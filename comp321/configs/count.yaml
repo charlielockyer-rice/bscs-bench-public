@@ -1,0 +1,75 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 2
+assignment_name: "count"
+display_name: "Word Count"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: c
+runtime:
+  version: "gcc13"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 34
+  total_points: 60
+  timeout_seconds: 60
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "count.c"
+    functions:
+      - do_count
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  executable: "count"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  test_blankfile_small: 2
+  test_blankfile_large: 2
+  test_alphanumeric_only: 2
+  test_special_char_only: 2
+  test_special_char_with_spaces: 2
+  test_huge_line: 2
+  test_long_misspelled_word: 2
+  test_lots_of_unique_misspelled: 2
+  test_small_dict_big_input: 2
+  test_large_dict: 2
+  test_lotsa_misspelled: 2
+  test_emptyfile: 2
+  test_read_not_allowed: 2
+  test_file_does_not_exist: 2
+  test_sort_test: 3
+  test_sort_test_with_error: 3
+  test_sort_test_only_errors: 3
+  test_args_c: 0.5
+  test_args_l: 0.5
+  test_args_w: 0.5
+  test_args_cw: 0.5
+  test_args_cl: 0.5
+  test_args_wl: 0.5
+  test_args_cwl: 0.5
+  test_1: 2
+  test_2: 2
+  test_3: 2
+  test_4: 2
+  test_5: 2
+  test_6: 2
+  test_7: 2
+  test_8: 2
+  test_9: 2
+  test_open_files: 3

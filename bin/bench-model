@@ -1,0 +1,246 @@
+#!/usr/bin/env bash
+# Run bin/bench on workspaces in a model directory.
+#
+# Supports filtering by course or individual workspace names. Each run gets its
+# own isolated results directory so parallel runs never collide.
+#
+# Usage:
+#   bin/bench-model <model-dir> [--model <model-id>] [filters...] [options]
+#
+# Filters (positional, after model-dir):
+#   comp140                     All COMP 140 workspaces
+#   comp140 comp182             Multiple courses
+#   comp140_module1_circles     Exact workspace name
+#   comp321_hw5_malloc comp411  Mix of exact + course prefix
+#
+# Options:
+#   --model <id>           OpenRouter model ID
+#   --course <name>        (Deprecated, use positional filters)
+#   --reset                Reset matching workspaces before running
+#   --dry-run              Preview without running
+#   --tmux                 Run in detached tmux session
+#   --continue-on-fail     Re-prompt agent on test failure
+#   --max-steps N          Maximum agent steps (passed to bin/bench)
+#
+# Examples:
+#   bin/bench-model nvidia-nemotron-3-super-120b-a12b-free --model nvidia/nemotron-3-super-120b-a12b:free
+#   bin/bench-model nvidia-nemotron-3-super-120b-a12b-free --model nvidia/nemotron-3-super-120b-a12b:free comp215
+#   bin/bench-model nvidia-nemotron-3-super-120b-a12b-free --model nvidia/nemotron-3-super-120b-a12b:free comp140 comp182 --tmux
+#   bin/bench-model nvidia-nemotron-3-super-120b-a12b-free --model nvidia/nemotron-3-super-120b-a12b:free comp215_homework2 --reset
+
+set -eo pipefail
+PROJECT_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+cd "$PROJECT_ROOT"
+
+MODEL_DIR=""
+MODEL=""
+DRY_RUN=false
+TMUX_MODE=false
+RESET_MODE=false
+FILTERS=()
+EXTRA_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --model) MODEL="$2"; shift 2 ;;
+        --course) FILTERS+=("$2"); shift 2 ;;  # backward compat
+        --reset) RESET_MODE=true; shift ;;
+        --dry-run) DRY_RUN=true; shift ;;
+        --tmux) TMUX_MODE=true; shift ;;
+        --help|-h)
+            sed -n '2,/^$/p' "$0" | sed 's/^# \?//'
+            exit 0
+            ;;
+        --*) EXTRA_ARGS+=("$1"); shift ;;  # pass through to bin/bench
+        *)
+            if [ -z "$MODEL_DIR" ]; then
+                MODEL_DIR="$1"; shift
+            else
+                FILTERS+=("$1"); shift
+            fi
+            ;;
+    esac
+done
+
+if [ -z "$MODEL_DIR" ]; then
+    echo "Error: model-dir is required"
+    echo "Usage: bin/bench-model <model-dir> [--model <model-id>] [filters...] [options]"
+    exit 1
+fi
+
+WS_DIR="$PROJECT_ROOT/workspaces/$MODEL_DIR"
+if [ ! -d "$WS_DIR" ]; then
+    echo "Error: Model directory not found: $WS_DIR"
+    exit 1
+fi
+
+# Collect workspaces, applying filters
+WORKSPACES=()
+for ws in "$WS_DIR"/*/; do
+    ws_name=$(basename "$ws")
+    [ "$ws_name" = "runs" ] && continue
+    [ -f "$ws/workspace.yaml" ] || [ -f "$ws/workspace.json" ] || continue
+
+    # Apply filters: if any filters given, workspace must match at least one
+    if [ ${#FILTERS[@]} -gt 0 ]; then
+        matched=false
+        for filter in "${FILTERS[@]}"; do
+            # Match as exact name or as course prefix
+            if [ "$ws_name" = "$filter" ] || [[ "$ws_name" == ${filter}_* ]]; then
+                matched=true
+                break
+            fi
+        done
+        $matched || continue
+    fi
+
+    WORKSPACES+=("$ws_name")
+done
+
+# Sort workspaces
+if [ ${#WORKSPACES[@]} -gt 0 ]; then
+    IFS=$'\n' WORKSPACES=($(sort <<<"${WORKSPACES[*]}")); unset IFS
+fi
+
+TOTAL=${#WORKSPACES[@]}
+if [ "$TOTAL" -eq 0 ]; then
+    echo "No workspaces found in $WS_DIR"
+    [ ${#FILTERS[@]} -gt 0 ] && echo "  Filters: ${FILTERS[*]}"
+    exit 1
+fi
+
+# Build results directory — include filter in name to isolate parallel runs
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+if [ ${#FILTERS[@]} -gt 0 ]; then
+    # Use first filter as tag (truncated)
+    FILTER_TAG=$(echo "${FILTERS[0]}" | cut -c1-15)
+    RESULTS_DIR="$WS_DIR/runs/${TIMESTAMP}-${FILTER_TAG}"
+else
+    RESULTS_DIR="$WS_DIR/runs/$TIMESTAMP"
+fi
+
+# Reset workspaces if requested
+if [ "$RESET_MODE" = true ] && [ "$DRY_RUN" = false ]; then
+    echo "Resetting ${TOTAL} workspaces..."
+    for ws in "${WORKSPACES[@]}"; do
+        ws_path="$WS_DIR/$ws"
+        if [ -d "$ws_path/.git" ]; then
+            initial=$(cd "$ws_path" && git rev-list --max-parents=0 HEAD 2>/dev/null)
+            if [ -n "$initial" ]; then
+                (cd "$ws_path" && git reset --hard "$initial" >/dev/null 2>&1 && git clean -fdx >/dev/null 2>&1)
+                echo "  Reset $ws"
+            fi
+        fi
+    done
+    echo ""
+fi
+
+# If tmux mode, re-exec inside tmux
+if [ "$TMUX_MODE" = true ] && [ -z "${BSCS_BENCH_IN_TMUX:-}" ]; then
+    # Build session name from model + filter
+    if [ ${#FILTERS[@]} -gt 0 ]; then
+        SESSION="bench-$(echo "$MODEL_DIR" | cut -c1-15)-${FILTER_TAG}-$(date +%H%M%S)"
+    else
+        SESSION="bench-$(echo "$MODEL_DIR" | cut -c1-15)-all-$(date +%H%M%S)"
+    fi
+
+    ARGS=(bin/bench-model "$MODEL_DIR")
+    [ -n "$MODEL" ] && ARGS+=(--model "$MODEL")
+    for filter in "${FILTERS[@]}"; do
+        ARGS+=("$filter")
+    done
+    $DRY_RUN && ARGS+=(--dry-run)
+    $RESET_MODE && ARGS+=(--reset)
+    [ ${#EXTRA_ARGS[@]} -gt 0 ] && ARGS+=("${EXTRA_ARGS[@]}")
+
+    tmux new-session -d -s "$SESSION" \
+        "BSCS_BENCH_IN_TMUX=1 ${ARGS[*]}; echo 'Run finished. Press Enter to close.'; read"
+    echo "Started tmux session: $SESSION"
+    echo "  tmux attach -t $SESSION"
+    exit 0
+fi
+
+echo "BSCS Bench — Model Runner"
+echo "========================="
+echo "  Model Dir:  $MODEL_DIR"
+echo "  Model:      ${MODEL:-default}"
+echo "  Workspaces: $TOTAL"
+[ ${#FILTERS[@]} -gt 0 ] && echo "  Filters:    ${FILTERS[*]}"
+echo "  Results:    $RESULTS_DIR"
+if [ "$DRY_RUN" = true ]; then
+    echo "  Mode:       DRY RUN"
+fi
+echo ""
+
+mkdir -p "$RESULTS_DIR"
+
+PASSED=0
+FAILED=0
+SKIPPED=0
+ERRORS=0
+START_TIME=$(date +%s)
+
+for i in "${!WORKSPACES[@]}"; do
+    ws="${WORKSPACES[$i]}"
+    idx=$((i + 1))
+    ws_id="$MODEL_DIR/$ws"
+
+    echo "[$idx/$TOTAL] $ws — $(date +%H:%M:%S)"
+
+    # Skip workspaces that already have agent work (>1 git commit)
+    ws_commits=$(cd "$WS_DIR/$ws" && git rev-list --count HEAD 2>/dev/null || echo "0")
+    if [ "$ws_commits" -gt 1 ]; then
+        echo "  [SKIP] Already has agent work ($ws_commits commits)"
+        SKIPPED=$((SKIPPED + 1))
+        echo ""
+        continue
+    fi
+
+    if [ "$DRY_RUN" = true ]; then
+        echo "  [DRY RUN] Would run: bun bin/bench $ws_id --model ${MODEL:-default} ${EXTRA_ARGS[*]:-}"
+        echo ""
+        continue
+    fi
+
+    # Create per-workspace results dir
+    ws_result_dir="$RESULTS_DIR/$ws"
+    mkdir -p "$ws_result_dir"
+
+    # Build command — pass --results-dir so output files land in per-workspace dir
+    CMD=(bun bin/bench "$ws_id" --save --results-dir "$ws_result_dir")
+    [ -n "$MODEL" ] && CMD+=(--model "$MODEL")
+    [ ${#EXTRA_ARGS[@]} -gt 0 ] && CMD+=("${EXTRA_ARGS[@]}")
+
+    # Run and capture output
+    WS_START=$(date +%s)
+    if "${CMD[@]}" > "$ws_result_dir/bench_output.txt" 2>&1; then
+        WS_END=$(date +%s)
+        WS_DURATION=$((WS_END - WS_START))
+
+        # Check if tests passed by looking at the output
+        if grep -q "Status: Success" "$ws_result_dir/bench_output.txt"; then
+            echo "  ✓ Success (${WS_DURATION}s)"
+            PASSED=$((PASSED + 1))
+        else
+            echo "  ✗ Tests not all passing (${WS_DURATION}s)"
+            FAILED=$((FAILED + 1))
+        fi
+
+        # Copy grade result if available
+        grade_file="$WS_DIR/$ws/.benchmark/last_grade.json"
+        [ -f "$grade_file" ] && cp "$grade_file" "$ws_result_dir/grade_result.json"
+    else
+        WS_END=$(date +%s)
+        WS_DURATION=$((WS_END - WS_START))
+        echo "  ✗ Error (${WS_DURATION}s)"
+        ERRORS=$((ERRORS + 1))
+    fi
+    echo ""
+done
+
+END_TIME=$(date +%s)
+TOTAL_DURATION=$((END_TIME - START_TIME))
+
+echo "========================="
+echo "Done: $PASSED passed, $FAILED failed, $SKIPPED skipped, $ERRORS errors (${TOTAL_DURATION}s)"
+echo "Results: $RESULTS_DIR"

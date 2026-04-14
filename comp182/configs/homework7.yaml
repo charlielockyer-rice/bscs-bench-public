@@ -1,0 +1,32 @@
+assignment_number: 7
+assignment_name: "Dynamic Programming"
+display_name: "HW7: Dynamic Programming"
+course: "comp182"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+llm_grading:
+  rubric: "solutions/homework7_rubric.md"
+
+problems:
+  - number: 1
+    name: "DP Recurrence"
+    points: 40
+    description: "Formulate dynamic programming recurrences"
+
+  - number: 2
+    name: "DP Algorithm Design"
+    points: 35
+    description: "Design dynamic programming algorithms"
+
+  - number: 3
+    name: "DP Analysis"
+    points: 25
+    description: "Analyze time and space complexity of DP solutions"
+
+topics:
+  - "Dynamic Programming"
+  - "Memoization"
+  - "Optimal Substructure"
+  - "Overlapping Subproblems"

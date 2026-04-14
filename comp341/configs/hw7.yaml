@@ -1,0 +1,54 @@
+assignment_number: 7
+assignment_name: "house_images"
+display_name: "House Price Prediction with Images"
+language: python
+description: "Hybrid deep learning with tabular features and images"
+
+source_files:
+  - path: "solution.py"
+    classes:
+      - HouseImagesDataset
+      - HybridHouseNN
+      - HouseImageOnly
+      - HouseFeatsOnly
+    functions:
+      - display_image
+      - reduce_dimensions
+      - detect_schematics
+      - train_model
+      - validate_model
+      - prepare_kaggle_submission
+
+data_files:
+  - source: "data/hw7/home_data_train.csv"
+  - source: "data/hw7/home_data_test.csv"
+  - source: "data/hw7/house_imgs/"
+    description: "~7000 house listing images"
+
+dependencies:
+  - torch
+  - torchvision
+  - torchmetrics
+  - numpy
+  - pandas
+  - PIL
+  - sklearn
+
+grading:
+  total_points: 100
+  total_tests: 11
+  timeout_seconds: 600
+  max_attempts: 10
+
+test_points:
+  test_display_image: 5
+  test_dimensionality_reduction: 10
+  test_schematic_detection: 10
+  test_dataset_len: 5
+  test_dataset_getitem: 10
+  test_hybrid_model_forward: 15
+  test_image_only_forward: 10
+  test_features_only_forward: 10
+  test_training_loop: 10
+  test_validation_rmse: 10
+  test_submission_format: 5

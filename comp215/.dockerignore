@@ -1,0 +1,34 @@
+# Exclude reference solutions
+reference_solutions/
+
+# Exclude homework directories (mounted at runtime)
+Homework_*/
+
+# Exclude tests (compiled from host or mounted)
+tests/
+
+# Build artifacts
+*.class
+build/
+*/build/
+*/*/build/
+
+# Documentation
+*.pdf
+*.md
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Config (not needed in image)
+configs/

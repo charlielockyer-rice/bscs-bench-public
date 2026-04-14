@@ -1,0 +1,22 @@
+assignment_number: 1
+assignment_name: "hw01"
+display_name: "Shapes & GUI"
+language: java
+runtime:
+  version: "17"
+grading:
+  total_points: 100
+  timeout_seconds: 60
+  max_attempts: 10
+source_dir: "hw01"
+source_files:
+  - path: "src/hw01/shape/AShape.java"
+  - path: "src/hw01/shape/ASimpleShape.java"
+  - path: "src/hw01/shape/Circle.java"
+  - path: "src/hw01/shape/Rectangle.java"
+  - path: "src/hw01/shape/Ellipse.java"
+  - path: "src/hw01/shape/CompositeShape.java"
+  - path: "src/hw01/view/simpleGUIFrame.java"
+tests:
+  classes:
+    - "comp310.tests.hw01.ShapeTest"

@@ -1,0 +1,232 @@
+#!/usr/bin/env bun
+/**
+ * Benchmark CLI (Course Runner)
+ *
+ * Usage:
+ *   bin/bench-course <course_id> [options]
+ *
+ * Examples:
+ *   bin/bench-course comp140
+ *   bin/bench-course comp321 --model "openai/gpt-4o"
+ *   bin/bench-course comp140 --continue-on-fail --max-continuations 5
+ */
+
+import * as fs from "fs"
+import * as path from "path"
+import { run, saveResult } from "../agent/runner"
+import { config } from "../agent/config"
+import { loadWorkspaceConfigFromFile } from "../agent/workspaceConfig"
+import { iterateWorkspaces } from "../agent/workspacePaths"
+
+const args = process.argv.slice(2)
+
+if (args.length < 1 || args.includes("--help") || args.includes("-h")) {
+  console.log(`
+BSCS Bench - Course Benchmark Runner
+
+Usage:
+  bin/bench-course <course_id> [options]
+
+Arguments:
+  course_id       Course directory name (e.g., comp140, comp321)
+
+Options:
+  --model, -m         OpenRouter model ID (default: ${config.defaultModel})
+  --max-steps         Maximum agent steps (default: ${config.defaultMaxSteps})
+  --continue-on-fail  Re-prompt agent if it stops without passing all tests
+  --max-continuations Max re-prompts when using --continue-on-fail (default: 3)
+  --fail-fast         Stop after the first failed workspace
+  --verbose, -v       Enable verbose output
+  --save              Save per-workspace results to .benchmark/
+  --help, -h          Show this help
+
+Examples:
+  bin/bench-course comp140
+  bin/bench-course comp321 --model "openai/gpt-4o"
+  bin/bench-course comp140 --continue-on-fail --max-continuations 5
+  bin/bench-course comp140 --save
+`)
+  process.exit(args.includes("--help") || args.includes("-h") ? 0 : 1)
+}
+
+const courseId = args[0]
+
+let model = config.defaultModel
+let maxSteps = config.defaultMaxSteps
+let verbose = false
+let save = false
+let continueOnFail = false
+let maxContinuations = 3
+let failFast = false
+
+for (let i = 1; i < args.length; i++) {
+  const arg = args[i]
+  if (arg === "--model" || arg === "-m") {
+    model = args[++i]
+  } else if (arg === "--max-steps") {
+    maxSteps = parseInt(args[++i])
+  } else if (arg === "--continue-on-fail") {
+    continueOnFail = true
+  } else if (arg === "--max-continuations") {
+    maxContinuations = parseInt(args[++i])
+  } else if (arg === "--fail-fast") {
+    failFast = true
+  } else if (arg === "--verbose" || arg === "-v") {
+    verbose = true
+  } else if (arg === "--save") {
+    save = true
+  }
+}
+
+if (!process.env.OPENROUTER_API_KEY) {
+  console.error("Error: OPENROUTER_API_KEY environment variable is required")
+  console.error("Get an API key at: https://openrouter.ai/keys")
+  process.exit(1)
+}
+
+const projectRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..")
+const workspacesDir = path.join(projectRoot, "workspaces")
+
+if (!fs.existsSync(workspacesDir)) {
+  console.error(`Error: workspaces directory not found: ${workspacesDir}`)
+  process.exit(1)
+}
+
+const workspaces: Array<{ id: string; moduleNumber: number; moduleName: string }> = []
+
+for (const { id, dir } of iterateWorkspaces(workspacesDir)) {
+  const wsConfig = loadWorkspaceConfigFromFile(dir)
+  if (!wsConfig || wsConfig.course !== courseId) continue
+  workspaces.push({
+    id,
+    moduleNumber: wsConfig.module_number,
+    moduleName: wsConfig.module_name,
+  })
+}
+
+if (workspaces.length === 0) {
+  console.error(`Error: No workspaces found for course: ${courseId}`)
+  process.exit(1)
+}
+
+workspaces.sort((a, b) => {
+  if (a.moduleNumber !== b.moduleNumber) return a.moduleNumber - b.moduleNumber
+  return a.id.localeCompare(b.id)
+})
+
+console.log(`Starting course benchmark...`)
+console.log(`  Course: ${courseId}`)
+console.log(`  Workspaces: ${workspaces.length}`)
+console.log(`  Model: ${model}`)
+console.log()
+
+let totalSteps = 0
+let totalDurationMs = 0
+let successCount = 0
+let failureCount = 0
+let processedCount = 0
+
+let tokensAvailable = false
+let tokensComplete = true
+let costComplete = true
+let totalInputTokens = 0
+let totalOutputTokens = 0
+let totalTokens = 0
+let totalCost = 0
+
+for (const ws of workspaces) {
+  processedCount += 1
+  console.log(`\n=== ${ws.id} (${ws.moduleName}) ===`)
+  const result = await run({
+    workspaceId: ws.id,
+    model,
+    maxSteps,
+    verbose,
+    continueOnFail,
+    maxContinuations,
+  })
+
+  totalSteps += result.steps
+  totalDurationMs += result.durationMs
+
+  if (result.success) {
+    successCount += 1
+  } else {
+    failureCount += 1
+  }
+
+  console.log(`Status: ${result.success ? "Success" : "Failed"}`)
+  if (result.error) {
+    console.log(`Error: ${result.error}`)
+  }
+  if (result.gradeResult) {
+    console.log(`Grade: ${result.gradeResult.passed}/${result.gradeResult.total} (${result.gradeResult.percentage}%)`)
+  }
+  console.log(`Steps: ${result.steps}`)
+  console.log(`Duration: ${(result.durationMs / 1000).toFixed(1)}s`)
+
+  if (result.tokens) {
+    tokensAvailable = true
+    totalInputTokens += result.tokens.inputTokens
+    totalOutputTokens += result.tokens.outputTokens
+    totalTokens += result.tokens.totalTokens
+    totalCost += result.tokens.cost
+    if (result.tokens.costIsComplete === false) {
+      costComplete = false
+    }
+    console.log(
+      `Tokens: ${result.tokens.totalTokens.toLocaleString()} (${result.tokens.inputTokens.toLocaleString()}↑ ${result.tokens.outputTokens.toLocaleString()}↓)`
+    )
+    if (result.tokens.costIsComplete === false) {
+      if (result.tokens.cost === 0) {
+        console.log(`Cost: unavailable (provider did not report cost)`)
+      } else {
+        console.log(`Cost: $${result.tokens.cost.toFixed(4)} (partial)`)
+      }
+    } else {
+      console.log(`Cost: $${result.tokens.cost.toFixed(4)}`)
+    }
+  } else {
+    tokensComplete = false
+  }
+
+  if (save) {
+    const filepath = saveResult(result)
+    console.log(`Saved: ${filepath}`)
+  }
+
+  if (failFast && !result.success) {
+    console.log(`Stopping early due to failure (--fail-fast).`)
+    break
+  }
+}
+
+console.log(`\nCourse Benchmark Complete`)
+console.log(`========================`)
+const workspaceCountLabel = processedCount === workspaces.length
+  ? `${workspaces.length}`
+  : `${processedCount}/${workspaces.length}`
+console.log(`Workspaces: ${workspaceCountLabel}`)
+console.log(`Successes: ${successCount}`)
+console.log(`Failures: ${failureCount}`)
+console.log(`Total steps: ${totalSteps}`)
+console.log(`Total duration: ${(totalDurationMs / 1000).toFixed(1)}s`)
+
+if (tokensAvailable) {
+  console.log(
+    `Total tokens: ${totalTokens.toLocaleString()} (${totalInputTokens.toLocaleString()}↑ ${totalOutputTokens.toLocaleString()}↓)`
+  )
+  const costSummary =
+    tokensComplete && costComplete
+      ? `Cost: $${totalCost.toFixed(4)}`
+      : `Cost (partial): $${totalCost.toFixed(4)}`
+  console.log(costSummary)
+  if (!tokensComplete) {
+    console.log(`Note: token usage missing for one or more workspaces.`)
+  }
+  if (!costComplete) {
+    console.log(`Note: cost was not reported for one or more workspaces.`)
+  }
+} else {
+  console.log(`Token usage: unavailable (provider did not report tokens)`)
+}

@@ -1,0 +1,26 @@
+# Include hw1 for dependency caching during build
+# hw1-*/
+hw2-*/
+hw3-*/
+hw4-*/
+
+# Build artifacts
+*/target/
+target/
+
+# Documentation
+*.pdf
+*.md
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+*.iml
+.vscode/

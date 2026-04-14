@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<drjava version="drjava-20200303-210720">
+  <project autorefresh="false" build="../classes/" root="" work="../">
+    <createjar file=""/>
+    <source>
+      <file active="true" name="Interp.java" package="" timestamp="18-Jan-2024 19:17:03">
+        <select from="18" to="18"/>
+        <scroll column="26" row="0"/>
+      </file>
+      <file name="ValuesTokens.java" package="" timestamp="06-Feb-2023 15:16:03">
+        <select from="18" to="18"/>
+        <scroll column="26" row="0"/>
+      </file>
+      <file name="Parser.java" package="" timestamp="04-Feb-2022 06:14:21">
+        <select from="18" to="18"/>
+        <scroll column="26" row="0"/>
+      </file>
+      <file name="Lexer.java" package="" timestamp="29-Jan-2023 21:31:15">
+        <select from="18" to="18"/>
+        <scroll column="26" row="0"/>
+      </file>
+      <file name="Assign1Test.java" package="" timestamp="22-Jan-2023 09:20:30">
+        <select from="18" to="18"/>
+        <scroll column="26" row="0"/>
+      </file>
+      <file name="AST.java" package="" timestamp="22-Jan-2023 09:15:16">
+        <select from="18" to="18"/>
+        <scroll column="26" row="0"/>
+      </file>
+      <file name="Assign2Test.java" package="" timestamp="18-Jan-2024 18:40:06">
+        <select from="18" to="18"/>
+        <scroll column="26" row="0"/>
+      </file>
+    </source>
+    <included/>
+    <excluded/>
+    <collapsed/>
+    <classpath/>
+    <breakpoints/>
+    <watches/>
+    <bookmarks/>
+    <preferences/>
+  </project>
+</drjava>

@@ -1,0 +1,101 @@
+assignment_number: 3
+assignment_name: "Dynamic Programming"
+display_name: "HW3: Dynamic Programming"
+course: "comp382"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+problems:
+  - number: 1
+    name: "String Merging"
+    points: 15
+    parts:
+      - part: "1"
+        points: 5
+        description: "DP algorithm for merge detection"
+        rubric:
+          - "Correct subproblem definition M[i,j]: 2pts"
+          - "Correct recurrence relation: 2pts"
+          - "O(mn) time complexity: 1pt"
+      - part: "2"
+        points: 10
+        description: "Generalized merge with K errors"
+        rubric:
+          - "Correct subproblem T[i,j] (min Hamming distance): 3pts"
+          - "Correct recurrence with ν(a,b) cost function: 4pts"
+          - "Output T[m,n] ≤ K check: 2pts"
+          - "O(mn) time complexity: 1pt"
+
+  - number: 2
+    name: "Inventory Planning"
+    points: 20
+    parts:
+      - part: "1"
+        points: 20
+        description: "DP algorithm minimizing manufacturing + holding costs"
+        rubric:
+          - "Correct subproblem definition OPT(i,K): 5pts"
+          - "Correct base case (final month): 3pts"
+          - "Correct recurrence (production choices): 5pts"
+          - "Constraint handling (demand, capacity): 3pts"
+          - "Polynomial time O(nD²): 4pts"
+
+  - number: 3
+    name: "Optimal Matching of Sequences"
+    points: 30
+    parts:
+      - part: "1"
+        points: 3
+        description: "Prove every matching contains (1,1) and (m,n)"
+        rubric:
+          - "Proof by contradiction using no-crossing property: 3pts"
+      - part: "2"
+        points: 7
+        description: "Recursive definition for f(m,n)"
+        rubric:
+          - "Correct base cases f(1,n)=f(m,1)=1: 2pts"
+          - "Recursive case f(m,n)=f(m-1,n)+f(m,n-1)+f(m-1,n-1): 3pts"
+          - "Clear explanation of three disjoint cases: 2pts"
+      - part: "3"
+        points: 20
+        description: "Algorithm for minimal cost matching"
+        rubric:
+          - "Correct subproblem opt(i,j): 5pts"
+          - "Correct base cases: 3pts"
+          - "Correct recurrence (3-way min + cost): 5pts"
+          - "Correctness explanation: 4pts"
+          - "O(mn) time and space complexity: 3pts"
+
+  - number: 4
+    name: "Edit Distance & LCS"
+    points: 35
+    parts:
+      - part: "1"
+        points: 3
+        description: "EDITDISTANCE pseudocode"
+        rubric:
+          - "Correct initialization: 1pt"
+          - "Correct recurrence with c_i, c_d, c_s: 2pts"
+      - part: "2"
+        points: 12
+        description: "Prove D(xa, ya) = D(x, y)"
+        rubric:
+          - "D(xa,ya) ≤ D(x,y) direction: 3pts"
+          - "D(xa,ya) ≥ D(x,y) by contradiction: 5pts"
+          - "All cases handled (copy, deletion, insertion): 4pts"
+      - part: "3"
+        points: 20
+        description: "Compute LCS using one EDITDISTANCE call"
+        rubric:
+          - "Correct formula: L = (|X|+|Y|-D(X,Y,1,1,∞))/2: 5pts"
+          - "Lemma: D(x,y)+2L(x,y)=|x|+|y|: 5pts"
+          - "Proof by induction (all cases): 8pts"
+          - "Justification of c_s=∞ choice: 2pts"
+
+topics:
+  - "Dynamic Programming"
+  - "String Merging"
+  - "Edit Distance"
+  - "Longest Common Subsequence"
+  - "Optimal Matching"

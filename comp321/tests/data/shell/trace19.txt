@@ -1,0 +1,32 @@
+#
+# trace19.txt - Comprehensive job control test
+#
+/bin/echo tsh> ./myspin 10 \046
+./myspin 10 &
+
+/bin/echo tsh> ./mystop 4
+./mystop 4
+
+SLEEP 2
+TSTP
+
+/bin/echo tsh> jobs
+jobs
+
+/bin/echo tsh> bg %2
+bg %2
+
+/bin/echo tsh> jobs
+jobs
+
+/bin/echo tsh> fg %1
+fg %1
+
+SLEEP 2
+INT
+
+/bin/echo tsh> jobs
+jobs
+
+/bin/echo tsh> quit
+quit

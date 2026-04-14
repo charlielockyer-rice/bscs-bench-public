@@ -1,0 +1,91 @@
+# Root .dockerignore for combined container builds
+# Build context is the project root, so we exclude large/unnecessary directories
+# to keep the Docker build context small and fast.
+
+# Runtime data (not needed in images)
+workspaces/
+results/
+archives/
+
+# Dependencies (installed inside container)
+node_modules/
+.venv/
+
+# Version control
+.git/
+
+# Dashboard (not needed in grading/agent images)
+dashboard/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files (secrets — never bake into images)
+.env
+.env.local
+.env.*.local
+
+# Large course data (mounted at runtime instead)
+comp341/data/
+comp341/sources/
+comp341/notebooks/
+
+# Course reference materials not needed in container
+comp140/reference_solutions/
+comp140/solutions/
+comp310/coursework/
+comp310/libraries/
+
+# Course homework/assignment source directories (never COPYed by Dockerfile.combined)
+comp310/hw0*/
+comp322/hw*-charlielockyer-rice/
+!comp322/hw1-charlielockyer-rice/pom.xml
+comp321/factors/
+comp321/count/
+comp321/linking/
+comp321/shell/
+comp321/malloc/
+comp321/proxy/
+comp411/Assignment */
+comp411/sources/
+comp318/m3ssag1n8/
+comp318/owldb/
+comp421/lab*/
+comp421/midterm/
+comp421/final/
+comp140/Module_*/
+comp140/sources/
+comp182/solutions/
+
+# Course homework source directories (not needed in container)
+comp215/Homework_*/
+comp382/
+
+# Build artifacts
+dist/
+
+# Private tests
+private_tests/
+
+# Documentation
+docs/
+
+# Agent harness (not used in combined containers)
+agent/
+
+# File patterns
+*.pdf
+*.html
+*.tar.gz

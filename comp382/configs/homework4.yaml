@@ -1,0 +1,88 @@
+assignment_number: 4
+assignment_name: "Hashing and Randomized Algorithms"
+display_name: "HW4: Hashing and Randomized Algorithms"
+course: "comp382"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+problems:
+  - number: 1
+    name: "Hashing with Chaining"
+    points: 20
+    parts:
+      - part: "1"
+        points: 20
+        description: "Uniform random key selection in O(L(1+1/α))"
+        rubric:
+          - "Correct rejection sampling algorithm: 6pts"
+          - "Uniform probability argument (1/mL per element): 5pts"
+          - "Expected time analysis: 5pts"
+          - "Final O(L(1+1/α)) bound: 4pts"
+
+  - number: 2
+    name: "Longest-Probe Bound for Hashing"
+    points: 40
+    parts:
+      - part: "a"
+        points: 10
+        description: "Show Pr[>k probes] ≤ 2^(-k)"
+        rubric:
+          - "n ≤ m/2 implies ≥ half empty: 3pts"
+          - "Each probe hits occupied with prob < 1/2: 4pts"
+          - "Product bound 2^(-k): 3pts"
+      - part: "b"
+        points: 10
+        description: "Show Pr[>2log₂n probes] = O(1/n²)"
+        rubric:
+          - "Substitution k = 2log₂n into part (a): 5pts"
+          - "Simplification to 1/n²: 5pts"
+      - part: "c"
+        points: 10
+        description: "Show Pr[X > 2log₂n] = O(1/n)"
+        rubric:
+          - "Union bound application: 5pts"
+          - "Sum of n terms of O(1/n²): 5pts"
+      - part: "d"
+        points: 10
+        description: "Show E[X] = O(log₂n)"
+        rubric:
+          - "Split into ≤ 2log₂n and > 2log₂n cases: 4pts"
+          - "Bound worst case by n: 3pts"
+          - "Final O(log n) conclusion: 3pts"
+
+  - number: 3
+    name: "Randomized Coloring"
+    points: 15
+    parts:
+      - part: "1"
+        points: 15
+        description: "Randomized 3-coloring with ≥ (2/3)c* expected satisfied edges"
+        rubric:
+          - "Algorithm: random independent coloring: 3pts"
+          - "Upper bound c* ≤ m: 2pts"
+          - "Indicator variable for each edge: 3pts"
+          - "Pr[edge satisfied] = 2/3: 3pts"
+          - "Linearity of expectation for (2/3)m ≥ (2/3)c*: 4pts"
+
+  - number: 4
+    name: "Analysis of Selection Using Recurrence"
+    points: 25
+    parts:
+      - part: "1"
+        points: 25
+        description: "Find smallest c with T(n) ≤ cn"
+        rubric:
+          - "Correct recurrence formulation: 5pts"
+          - "Induction setup with hypothesis T(i) ≤ ci: 3pts"
+          - "Algebraic manipulation of sums: 5pts"
+          - "Maximization over k (k=n/2): 5pts"
+          - "Derivation of c=4: 5pts"
+          - "Verification that c=4 works: 2pts"
+
+topics:
+  - "Hash Tables"
+  - "Open Addressing"
+  - "Probabilistic Analysis"
+  - "Randomized Algorithms"
+  - "Recurrence Relations"

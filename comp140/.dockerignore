@@ -1,0 +1,36 @@
+# Reference solutions - never include in Docker context
+reference_solutions/
+solutions/
+
+# Build artifacts
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Documentation
+*.pdf
+*.md
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Demo files (not needed for testing)
+demos/

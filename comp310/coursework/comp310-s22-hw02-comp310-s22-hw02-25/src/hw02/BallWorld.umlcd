@@ -1,0 +1,1336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.yattasolutions.uml.diagrams.classifier:ClassDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.yattasolutions.diagrams="http://ns.yatta-solutions.com/umllab/diagrams/1.1.0" xmlns:com.yattasolutions.uml.diagrams.classifier="http://ns.yatta-solutions.com/umllab/diagrams/classifier/1.1.0" xmi:id="_D_aykH0PEeyOAbB1Mx5Bgw">
+  <modelElement href="BallWorld.uml#_EHM1kH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_ELYyAn0PEeyOAbB1Mx5Bgw" sourceAnchor="0.0,54.0" targetAnchor="700.0,150.0" superClass="_ELccYH0PEeyOAbB1Mx5Bgw" subClass="_ELWVwH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EI768H0PEeyOAbB1Mx5Bgw"/>
+    <bendpoints xmi:id="_ERYsUH0PEeyOAbB1Mx5Bgw" sourceX="-41" targetX="50" targetY="173"/>
+    <bendpoints xmi:id="_ERYsUX0PEeyOAbB1Mx5Bgw" sourceX="-41" sourceY="-173" targetX="50"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELYyA30PEeyOAbB1Mx5Bgw" source="_ELccYH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJiX5H0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_ELanMX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJi-8H0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELaAIH0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_ELaAIX0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJiX5X0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELbOQX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELbOQH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELanMH0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="color" navigable="true">
+      <modelElement href="BallWorld.uml#_EJU8gH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELbOQ30PEeyOAbB1Mx5Bgw" label="#"/>
+      <cardinality xmi:id="_ELbOQn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELYyBH0PEeyOAbB1Mx5Bgw" source="_ELccYH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJi-8X0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_ELanNX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJi-830PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELanMn0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_ELanM30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJi-8n0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELbORn0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELbORX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELanNH0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="position" navigable="true">
+      <modelElement href="BallWorld.uml#_EJU8gn0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELbOSH0PEeyOAbB1Mx5Bgw" label="#"/>
+      <cardinality xmi:id="_ELbOR30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELYyBX0PEeyOAbB1Mx5Bgw" source="_ELccYH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJi-9H0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_ELanOX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJjmAH0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELanNn0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_ELanN30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJi-9X0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELbOS30PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELbOSn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELanOH0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="velocity" navigable="true">
+      <modelElement href="BallWorld.uml#_EJU8hH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELbOTX0PEeyOAbB1Mx5Bgw" label="#"/>
+      <cardinality xmi:id="_ELbOTH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELYyBn0PEeyOAbB1Mx5Bgw" source="_ELccYH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJjmAX0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_ELanPX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJjmA30PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELanOn0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_ELanO30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJjmAn0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELbOUH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELbOT30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELanPH0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="dimension" navigable="true">
+      <modelElement href="BallWorld.uml#_EJVjk30PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELb1UX0PEeyOAbB1Mx5Bgw" label="#"/>
+      <cardinality xmi:id="_ELb1UH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_ELgGwH0PEeyOAbB1Mx5Bgw" sourceAnchor="0.0,43.0" targetAnchor="700.0,150.0" superClass="_ELccYH0PEeyOAbB1Mx5Bgw" subClass="_ELgt0H0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EI10UH0PEeyOAbB1Mx5Bgw"/>
+    <bendpoints xmi:id="_ERYsUn0PEeyOAbB1Mx5Bgw" sourceX="-271" targetX="50" targetY="481"/>
+    <bendpoints xmi:id="_ERZTYH0PEeyOAbB1Mx5Bgw" sourceX="-271" sourceY="-481" targetX="50"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_ELijAH0PEeyOAbB1Mx5Bgw" sourceAnchor="0.0,69.0" targetAnchor="700.0,150.0" superClass="_ELccYH0PEeyOAbB1Mx5Bgw" subClass="_ELkYQn0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EI-XMH0PEeyOAbB1Mx5Bgw"/>
+    <bendpoints xmi:id="_ERZTYX0PEeyOAbB1Mx5Bgw" sourceX="-30" targetX="50" targetY="703"/>
+    <bendpoints xmi:id="_ERZTYn0PEeyOAbB1Mx5Bgw" sourceX="-30" sourceY="-703" targetX="50"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELkYMH0PEeyOAbB1Mx5Bgw" source="_ELkYQn0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJjmBH0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_ELkYMX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJkNEH0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELkYMn0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_ELkYM30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJjmBX0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELkYNH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELkYNX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELkYNn0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="xVelChanger" navigable="true">
+      <modelElement href="BallWorld.uml#_EJWKoH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELkYN30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELkYOH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELkYOX0PEeyOAbB1Mx5Bgw" source="_ELkYQn0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJkNEX0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_ELkYOn0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJkNE30PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELkYO30PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_ELkYPH0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJkNEn0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELkYPX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELkYPn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELkYP30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="yVelChanger" navigable="true">
+      <modelElement href="BallWorld.uml#_EJWxsH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELkYQH0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELkYQX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELnbgH0PEeyOAbB1Mx5Bgw" sourceAnchor="130.0,0.0" targetAnchor="0.0,54.0" target="_ELpQsn0PEeyOAbB1Mx5Bgw" source="_ELpQsn0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJhJwH0PEeyOAbB1Mx5Bgw"/>
+    <bendpoints xmi:id="_ERZTY30PEeyOAbB1Mx5Bgw" sourceY="-128" targetX="130" targetY="-182"/>
+    <bendpoints xmi:id="_ERZTZH0PEeyOAbB1Mx5Bgw" sourceX="-286" sourceY="-128" targetX="-156" targetY="-182"/>
+    <bendpoints xmi:id="_ERZ6cH0PEeyOAbB1Mx5Bgw" sourceX="-286" sourceY="54" targetX="-156"/>
+    <stereotypes xmi:id="_ELopo30PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJhJwn0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELopoH0PEeyOAbB1Mx5Bgw" text="">
+      <visualProperties xmi:id="_ERbvoH0PEeyOAbB1Mx5Bgw" position="226.5,-11.75"/>
+    </nameVisual>
+    <sourceRole xmi:id="_ELopoX0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJhJwX0PEeyOAbB1Mx5Bgw"/>
+      <visualProperties xmi:id="_ERbIkX0PEeyOAbB1Mx5Bgw" position="-21.0,-60.75"/>
+      <visibility xmi:id="_ELoppX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELoppH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELopon0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="NULL_OBJECT" navigable="true">
+      <modelElement href="BallWorld.uml#_EH7OUH0PEeyOAbB1Mx5Bgw"/>
+      <visualProperties xmi:id="_ERbvoX0PEeyOAbB1Mx5Bgw" position="-112.0,10.749999999999957"/>
+      <visibility xmi:id="_ELpQsX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELpQsH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELrs8H0PEeyOAbB1Mx5Bgw" sourceAnchor="0.0,131.0" targetAnchor="160.0,0.0" target="_ELpQsn0PEeyOAbB1Mx5Bgw" source="_ELxzmX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJhJw30PEeyOAbB1Mx5Bgw"/>
+    <bendpoints xmi:id="_ERZ6cX0PEeyOAbB1Mx5Bgw" sourceX="-97" targetX="-1420" targetY="230"/>
+    <bendpoints xmi:id="_ERZ6cn0PEeyOAbB1Mx5Bgw" sourceX="-97" sourceY="-388" targetX="-1420" targetY="-158"/>
+    <bendpoints xmi:id="_ERZ6c30PEeyOAbB1Mx5Bgw" sourceX="1323" sourceY="-388" targetY="-158"/>
+    <stereotypes xmi:id="_ELtiIH0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJhw0H0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELs7En0PEeyOAbB1Mx5Bgw" text="">
+      <visualProperties xmi:id="_ERcWsX0PEeyOAbB1Mx5Bgw" position="-279.5,300.99999999999994"/>
+    </nameVisual>
+    <sourceRole xmi:id="_ELs7E30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJhJxH0PEeyOAbB1Mx5Bgw"/>
+      <visualProperties xmi:id="_ERcWsH0PEeyOAbB1Mx5Bgw" position="-63.0,-17.5"/>
+      <visibility xmi:id="_ELvXUX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELvXUH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELs7FH0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="model2ViewAdpt" navigable="true">
+      <modelElement href="BallWorld.uml#_EJTHUX0PEeyOAbB1Mx5Bgw"/>
+      <visualProperties xmi:id="_ERcWsn0PEeyOAbB1Mx5Bgw" position="-1493.0,66.50000000000003"/>
+      <visibility xmi:id="_ELvXU30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELvXUn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELtiIX0PEeyOAbB1Mx5Bgw" source="_ELxzmX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJhw1H0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_ELv-ZH0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJiX4H0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELv-YX0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_ELv-Yn0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJhw1X0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELwlcH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELv-ZX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELv-Y30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="ballDispatcher" navigable="true">
+      <modelElement href="BallWorld.uml#_EJTuYX0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELwlcn0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELwlcX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELxMgH0PEeyOAbB1Mx5Bgw" source="_ELxzmX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJhw0X0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_ELxMgX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJhw030PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELxMgn0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_ELxMg30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJhw0n0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELxMhH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELxMhX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELxMhn0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="timer" navigable="true">
+      <modelElement href="BallWorld.uml#_EJTHVH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELxMh30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELxMiH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_ELxzkH0PEeyOAbB1Mx5Bgw" source="_ELxzmX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJiX4X0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_ELxzkX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJiX430PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_ELxzkn0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_ELxzk30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJiX4n0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELxzlH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELxzlX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_ELxzln0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="loader" navigable="true">
+      <modelElement href="BallWorld.uml#_EJTuZX0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELxzl30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELxzmH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_EL2FAH0PEeyOAbB1Mx5Bgw" sourceAnchor="0.0,43.0" targetAnchor="700.0,150.0" superClass="_ELccYH0PEeyOAbB1Mx5Bgw" subClass="_EL3TIH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EI2bYH0PEeyOAbB1Mx5Bgw"/>
+    <bendpoints xmi:id="_ERahgH0PEeyOAbB1Mx5Bgw" sourceX="-38" targetX="50" targetY="899"/>
+    <bendpoints xmi:id="_ERahgX0PEeyOAbB1Mx5Bgw" sourceX="-38" sourceY="-899" targetX="50"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_EL5vYH0PEeyOAbB1Mx5Bgw" sourceAnchor="274.0,54.0" targetAnchor="249.0,277.0" target="_ELxzmX0PEeyOAbB1Mx5Bgw" source="_EL8LqX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJkNFH0PEeyOAbB1Mx5Bgw"/>
+    <bendpoints xmi:id="_ERahgn0PEeyOAbB1Mx5Bgw" sourceX="331" targetY="109"/>
+    <stereotypes xmi:id="_EL6WdX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJkNFn0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_EL6Wcn0PEeyOAbB1Mx5Bgw" text="">
+      <visualProperties xmi:id="_ERdk0H0PEeyOAbB1Mx5Bgw" position="-149.5,-109.0"/>
+    </nameVisual>
+    <sourceRole xmi:id="_EL6Wc30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJkNFX0PEeyOAbB1Mx5Bgw"/>
+      <visualProperties xmi:id="_ERc9wH0PEeyOAbB1Mx5Bgw" position="47.5,-37.0"/>
+      <visibility xmi:id="_EL7kkX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EL7kkH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_EL6WdH0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="model" navigable="true">
+      <modelElement href="BallWorld.uml#_EJWxsn0PEeyOAbB1Mx5Bgw"/>
+      <visualProperties xmi:id="_ERdk0X0PEeyOAbB1Mx5Bgw" position="-177.0,-125.5"/>
+      <visibility xmi:id="_EL7kk30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EL7kkn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_EL8LoH0PEeyOAbB1Mx5Bgw" sourceAnchor="274.0,84.0" targetAnchor="236.0,300.0" target="_EMHx2X0PEeyOAbB1Mx5Bgw" source="_EL8LqX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJk0IH0PEeyOAbB1Mx5Bgw"/>
+    <bendpoints xmi:id="_ERahg30PEeyOAbB1Mx5Bgw" sourceX="903" targetY="139"/>
+    <stereotypes xmi:id="_EL8LoX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJk0In0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_EL8Lon0PEeyOAbB1Mx5Bgw" text="">
+      <visualProperties xmi:id="_ERey8H0PEeyOAbB1Mx5Bgw" position="-662.0,56.50000000000006"/>
+    </nameVisual>
+    <sourceRole xmi:id="_EL8Lo30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJk0IX0PEeyOAbB1Mx5Bgw"/>
+      <visualProperties xmi:id="_EReL4H0PEeyOAbB1Mx5Bgw" position="47.5,-37.0"/>
+      <visibility xmi:id="_EL8LpH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EL8LpX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_EL8Lpn0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="frame" navigable="true">
+      <modelElement href="BallWorld.uml#_EJXYwH0PEeyOAbB1Mx5Bgw"/>
+      <visualProperties xmi:id="_ERey8X0PEeyOAbB1Mx5Bgw" position="-534.0,-15.499999999999943"/>
+      <visibility xmi:id="_EL8Lp30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EL8LqH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_EL_O8n0PEeyOAbB1Mx5Bgw" sourceAnchor="236.0,0.0" targetAnchor="249.0,66.0" target="_EMBEJH0PEeyOAbB1Mx5Bgw" source="_EMHx2X0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJmpUX0PEeyOAbB1Mx5Bgw"/>
+    <bendpoints xmi:id="_ERbIkH0PEeyOAbB1Mx5Bgw" sourceY="-120" targetX="644"/>
+    <stereotypes xmi:id="_EMAdE30PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJmpU30PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_EMAdEH0PEeyOAbB1Mx5Bgw" text="">
+      <visualProperties xmi:id="_ERgBEH0PEeyOAbB1Mx5Bgw" position="119.0,170.00000000000003"/>
+    </nameVisual>
+    <sourceRole xmi:id="_EMAdEX0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJmpUn0PEeyOAbB1Mx5Bgw"/>
+      <visualProperties xmi:id="_ERfaAH0PEeyOAbB1Mx5Bgw" position="-18.0,-83.0"/>
+      <visibility xmi:id="_EMBEIH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMAdFH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_EMAdEn0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="view2ModelAdpt" navigable="true">
+      <modelElement href="BallWorld.uml#_EJZ1AX0PEeyOAbB1Mx5Bgw"/>
+      <visualProperties xmi:id="_ERgoIH0PEeyOAbB1Mx5Bgw" position="654.9999999999998,358.00000000000006"/>
+      <stereotypes xmi:id="_EMBEI30PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJZ1An0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_EMBEIn0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMBEIX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_EMF8oH0PEeyOAbB1Mx5Bgw" source="_EMHx2X0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJk0I30PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_EMF8oX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJk0JX0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_EMF8on0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_EMF8o30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJk0JH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMF8pH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMF8pX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_EMF8pn0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="contentPane" navigable="true">
+      <modelElement href="BallWorld.uml#_EJXYxH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMF8p30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMF8qH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_EMGjsH0PEeyOAbB1Mx5Bgw" source="_EMHx2X0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJk0Jn0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_EMGjsX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJlbMH0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_EMGjsn0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_EMGjs30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJk0J30PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMGjtH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMGjtX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_EMGjtn0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="controlPanel" navigable="true">
+      <modelElement href="BallWorld.uml#_EJX_0X0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMGjt30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMGjuH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_EMGjuX0PEeyOAbB1Mx5Bgw" source="_EMHx2X0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJlbMX0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_EMGjun0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJlbM30PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_EMGju30PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_EMGjvH0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJlbMn0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMGjvX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMGjvn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_EMGjv30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="ballTextField" navigable="true">
+      <modelElement href="BallWorld.uml#_EJX_1H0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMGjwH0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMGjwX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_EMHKwH0PEeyOAbB1Mx5Bgw" source="_EMHx2X0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJlbNH0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_EMHKwX0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJmCQH0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_EMHKwn0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_EMHKw30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJlbNX0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHKxH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMHKxX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_EMHKxn0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="makeBallButton" navigable="true">
+      <modelElement href="BallWorld.uml#_EJX_130PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHKx30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMHKyH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_EMHKyX0PEeyOAbB1Mx5Bgw" source="_EMHx2X0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJmCQX0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_EMHKyn0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJmCQ30PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_EMHKy30PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_EMHKzH0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJmCQn0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHKzX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMHKzn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_EMHKz30PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="clearButton" navigable="true">
+      <modelElement href="BallWorld.uml#_EJYm4n0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHK0H0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMHK0X0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_EMHx0H0PEeyOAbB1Mx5Bgw" source="_EMHx2X0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EJmCRH0PEeyOAbB1Mx5Bgw"/>
+    <stereotypes xmi:id="_EMHx0X0PEeyOAbB1Mx5Bgw" name="Reference">
+      <modelElement href="BallWorld.uml#_EJmpUH0PEeyOAbB1Mx5Bgw"/>
+    </stereotypes>
+    <nameVisual xmi:id="_EMHx0n0PEeyOAbB1Mx5Bgw" text=""/>
+    <sourceRole xmi:id="_EMHx030PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="">
+      <modelElement href="BallWorld.uml#_EJmCRX0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHx1H0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMHx1X0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_EMHx1n0PEeyOAbB1Mx5Bgw" aggregationKind="NONE" name="ballWorld" navigable="true">
+      <modelElement href="BallWorld.uml#_EJZN8H0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHx130PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMHx2H0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O2kiUH0PEeyOAbB1Mx5Bgw" targetItem="_ELgt0H0PEeyOAbB1Mx5Bgw" sourceItem="_O2j7QH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O3fIUH0PEeyOAbB1Mx5Bgw" targetItem="_EL3TIH0PEeyOAbB1Mx5Bgw" sourceItem="_O3ehQH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O4WrAH0PEeyOAbB1Mx5Bgw" targetItem="_ELxzmX0PEeyOAbB1Mx5Bgw" sourceItem="_O4WD8H0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O5KjUH0PEeyOAbB1Mx5Bgw" targetItem="_ELxztn0PEeyOAbB1Mx5Bgw" sourceItem="_O5J8QH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O548EX0PEeyOAbB1Mx5Bgw" targetItem="_ELxzu30PEeyOAbB1Mx5Bgw" sourceItem="_O548EH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O6xs4H0PEeyOAbB1Mx5Bgw" targetItem="_ELxzwX0PEeyOAbB1Mx5Bgw" sourceItem="_O6xF0H0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O7e3gX0PEeyOAbB1Mx5Bgw" targetItem="_ELxzxH0PEeyOAbB1Mx5Bgw" sourceItem="_O7e3gH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O8MCIH0PEeyOAbB1Mx5Bgw" targetItem="_ELxzx30PEeyOAbB1Mx5Bgw" sourceItem="_O8LbEH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O85z0X0PEeyOAbB1Mx5Bgw" targetItem="_ELxz0H0PEeyOAbB1Mx5Bgw" sourceItem="_O85z0H0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O9ozoH0PEeyOAbB1Mx5Bgw" targetItem="_ELWVwH0PEeyOAbB1Mx5Bgw" sourceItem="_O9oMkH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O-r8gH0PEeyOAbB1Mx5Bgw" targetItem="_ELccYH0PEeyOAbB1Mx5Bgw" sourceItem="_O-rVcH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_O_hC8H0PEeyOAbB1Mx5Bgw" targetItem="_ELpQsn0PEeyOAbB1Mx5Bgw" sourceItem="_O_gb4H0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PATGEH0PEeyOAbB1Mx5Bgw" targetItem="_ELpQuX0PEeyOAbB1Mx5Bgw" sourceItem="_PASfAH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PBTLoH0PEeyOAbB1Mx5Bgw" targetItem="_ELpQvH0PEeyOAbB1Mx5Bgw" sourceItem="_PBEiIH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PCVGYH0PEeyOAbB1Mx5Bgw" targetItem="_ELkYQn0PEeyOAbB1Mx5Bgw" sourceItem="_PCUfUH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PERAEH0PEeyOAbB1Mx5Bgw" targetItem="_ELkYT30PEeyOAbB1Mx5Bgw" sourceItem="_PEEy0H0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PFH7sH0PEeyOAbB1Mx5Bgw" targetItem="_EMBEJH0PEeyOAbB1Mx5Bgw" sourceItem="_PFGtkH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PGLEkH0PEeyOAbB1Mx5Bgw" targetItem="_EMBEJ30PEeyOAbB1Mx5Bgw" sourceItem="_PGKdgH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PHKjEH0PEeyOAbB1Mx5Bgw" targetItem="_EMBELX0PEeyOAbB1Mx5Bgw" sourceItem="_PG9HsH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PH7_IX0PEeyOAbB1Mx5Bgw" targetItem="_EMBEMH0PEeyOAbB1Mx5Bgw" sourceItem="_PH7_IH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PI_vEH0PEeyOAbB1Mx5Bgw" targetItem="_EMHx2X0PEeyOAbB1Mx5Bgw" sourceItem="_PI_IAH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PJ01gX0PEeyOAbB1Mx5Bgw" targetItem="_EMHyAn0PEeyOAbB1Mx5Bgw" sourceItem="_PJ01gH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PK2wQH0PEeyOAbB1Mx5Bgw" targetItem="_EMHyBX0PEeyOAbB1Mx5Bgw" sourceItem="_PK2JMH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PLykYH0PEeyOAbB1Mx5Bgw" targetItem="_EMHyCH0PEeyOAbB1Mx5Bgw" sourceItem="_PLlJAH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PMiLQH0PEeyOAbB1Mx5Bgw" targetItem="_EMHyC30PEeyOAbB1Mx5Bgw" sourceItem="_PMhkMH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PNd_YH0PEeyOAbB1Mx5Bgw" targetItem="_EL8LqX0PEeyOAbB1Mx5Bgw" sourceItem="_PNdYUH0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_POJ74X0PEeyOAbB1Mx5Bgw" targetItem="_EL8Ltn0PEeyOAbB1Mx5Bgw" sourceItem="_POJ74H0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PPFI8H0PEeyOAbB1Mx5Bgw" targetItem="_EL8LvH0PEeyOAbB1Mx5Bgw" sourceItem="_PPEh4H0PEeyOAbB1Mx5Bgw"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_PPxsgH0PEeyOAbB1Mx5Bgw" targetItem="_EL8Lv30PEeyOAbB1Mx5Bgw" sourceItem="_PPxFcH0PEeyOAbB1Mx5Bgw"/>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_ELWVwH0PEeyOAbB1Mx5Bgw" comments="_O9oMkH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O9ozoH0PEeyOAbB1Mx5Bgw" name="DVDLogoBall" generalizations="_ELYyAn0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EH1uwH0PEeyOAbB1Mx5Bgw"/>
+    <visualProperties xmi:id="_ELWVwX0PEeyOAbB1Mx5Bgw" position="30.0,30.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_ELWVwn0PEeyOAbB1Mx5Bgw" label="+"/>
+    <operations xmi:id="_ELWVw30PEeyOAbB1Mx5Bgw" name="bounce">
+      <modelElement href="BallWorld.uml#_EH2V0H0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELWVxH0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EH2V0n0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <stereotypes xmi:id="_ELWVxX0PEeyOAbB1Mx5Bgw" name="Annotations">
+        <modelElement href="BallWorld.uml#_EH2V030PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELWVxn0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELWVx30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_ELWVyH0PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EH2V0X0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_ELWVyX0PEeyOAbB1Mx5Bgw" name="boolean">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+        </type>
+      </outParameters>
+    </operations>
+    <operations xmi:id="_ELWVyn0PEeyOAbB1Mx5Bgw" name="DVDLogoBall">
+      <modelElement href="BallWorld.uml#_EJJWUH0PEeyOAbB1Mx5Bgw"/>
+      <keywords xmi:id="_ELWVy30PEeyOAbB1Mx5Bgw" keyword="create"/>
+      <visibility xmi:id="_ELWVzH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELWVzX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_ELWVzn0PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EJJ9Yn0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_ELWVz30PEeyOAbB1Mx5Bgw" name="DVDLogoBall">
+          <modelElement href="BallWorld.uml#_EH1uwH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_ELWV0H0PEeyOAbB1Mx5Bgw" name="color">
+        <modelElement href="BallWorld.uml#_EJJWUX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELWV0X0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELWV0n0PEeyOAbB1Mx5Bgw" name="Color">
+          <modelElement href="BallWorld.uml#_EIzYEH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELWV030PEeyOAbB1Mx5Bgw" name="position">
+        <modelElement href="BallWorld.uml#_EJJWUn0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELWV1H0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELWV1X0PEeyOAbB1Mx5Bgw" name="Point">
+          <modelElement href="BallWorld.uml#_EI0mMH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELWV1n0PEeyOAbB1Mx5Bgw" name="velocity">
+        <modelElement href="BallWorld.uml#_EJJWU30PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELWV130PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELWV2H0PEeyOAbB1Mx5Bgw" name="Point">
+          <modelElement href="BallWorld.uml#_EI0mMH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELWV2X0PEeyOAbB1Mx5Bgw" name="diameter">
+        <modelElement href="BallWorld.uml#_EJJWVH0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELWV2n0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELWV230PEeyOAbB1Mx5Bgw" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELWV3H0PEeyOAbB1Mx5Bgw" name="dimension">
+        <modelElement href="BallWorld.uml#_EJJWVX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELWV3X0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELWV3n0PEeyOAbB1Mx5Bgw" name="IDimension">
+          <modelElement href="BallWorld.uml#_EI1NQX0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_ELWV330PEeyOAbB1Mx5Bgw" name="updateState">
+      <modelElement href="BallWorld.uml#_EJJ9Y30PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELWV4H0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJJ9ZX0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <stereotypes xmi:id="_ELWV4X0PEeyOAbB1Mx5Bgw" name="Annotations">
+        <modelElement href="BallWorld.uml#_EJKkcX0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELWV4n0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELWV430PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_ELWV5H0PEeyOAbB1Mx5Bgw" name="disp">
+        <modelElement href="BallWorld.uml#_EJJ9ZH0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELWV5X0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELWV5n0PEeyOAbB1Mx5Bgw" name="IDispatcher">
+          <modelElement href="BallWorld.uml#_EI0mMn0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_ELccYH0PEeyOAbB1Mx5Bgw" comments="_O-rVcH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O-r8gH0PEeyOAbB1Mx5Bgw" name="ABall" abstractClass="true" associationsOut="_ELYyA30PEeyOAbB1Mx5Bgw _ELYyBH0PEeyOAbB1Mx5Bgw _ELYyBX0PEeyOAbB1Mx5Bgw _ELYyBn0PEeyOAbB1Mx5Bgw" subclassedBy="_ELYyAn0PEeyOAbB1Mx5Bgw _ELgGwH0PEeyOAbB1Mx5Bgw _ELijAH0PEeyOAbB1Mx5Bgw _EL2FAH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EH3j8H0PEeyOAbB1Mx5Bgw"/>
+    <visualProperties xmi:id="_ELccYX0PEeyOAbB1Mx5Bgw" position="-761.0,-239.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_ELccYn0PEeyOAbB1Mx5Bgw" label="+"/>
+    <attributes xmi:id="_ELccY30PEeyOAbB1Mx5Bgw" name="color">
+      <modelElement href="BallWorld.uml#_EJU8gH0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELccZH0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJU8gX0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELccZX0PEeyOAbB1Mx5Bgw" label="#"/>
+      <cardinality xmi:id="_ELccZn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELccZ30PEeyOAbB1Mx5Bgw" name="Color">
+        <modelElement href="BallWorld.uml#_EIzYEH0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_ELccaH0PEeyOAbB1Mx5Bgw" name="position">
+      <modelElement href="BallWorld.uml#_EJU8gn0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELccaX0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJU8g30PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELccan0PEeyOAbB1Mx5Bgw" label="#"/>
+      <cardinality xmi:id="_ELcca30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELccbH0PEeyOAbB1Mx5Bgw" name="Point">
+        <modelElement href="BallWorld.uml#_EI0mMH0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_ELccbX0PEeyOAbB1Mx5Bgw" name="velocity">
+      <modelElement href="BallWorld.uml#_EJU8hH0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELccbn0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJVjkH0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELccb30PEeyOAbB1Mx5Bgw" label="#"/>
+      <cardinality xmi:id="_ELcccH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELcccX0PEeyOAbB1Mx5Bgw" name="Point">
+        <modelElement href="BallWorld.uml#_EI0mMH0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_ELcccn0PEeyOAbB1Mx5Bgw" name="diameter">
+      <modelElement href="BallWorld.uml#_EJVjkX0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELccc30PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJVjkn0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELccdH0PEeyOAbB1Mx5Bgw" label="#"/>
+      <cardinality xmi:id="_ELccdX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELccdn0PEeyOAbB1Mx5Bgw" name="int">
+        <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_ELccd30PEeyOAbB1Mx5Bgw" name="dimension">
+      <modelElement href="BallWorld.uml#_EJVjk30PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELcceH0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJVjlH0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELcceX0PEeyOAbB1Mx5Bgw" label="#"/>
+      <cardinality xmi:id="_ELccen0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELcce30PEeyOAbB1Mx5Bgw" name="IDimension">
+        <modelElement href="BallWorld.uml#_EI1NQX0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_ELccfH0PEeyOAbB1Mx5Bgw" name="move">
+      <modelElement href="BallWorld.uml#_EH4LAH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELccfX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELccfn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </operations>
+    <operations xmi:id="_ELccf30PEeyOAbB1Mx5Bgw" name="bounce">
+      <modelElement href="BallWorld.uml#_EH4yEH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELccgH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELccgX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_ELccgn0PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EH4yEX0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_ELccg30PEeyOAbB1Mx5Bgw" name="boolean">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+        </type>
+      </outParameters>
+    </operations>
+    <operations xmi:id="_ELcchH0PEeyOAbB1Mx5Bgw" name="ABall">
+      <modelElement href="BallWorld.uml#_EJLykH0PEeyOAbB1Mx5Bgw"/>
+      <keywords xmi:id="_ELcchX0PEeyOAbB1Mx5Bgw" keyword="create"/>
+      <visibility xmi:id="_ELcchn0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELcch30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_ELcciH0PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EJLymH0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_ELcciX0PEeyOAbB1Mx5Bgw" name="ABall">
+          <modelElement href="BallWorld.uml#_EH3j8H0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_ELccin0PEeyOAbB1Mx5Bgw" name="color">
+        <modelElement href="BallWorld.uml#_EJLykX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELcci30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELccjH0PEeyOAbB1Mx5Bgw" name="Color">
+          <modelElement href="BallWorld.uml#_EIzYEH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELccjX0PEeyOAbB1Mx5Bgw" name="position">
+        <modelElement href="BallWorld.uml#_EJLykn0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELccjn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELccj30PEeyOAbB1Mx5Bgw" name="Point">
+          <modelElement href="BallWorld.uml#_EI0mMH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELcckH0PEeyOAbB1Mx5Bgw" name="velocity">
+        <modelElement href="BallWorld.uml#_EJLyk30PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELcckX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELcckn0PEeyOAbB1Mx5Bgw" name="Point">
+          <modelElement href="BallWorld.uml#_EI0mMH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELcck30PEeyOAbB1Mx5Bgw" name="diameter">
+        <modelElement href="BallWorld.uml#_EJLylH0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELcclH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELcclX0PEeyOAbB1Mx5Bgw" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELccln0PEeyOAbB1Mx5Bgw" name="dimension">
+        <modelElement href="BallWorld.uml#_EJLylX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELccl30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELccmH0PEeyOAbB1Mx5Bgw" name="IDimension">
+          <modelElement href="BallWorld.uml#_EI1NQX0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_ELccmX0PEeyOAbB1Mx5Bgw" name="paint">
+      <modelElement href="BallWorld.uml#_EJMZoH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELccmn0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELccm30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_ELccnH0PEeyOAbB1Mx5Bgw" name="g">
+        <modelElement href="BallWorld.uml#_EJMZoX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELccnX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELccnn0PEeyOAbB1Mx5Bgw" name="Graphics">
+          <modelElement href="BallWorld.uml#_EIz_IX0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_ELccn30PEeyOAbB1Mx5Bgw" abstractOperation="true" name="updateState">
+      <modelElement href="BallWorld.uml#_EJMZon0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELccoH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELccoX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_ELccon0PEeyOAbB1Mx5Bgw" name="disp">
+        <modelElement href="BallWorld.uml#_EJMZo30PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELcco30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELccpH0PEeyOAbB1Mx5Bgw" name="IDispatcher">
+          <modelElement href="BallWorld.uml#_EI0mMn0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_ELccpX0PEeyOAbB1Mx5Bgw" name="update">
+      <modelElement href="BallWorld.uml#_EJNAsX0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELccpn0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELccp30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_ELccqH0PEeyOAbB1Mx5Bgw" name="disp">
+        <modelElement href="BallWorld.uml#_EJNAsn0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELccqX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELccqn0PEeyOAbB1Mx5Bgw" name="IDispatcher">
+          <modelElement href="BallWorld.uml#_EI0mMn0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELccq30PEeyOAbB1Mx5Bgw" name="g">
+        <modelElement href="BallWorld.uml#_EJNAs30PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELccrH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELccrX0PEeyOAbB1Mx5Bgw" name="Graphics">
+          <modelElement href="BallWorld.uml#_EIz_IX0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_ELgt0H0PEeyOAbB1Mx5Bgw" comments="_O2j7QH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O2kiUH0PEeyOAbB1Mx5Bgw" name="ErrorBall" generalizations="_ELgGwH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EHwPMH0PEeyOAbB1Mx5Bgw"/>
+    <visualProperties xmi:id="_ELgt0X0PEeyOAbB1Mx5Bgw" position="260.0,349.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_ELgt0n0PEeyOAbB1Mx5Bgw" label="+"/>
+    <operations xmi:id="_ELgt030PEeyOAbB1Mx5Bgw" name="ErrorBall">
+      <modelElement href="BallWorld.uml#_EJFr8H0PEeyOAbB1Mx5Bgw"/>
+      <keywords xmi:id="_ELgt1H0PEeyOAbB1Mx5Bgw" keyword="create"/>
+      <visibility xmi:id="_ELgt1X0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELgt1n0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_ELgt130PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EJGTA30PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_ELgt2H0PEeyOAbB1Mx5Bgw" name="ErrorBall">
+          <modelElement href="BallWorld.uml#_EHwPMH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_ELgt2X0PEeyOAbB1Mx5Bgw" name="dimension">
+        <modelElement href="BallWorld.uml#_EJGTAH0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELgt2n0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELgt230PEeyOAbB1Mx5Bgw" name="IDimension">
+          <modelElement href="BallWorld.uml#_EI1NQX0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_ELgt3H0PEeyOAbB1Mx5Bgw" name="updateState">
+      <modelElement href="BallWorld.uml#_EJGTBH0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELgt3X0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJGTBn0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <stereotypes xmi:id="_ELgt3n0PEeyOAbB1Mx5Bgw" name="Annotations">
+        <modelElement href="BallWorld.uml#_EJG6EX0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELgt330PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELgt4H0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_ELgt4X0PEeyOAbB1Mx5Bgw" name="disp">
+        <modelElement href="BallWorld.uml#_EJGTBX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELgt4n0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELgt430PEeyOAbB1Mx5Bgw" name="IDispatcher">
+          <modelElement href="BallWorld.uml#_EI0mMn0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_ELkYQn0PEeyOAbB1Mx5Bgw" comments="_PCUfUH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PCVGYH0PEeyOAbB1Mx5Bgw" name="SineSpeedBall" associationsOut="_ELkYMH0PEeyOAbB1Mx5Bgw _ELkYOX0PEeyOAbB1Mx5Bgw" generalizations="_ELijAH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EH71YH0PEeyOAbB1Mx5Bgw"/>
+    <visualProperties xmi:id="_ELkYQ30PEeyOAbB1Mx5Bgw" position="19.0,545.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_ELkYRH0PEeyOAbB1Mx5Bgw" label="+"/>
+    <attributes xmi:id="_ELkYRX0PEeyOAbB1Mx5Bgw" name="xVelChanger">
+      <modelElement href="BallWorld.uml#_EJWKoH0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELkYRn0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJWKoX0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELkYR30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELkYSH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELkYSX0PEeyOAbB1Mx5Bgw" name="SineMaker">
+        <modelElement href="BallWorld.uml#_EI9wIH0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_ELkYSn0PEeyOAbB1Mx5Bgw" name="yVelChanger">
+      <modelElement href="BallWorld.uml#_EJWxsH0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELkYS30PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJWxsX0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELkYTH0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELkYTX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELkYTn0PEeyOAbB1Mx5Bgw" name="SineMaker">
+        <modelElement href="BallWorld.uml#_EI9wIH0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_ELkYT30PEeyOAbB1Mx5Bgw" comments="_PEEy0H0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PERAEH0PEeyOAbB1Mx5Bgw" name="SineSpeedBall">
+      <modelElement href="BallWorld.uml#_EJOO0X0PEeyOAbB1Mx5Bgw"/>
+      <keywords xmi:id="_ELkYUH0PEeyOAbB1Mx5Bgw" keyword="create"/>
+      <visibility xmi:id="_ELkYUX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELkYUn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_ELkYU30PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EJO15n0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_ELkYVH0PEeyOAbB1Mx5Bgw" name="SineSpeedBall">
+          <modelElement href="BallWorld.uml#_EH71YH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_ELkYVX0PEeyOAbB1Mx5Bgw" name="color">
+        <modelElement href="BallWorld.uml#_EJOO0n0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELkYVn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELkYV30PEeyOAbB1Mx5Bgw" name="Color">
+          <modelElement href="BallWorld.uml#_EIzYEH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELkYWH0PEeyOAbB1Mx5Bgw" name="position">
+        <modelElement href="BallWorld.uml#_EJO14H0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELkYWX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELkYWn0PEeyOAbB1Mx5Bgw" name="Point">
+          <modelElement href="BallWorld.uml#_EI0mMH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELkYW30PEeyOAbB1Mx5Bgw" name="velocity">
+        <modelElement href="BallWorld.uml#_EJO14X0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELkYXH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELkYXX0PEeyOAbB1Mx5Bgw" name="Point">
+          <modelElement href="BallWorld.uml#_EI0mMH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELkYXn0PEeyOAbB1Mx5Bgw" name="diameter">
+        <modelElement href="BallWorld.uml#_EJO14n0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELkYX30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELkYYH0PEeyOAbB1Mx5Bgw" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_ELkYYX0PEeyOAbB1Mx5Bgw" name="dimension">
+        <modelElement href="BallWorld.uml#_EJO1430PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELkYYn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELkYY30PEeyOAbB1Mx5Bgw" name="IDimension">
+          <modelElement href="BallWorld.uml#_EI1NQX0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_ELkYZH0PEeyOAbB1Mx5Bgw" name="updateState">
+      <modelElement href="BallWorld.uml#_EJPc8H0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELkYZX0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJPc8n0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <stereotypes xmi:id="_ELkYZn0PEeyOAbB1Mx5Bgw" name="Annotations">
+        <modelElement href="BallWorld.uml#_EJQEAX0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELkYZ30PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELkYaH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_ELkYaX0PEeyOAbB1Mx5Bgw" name="disp">
+        <modelElement href="BallWorld.uml#_EJPc8X0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELkYan0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELkYa30PEeyOAbB1Mx5Bgw" name="IDispatcher">
+          <modelElement href="BallWorld.uml#_EI0mMn0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:InterfaceVisual" xmi:id="_ELpQsn0PEeyOAbB1Mx5Bgw" comments="_O_gb4H0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O_hC8H0PEeyOAbB1Mx5Bgw" name="IModel2ViewAdapter" associationsIn="_ELnbgH0PEeyOAbB1Mx5Bgw _ELrs8H0PEeyOAbB1Mx5Bgw" associationsOut="_ELnbgH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EH6nQH0PEeyOAbB1Mx5Bgw"/>
+    <visualProperties xmi:id="_ELpQs30PEeyOAbB1Mx5Bgw" position="2185.0,-106.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_ELpQtH0PEeyOAbB1Mx5Bgw" label="+"/>
+    <attributes xmi:id="_ELpQtX0PEeyOAbB1Mx5Bgw" defaultValue="new IModel2ViewAdapter() {&#xD;&#xA;&#x9;&#x9;public void update() {&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;public IDimension getDimension() {&#xD;&#xA;&#x9;&#x9;&#x9;return null;&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;}" name="NULL_OBJECT" staticAttribute="true">
+      <modelElement href="BallWorld.uml#_EH7OUH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELpQtn0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELpQt30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELpQuH0PEeyOAbB1Mx5Bgw" name="IModel2ViewAdapter">
+        <modelElement href="BallWorld.uml#_EH6nQH0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_ELpQuX0PEeyOAbB1Mx5Bgw" comments="_PASfAH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PATGEH0PEeyOAbB1Mx5Bgw" name="update">
+      <modelElement href="BallWorld.uml#_EH6nQX0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELpQun0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELpQu30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </operations>
+    <operations xmi:id="_ELpQvH0PEeyOAbB1Mx5Bgw" comments="_PBEiIH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PBTLoH0PEeyOAbB1Mx5Bgw" name="getDimension">
+      <modelElement href="BallWorld.uml#_EH7OUn0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELpQvX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELpQvn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_ELpQv30PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EJOO0H0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_ELpQwH0PEeyOAbB1Mx5Bgw" name="IDimension">
+          <modelElement href="BallWorld.uml#_EI1NQX0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </outParameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_ELxzmX0PEeyOAbB1Mx5Bgw" comments="_O4WD8H0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O4WrAH0PEeyOAbB1Mx5Bgw" name="BallModel" associationsIn="_EL5vYH0PEeyOAbB1Mx5Bgw" associationsOut="_ELrs8H0PEeyOAbB1Mx5Bgw _ELtiIX0PEeyOAbB1Mx5Bgw _ELxMgH0PEeyOAbB1Mx5Bgw _ELxzkH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EHzSgH0PEeyOAbB1Mx5Bgw"/>
+    <visualProperties xmi:id="_ELxzmn0PEeyOAbB1Mx5Bgw" position="1022.0,-7.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_ELxzm30PEeyOAbB1Mx5Bgw" label="+"/>
+    <attributes xmi:id="_ELxznH0PEeyOAbB1Mx5Bgw" defaultValue="50" name="timeSlice" staticAttribute="true">
+      <modelElement href="BallWorld.uml#_EJSgQH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELxznX0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELxznn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELxzn30PEeyOAbB1Mx5Bgw" name="int">
+        <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_ELxzoH0PEeyOAbB1Mx5Bgw" defaultValue="IModel2ViewAdapter.NULL_OBJECT" name="model2ViewAdpt">
+      <modelElement href="BallWorld.uml#_EJTHUX0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELxzoX0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJTHU30PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELxzon0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELxzo30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELxzpH0PEeyOAbB1Mx5Bgw" name="IModel2ViewAdapter">
+        <modelElement href="BallWorld.uml#_EH6nQH0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_ELxzpX0PEeyOAbB1Mx5Bgw" defaultValue="new Timer(timeSlice, (e) -> model2ViewAdpt.update())" name="timer">
+      <modelElement href="BallWorld.uml#_EJTHVH0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELxzpn0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJTuYH0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELxzp30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELxzqH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELxzqX0PEeyOAbB1Mx5Bgw" name="Timer">
+        <modelElement href="BallWorld.uml#_EI3pgX0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_ELxzqn0PEeyOAbB1Mx5Bgw" defaultValue="new SequentialDispatcher&lt;Graphics>()" name="ballDispatcher">
+      <modelElement href="BallWorld.uml#_EJTuYX0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELxzq30PEeyOAbB1Mx5Bgw" name="Generics">
+        <modelElement href="BallWorld.uml#_EJTuYn0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <stereotypes xmi:id="_ELxzrH0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJTuZH0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELxzrX0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELxzrn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELxzr30PEeyOAbB1Mx5Bgw" name="IDispatcher">
+        <modelElement href="BallWorld.uml#_EI0mMn0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_ELxzsH0PEeyOAbB1Mx5Bgw" defaultValue="new ObjectLoader&lt;IObserver&lt;Graphics>>(&#xD;&#xA;&#x9;&#x9;&#x9;args -> new ErrorBall(model2ViewAdpt.getDimension()))" name="loader">
+      <modelElement href="BallWorld.uml#_EJTuZX0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_ELxzsX0PEeyOAbB1Mx5Bgw" name="Generics">
+        <modelElement href="BallWorld.uml#_EJUVcH0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <stereotypes xmi:id="_ELxzsn0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJUVcn0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_ELxzs30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_ELxztH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_ELxztX0PEeyOAbB1Mx5Bgw" name="IObjectLoader">
+        <modelElement href="BallWorld.uml#_EI43on0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_ELxztn0PEeyOAbB1Mx5Bgw" comments="_O5J8QH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O5KjUH0PEeyOAbB1Mx5Bgw" name="getTimeSlice" staticOperation="true">
+      <modelElement href="BallWorld.uml#_EHz5kH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELxzt30PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELxzuH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_ELxzuX0PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EHz5kX0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_ELxzun0PEeyOAbB1Mx5Bgw" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </outParameters>
+    </operations>
+    <operations xmi:id="_ELxzu30PEeyOAbB1Mx5Bgw" comments="_O548EH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O548EX0PEeyOAbB1Mx5Bgw" name="makeBall">
+      <modelElement href="BallWorld.uml#_EHz5kn0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELxzvH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELxzvX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_ELxzvn0PEeyOAbB1Mx5Bgw" name="ballType">
+        <modelElement href="BallWorld.uml#_EHz5k30PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELxzv30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELxzwH0PEeyOAbB1Mx5Bgw" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_ELxzwX0PEeyOAbB1Mx5Bgw" comments="_O6xF0H0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O6xs4H0PEeyOAbB1Mx5Bgw" name="clearBalls">
+      <modelElement href="BallWorld.uml#_EH0goH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELxzwn0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELxzw30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </operations>
+    <operations xmi:id="_ELxzxH0PEeyOAbB1Mx5Bgw" comments="_O7e3gH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O7e3gX0PEeyOAbB1Mx5Bgw" name="start">
+      <modelElement href="BallWorld.uml#_EH0goX0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELxzxX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELxzxn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </operations>
+    <operations xmi:id="_ELxzx30PEeyOAbB1Mx5Bgw" comments="_O8LbEH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O8MCIH0PEeyOAbB1Mx5Bgw" name="BallModel">
+      <modelElement href="BallWorld.uml#_EI6s0H0PEeyOAbB1Mx5Bgw"/>
+      <keywords xmi:id="_ELxzyH0PEeyOAbB1Mx5Bgw" keyword="create"/>
+      <visibility xmi:id="_ELxzyX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELxzyn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_ELxzy30PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EI6s1H0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_ELxzzH0PEeyOAbB1Mx5Bgw" name="BallModel">
+          <modelElement href="BallWorld.uml#_EHzSgH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_ELxzzX0PEeyOAbB1Mx5Bgw" name="model2ViewAdpt">
+        <modelElement href="BallWorld.uml#_EI6s0X0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELxzzn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELxzz30PEeyOAbB1Mx5Bgw" name="IModel2ViewAdapter">
+          <modelElement href="BallWorld.uml#_EH6nQH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_ELxz0H0PEeyOAbB1Mx5Bgw" comments="_O85z0H0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O85z0X0PEeyOAbB1Mx5Bgw" name="update">
+      <modelElement href="BallWorld.uml#_EJIvQH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_ELxz0X0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_ELxz0n0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_ELxz030PEeyOAbB1Mx5Bgw" name="g">
+        <modelElement href="BallWorld.uml#_EJIvQX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_ELxz1H0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_ELxz1X0PEeyOAbB1Mx5Bgw" name="Graphics">
+          <modelElement href="BallWorld.uml#_EIz_IX0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_EL3TIH0PEeyOAbB1Mx5Bgw" comments="_O3ehQH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_O3fIUH0PEeyOAbB1Mx5Bgw" name="BounceUpBall" generalizations="_EL2FAH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EHxdUH0PEeyOAbB1Mx5Bgw"/>
+    <visualProperties xmi:id="_EL3TIX0PEeyOAbB1Mx5Bgw" position="27.0,767.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_EL3TIn0PEeyOAbB1Mx5Bgw" label="+"/>
+    <operations xmi:id="_EL3TI30PEeyOAbB1Mx5Bgw" name="BounceUpBall">
+      <modelElement href="BallWorld.uml#_EJHhIH0PEeyOAbB1Mx5Bgw"/>
+      <keywords xmi:id="_EL3TJH0PEeyOAbB1Mx5Bgw" keyword="create"/>
+      <visibility xmi:id="_EL3TJX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EL3TJn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_EL3TJ30PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EJHhKH0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_EL3TKH0PEeyOAbB1Mx5Bgw" name="BounceUpBall">
+          <modelElement href="BallWorld.uml#_EHxdUH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_EL3TKX0PEeyOAbB1Mx5Bgw" name="color">
+        <modelElement href="BallWorld.uml#_EJHhIX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_EL3TKn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_EL3TK30PEeyOAbB1Mx5Bgw" name="Color">
+          <modelElement href="BallWorld.uml#_EIzYEH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_EL3TLH0PEeyOAbB1Mx5Bgw" name="position">
+        <modelElement href="BallWorld.uml#_EJHhIn0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_EL3TLX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_EL3TLn0PEeyOAbB1Mx5Bgw" name="Point">
+          <modelElement href="BallWorld.uml#_EI0mMH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_EL3TL30PEeyOAbB1Mx5Bgw" name="velocity">
+        <modelElement href="BallWorld.uml#_EJHhI30PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_EL3TMH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_EL3TMX0PEeyOAbB1Mx5Bgw" name="Point">
+          <modelElement href="BallWorld.uml#_EI0mMH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_EL3TMn0PEeyOAbB1Mx5Bgw" name="diameter">
+        <modelElement href="BallWorld.uml#_EJHhJH0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_EL3TM30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_EL3TNH0PEeyOAbB1Mx5Bgw" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_EL3TNX0PEeyOAbB1Mx5Bgw" name="dimension">
+        <modelElement href="BallWorld.uml#_EJHhJX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_EL3TNn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_EL3TN30PEeyOAbB1Mx5Bgw" name="IDimension">
+          <modelElement href="BallWorld.uml#_EI1NQX0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_EL3TOH0PEeyOAbB1Mx5Bgw" name="updateState">
+      <modelElement href="BallWorld.uml#_EJHhKX0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_EL3TOX0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJIIMH0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <stereotypes xmi:id="_EL3TOn0PEeyOAbB1Mx5Bgw" name="Annotations">
+        <modelElement href="BallWorld.uml#_EJIIMn0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_EL3TO30PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EL3TPH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_EL3TPX0PEeyOAbB1Mx5Bgw" name="disp">
+        <modelElement href="BallWorld.uml#_EJHhKn0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_EL3TPn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_EL3TP30PEeyOAbB1Mx5Bgw" name="IDispatcher">
+          <modelElement href="BallWorld.uml#_EI0mMn0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_EL8LqX0PEeyOAbB1Mx5Bgw" comments="_PNdYUH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PNd_YH0PEeyOAbB1Mx5Bgw" name="BallController" associationsOut="_EL5vYH0PEeyOAbB1Mx5Bgw _EL8LoH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EH9qkH0PEeyOAbB1Mx5Bgw"/>
+    <visualProperties xmi:id="_EL8Lqn0PEeyOAbB1Mx5Bgw" position="666.0,325.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_EL8Lq30PEeyOAbB1Mx5Bgw" label="+"/>
+    <attributes xmi:id="_EL8LrH0PEeyOAbB1Mx5Bgw" name="model">
+      <modelElement href="BallWorld.uml#_EJWxsn0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_EL8LrX0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJWxs30PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_EL8Lrn0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EL8Lr30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_EL8LsH0PEeyOAbB1Mx5Bgw" name="BallModel">
+        <modelElement href="BallWorld.uml#_EHzSgH0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_EL8LsX0PEeyOAbB1Mx5Bgw" name="frame">
+      <modelElement href="BallWorld.uml#_EJXYwH0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_EL8Lsn0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJXYwX0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_EL8Ls30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EL8LtH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_EL8LtX0PEeyOAbB1Mx5Bgw" name="ViewGUI">
+        <modelElement href="BallWorld.uml#_EIAG0H0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_EL8Ltn0PEeyOAbB1Mx5Bgw" comments="_POJ74H0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_POJ74X0PEeyOAbB1Mx5Bgw" name="BallController">
+      <modelElement href="BallWorld.uml#_EH9qkX0PEeyOAbB1Mx5Bgw"/>
+      <keywords xmi:id="_EL8Lt30PEeyOAbB1Mx5Bgw" keyword="create"/>
+      <visibility xmi:id="_EL8LuH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EL8LuX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_EL8Lun0PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EH-Ron0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_EL8Lu30PEeyOAbB1Mx5Bgw" name="BallController">
+          <modelElement href="BallWorld.uml#_EH9qkH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </outParameters>
+    </operations>
+    <operations xmi:id="_EL8LvH0PEeyOAbB1Mx5Bgw" comments="_PPEh4H0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PPFI8H0PEeyOAbB1Mx5Bgw" name="start">
+      <modelElement href="BallWorld.uml#_EH-Ro30PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EL8LvX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EL8Lvn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </operations>
+    <operations xmi:id="_EL8Lv30PEeyOAbB1Mx5Bgw" comments="_PPxFcH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PPxsgH0PEeyOAbB1Mx5Bgw" name="main" staticOperation="true">
+      <modelElement href="BallWorld.uml#_EH-RpH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EL8LwH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EL8LwX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_EL8Lwn0PEeyOAbB1Mx5Bgw" name="args">
+        <modelElement href="BallWorld.uml#_EH-RpX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_EL8Lw30PEeyOAbB1Mx5Bgw" label="1..*" max="-1" min="1"/>
+        <type xmi:id="_EL8LxH0PEeyOAbB1Mx5Bgw" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:InterfaceVisual" xmi:id="_EMBEJH0PEeyOAbB1Mx5Bgw" comments="_PFGtkH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PFH7sH0PEeyOAbB1Mx5Bgw" name="IView2ModelAdapter" associationsIn="_EL_O8n0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EH-4sH0PEeyOAbB1Mx5Bgw"/>
+    <visualProperties xmi:id="_EMBEJX0PEeyOAbB1Mx5Bgw" position="950.0,-216.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_EMBEJn0PEeyOAbB1Mx5Bgw" label="+"/>
+    <operations xmi:id="_EMBEJ30PEeyOAbB1Mx5Bgw" comments="_PGKdgH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PGLEkH0PEeyOAbB1Mx5Bgw" name="makeBall">
+      <modelElement href="BallWorld.uml#_EH_fwH0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMBEKH0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMBEKX0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_EMBEKn0PEeyOAbB1Mx5Bgw" name="ballType">
+        <modelElement href="BallWorld.uml#_EH_fwX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_EMBEK30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_EMBELH0PEeyOAbB1Mx5Bgw" name="String">
+          <modelElement href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_EMBELX0PEeyOAbB1Mx5Bgw" comments="_PG9HsH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PHKjEH0PEeyOAbB1Mx5Bgw" name="clearBalls">
+      <modelElement href="BallWorld.uml#_EH_fwn0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMBELn0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMBEL30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </operations>
+    <operations xmi:id="_EMBEMH0PEeyOAbB1Mx5Bgw" comments="_PH7_IH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PH7_IX0PEeyOAbB1Mx5Bgw" name="paintBalls">
+      <modelElement href="BallWorld.uml#_EJQEA30PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMBEMX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMBEMn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <parameters xmi:id="_EMBEM30PEeyOAbB1Mx5Bgw" name="g">
+        <modelElement href="BallWorld.uml#_EJQEBH0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_EMBENH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_EMBENX0PEeyOAbB1Mx5Bgw" name="Graphics">
+          <modelElement href="BallWorld.uml#_EIz_IX0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_EMHx2X0PEeyOAbB1Mx5Bgw" comments="_PI_IAH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PI_vEH0PEeyOAbB1Mx5Bgw" name="ViewGUI" associationsIn="_EL8LoH0PEeyOAbB1Mx5Bgw" associationsOut="_EL_O8n0PEeyOAbB1Mx5Bgw _EMF8oH0PEeyOAbB1Mx5Bgw _EMGjsH0PEeyOAbB1Mx5Bgw _EMGjuX0PEeyOAbB1Mx5Bgw _EMHKwH0PEeyOAbB1Mx5Bgw _EMHKyX0PEeyOAbB1Mx5Bgw _EMHx0H0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_EIAG0H0PEeyOAbB1Mx5Bgw"/>
+    <visualProperties xmi:id="_EMHx2n0PEeyOAbB1Mx5Bgw" position="1607.0,-30.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_EMHx230PEeyOAbB1Mx5Bgw" label="+"/>
+    <attributes xmi:id="_EMHx3H0PEeyOAbB1Mx5Bgw" defaultValue="-38501937628770671L" name="serialVersionUID" staticAttribute="true">
+      <modelElement href="BallWorld.uml#_EJXYwn0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHx3X0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMHx3n0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_EMHx330PEeyOAbB1Mx5Bgw" name="long">
+        <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_EMHx4H0PEeyOAbB1Mx5Bgw" name="contentPane">
+      <modelElement href="BallWorld.uml#_EJXYxH0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_EMHx4X0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJX_0H0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_EMHx4n0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMHx430PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_EMHx5H0PEeyOAbB1Mx5Bgw" name="JPanel">
+        <modelElement href="BallWorld.uml#_EJAMY30PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_EMHx5X0PEeyOAbB1Mx5Bgw" defaultValue="new JPanel()" name="controlPanel">
+      <modelElement href="BallWorld.uml#_EJX_0X0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_EMHx5n0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJX_030PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_EMHx530PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMHx6H0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_EMHx6X0PEeyOAbB1Mx5Bgw" name="JPanel">
+        <modelElement href="BallWorld.uml#_EJAMY30PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_EMHx6n0PEeyOAbB1Mx5Bgw" defaultValue="new JTextField()" name="ballTextField">
+      <modelElement href="BallWorld.uml#_EJX_1H0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_EMHx630PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJX_1n0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_EMHx7H0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMHx7X0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_EMHx7n0PEeyOAbB1Mx5Bgw" name="JTextField">
+        <modelElement href="BallWorld.uml#_EJAzc30PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_EMHx730PEeyOAbB1Mx5Bgw" defaultValue="new JButton(&quot;Make ball&quot;)" name="makeBallButton">
+      <modelElement href="BallWorld.uml#_EJX_130PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_EMHx8H0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJYm4X0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_EMHx8X0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMHx8n0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_EMHx830PEeyOAbB1Mx5Bgw" name="JButton">
+        <modelElement href="BallWorld.uml#_EJBagX0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_EMHx9H0PEeyOAbB1Mx5Bgw" defaultValue="new JButton(&quot;Clear all&quot;)" name="clearButton">
+      <modelElement href="BallWorld.uml#_EJYm4n0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_EMHx9X0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJYm5H0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_EMHx9n0PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMHx930PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_EMHx-H0PEeyOAbB1Mx5Bgw" name="JButton">
+        <modelElement href="BallWorld.uml#_EJBagX0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_EMHx-X0PEeyOAbB1Mx5Bgw" defaultValue="new JPanel() {&#xD;&#xA;&#x9;&#x9;/**&#xD;&#xA;&#x9;&#x9; * Auto-generated ID&#xD;&#xA;&#x9;&#x9; */&#xD;&#xA;&#x9;&#x9;private static final long serialVersionUID = -3824415969248765824L;&#xD;&#xA;&#xD;&#xA;&#x9;&#x9;@Override&#xD;&#xA;&#x9;&#x9;public void paintComponent(Graphics g) {&#xD;&#xA;&#x9;&#x9;&#x9;super.paintComponent(g);&#xD;&#xA;&#x9;&#x9;&#x9;ViewGUI.this.view2ModelAdpt.paintBalls(g);&#xD;&#xA;&#x9;&#x9;}&#xD;&#xA;&#x9;}" name="ballWorld">
+      <modelElement href="BallWorld.uml#_EJZN8H0PEeyOAbB1Mx5Bgw"/>
+      <stereotypes xmi:id="_EMHx-n0PEeyOAbB1Mx5Bgw" name="LegacyStyledElement">
+        <modelElement href="BallWorld.uml#_EJZN8X0PEeyOAbB1Mx5Bgw"/>
+      </stereotypes>
+      <visibility xmi:id="_EMHx-30PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMHx_H0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_EMHx_X0PEeyOAbB1Mx5Bgw" name="JPanel">
+        <modelElement href="BallWorld.uml#_EJAMY30PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_EMHx_n0PEeyOAbB1Mx5Bgw" name="view2ModelAdpt">
+      <modelElement href="BallWorld.uml#_EJZ1AX0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHx_30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMHyAH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <type xmi:id="_EMHyAX0PEeyOAbB1Mx5Bgw" name="IView2ModelAdapter">
+        <modelElement href="BallWorld.uml#_EH-4sH0PEeyOAbB1Mx5Bgw"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_EMHyAn0PEeyOAbB1Mx5Bgw" comments="_PJ01gH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PJ01gX0PEeyOAbB1Mx5Bgw" name="initGUI">
+      <modelElement href="BallWorld.uml#_EIAt4H0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHyA30PEeyOAbB1Mx5Bgw" label="-"/>
+      <cardinality xmi:id="_EMHyBH0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </operations>
+    <operations xmi:id="_EMHyBX0PEeyOAbB1Mx5Bgw" comments="_PK2JMH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PK2wQH0PEeyOAbB1Mx5Bgw" name="start">
+      <modelElement href="BallWorld.uml#_EIAt4X0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHyBn0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMHyB30PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </operations>
+    <operations xmi:id="_EMHyCH0PEeyOAbB1Mx5Bgw" comments="_PLlJAH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PLykYH0PEeyOAbB1Mx5Bgw" name="update">
+      <modelElement href="BallWorld.uml#_EIBU8H0PEeyOAbB1Mx5Bgw"/>
+      <visibility xmi:id="_EMHyCX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMHyCn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+    </operations>
+    <operations xmi:id="_EMHyC30PEeyOAbB1Mx5Bgw" comments="_PMhkMH0PEeyOAbB1Mx5Bgw" targetConnectionVisual="_PMiLQH0PEeyOAbB1Mx5Bgw" name="ViewGUI">
+      <modelElement href="BallWorld.uml#_EJCooH0PEeyOAbB1Mx5Bgw"/>
+      <keywords xmi:id="_EMHyDH0PEeyOAbB1Mx5Bgw" keyword="create"/>
+      <visibility xmi:id="_EMHyDX0PEeyOAbB1Mx5Bgw" label="+"/>
+      <cardinality xmi:id="_EMHyDn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_EMHyD30PEeyOAbB1Mx5Bgw">
+        <modelElement href="BallWorld.uml#_EJCopH0PEeyOAbB1Mx5Bgw"/>
+        <type xmi:id="_EMHyEH0PEeyOAbB1Mx5Bgw" name="ViewGUI">
+          <modelElement href="BallWorld.uml#_EIAG0H0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_EMHyEX0PEeyOAbB1Mx5Bgw" name="view2ModelAdpt">
+        <modelElement href="BallWorld.uml#_EJCooX0PEeyOAbB1Mx5Bgw"/>
+        <cardinality xmi:id="_EMHyEn0PEeyOAbB1Mx5Bgw" label="1" max="1" min="1"/>
+        <type xmi:id="_EMHyE30PEeyOAbB1Mx5Bgw" name="IView2ModelAdapter">
+          <modelElement href="BallWorld.uml#_EH-4sH0PEeyOAbB1Mx5Bgw"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O2j7QH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O2kiUH0PEeyOAbB1Mx5Bgw" text="@author rlmse&#xD;&#xA;Ball which is generated when the input ball type from the view is invalid. constructed so that&#xD;&#xA;it doesn't appear in the GUI" item="_ELgt0H0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKeX0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O3ehQH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O3fIUH0PEeyOAbB1Mx5Bgw" text="@author rlmse&#xD;&#xA;A ball that forces perspective, appearing as if it is bouncing out of the screen when moving&#xD;&#xA;right and as if it is bouncing away from the screen when moving left." item="_EL3TIH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKd30PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O4WD8H0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O4WrAH0PEeyOAbB1Mx5Bgw" text="@author rlmse&#xD;&#xA;A model representing a collection of independently moving balls in a 2D plane" item="_ELxzmX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKcH0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O5J8QH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O5KjUH0PEeyOAbB1Mx5Bgw" text="@return the period of the model refresh" item="_ELxztn0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKc30PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O548EH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O548EX0PEeyOAbB1Mx5Bgw" text="Generates an ABall&#xD;&#xA;&#x9; * @param ballType - the type of ABall to be generated. Input from the view" item="_ELxzu30PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKdH0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O6xF0H0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O6xs4H0PEeyOAbB1Mx5Bgw" text="Unsubscribe all current balls from the dispatcher, thus removing them from the view" item="_ELxzwX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKdX0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O7e3gH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O7e3gX0PEeyOAbB1Mx5Bgw" text="Start the timer of the model, thus beginning to update the status of the balls in the model" item="_ELxzxH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKdn0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O8LbEH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O8MCIH0PEeyOAbB1Mx5Bgw" text="Construct a new model&#xD;&#xA;&#x9; * @param model2ViewAdpt - the adapter allowing the model to communicate with the view" item="_ELxzx30PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKcX0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O85z0H0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O85z0X0PEeyOAbB1Mx5Bgw" text="Tells the dispatcher to update the balls in the model&#xD;&#xA;&#x9; * @param g - the Graphics object containing the balls that the model has generated" item="_ELxz0H0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKcn0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O9oMkH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O9ozoH0PEeyOAbB1Mx5Bgw" text="@author rlmse&#xD;&#xA;A ball which changes color when it hits a boundary, like the logo in the DVD idle screen" item="_ELWVwH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKeH0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O-rVcH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O-r8gH0PEeyOAbB1Mx5Bgw" text="@author rlmse&#xD;&#xA;Class which represents abstract balls which can appear in the GUI." item="_ELccYH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1qjYH0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_O_gb4H0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_O_hC8H0PEeyOAbB1Mx5Bgw" text="Adapter allowing the model to communicate to the view&#xD;&#xA;@author rlmse" item="_ELpQsn0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKen0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PASfAH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PATGEH0PEeyOAbB1Mx5Bgw" text="Tells the view to update what it displays to reflect changes in the model" item="_ELpQuX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKe30PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PBEiIH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PBTLoH0PEeyOAbB1Mx5Bgw" text="@return The dimensions of the Graphics object which contains the balls in the view" item="_ELpQvH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKfH0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PCUfUH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PCVGYH0PEeyOAbB1Mx5Bgw" text="@author rlmse&#xD;&#xA;A ball whose velocity which oscillates according to randomly generated sine waves" item="_ELkYQn0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKfX0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PEEy0H0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PERAEH0PEeyOAbB1Mx5Bgw" text="@param color - color of the SineSpeedBall&#xD;&#xA;&#x9; * @param position - Position of the SineSpeedBall&#xD;&#xA;&#x9; * @param velocity - Velocity of the SineSpeedBall&#xD;&#xA;&#x9; * @param diameter - Diameter of the SineSpeedBall&#xD;&#xA;&#x9; * @param dimension - Dimension of the graphic container of the SineSpeedBall" item="_ELkYT30PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKfn0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PFGtkH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PFH7sH0PEeyOAbB1Mx5Bgw" text="@author rlmse&#xD;&#xA;An adapter which allows the view to communicate to the model" item="_EMBEJH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKg30PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PGKdgH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PGLEkH0PEeyOAbB1Mx5Bgw" text="Tells the model to make a ball of the specified type&#xD;&#xA;&#x9; * @param ballType - the name of the type of ball that the model will generate" item="_EMBEJ30PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKhH0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PG9HsH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PHKjEH0PEeyOAbB1Mx5Bgw" text="Tells the model to delete the balls it has generated" item="_EMBELX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKhX0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PH7_IH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PH7_IX0PEeyOAbB1Mx5Bgw" text="Tells the balls generated by the model to display themselves in the view&#xD;&#xA;&#x9; * @param g - the Graphics object on which the balls generated by the model are displayed" item="_EMBEMH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKhn0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PI_IAH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PI_vEH0PEeyOAbB1Mx5Bgw" text="@author rlmse&#xD;&#xA;A GUI representing a view displaying the model of moving balls" item="_EMHx2X0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKh30PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PJ01gH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PJ01gX0PEeyOAbB1Mx5Bgw" text="Contains the initialization processes for the ViewGUI" item="_EMHyAn0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rxgX0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PK2JMH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PK2wQH0PEeyOAbB1Mx5Bgw" text="Makes the GUI visible" item="_EMHyBX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rxgn0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PLlJAH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PLykYH0PEeyOAbB1Mx5Bgw" text="Updates the GUI to reflect changes from the model" item="_EMHyCH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rxg30PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PMhkMH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PMiLQH0PEeyOAbB1Mx5Bgw" text="Create the frame.&#xD;&#xA;&#x9; * @param view2ModelAdpt - the adapter allowing the view to communicate to the model" item="_EMHyC30PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rxgH0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PNdYUH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PNd_YH0PEeyOAbB1Mx5Bgw" text="Following the MVC design patter, a controller which initializes and connects the model of moving&#xD;&#xA;balls and a view to display the model&#xD;&#xA;@author rlmse" item="_EL8LqX0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKf30PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_POJ74H0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_POJ74X0PEeyOAbB1Mx5Bgw" text="Constructs the model and view" item="_EL8Ltn0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKgH0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PPEh4H0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PPFI8H0PEeyOAbB1Mx5Bgw" text="Starts the model and view" item="_EL8LvH0PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKgX0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_PPxFcH0PEeyOAbB1Mx5Bgw" sourceConnectionVisual="_PPxsgH0PEeyOAbB1Mx5Bgw" text="Entry point for the BallWorld system. Initializes its controller&#xD;&#xA;&#x9; * @param args - not used" item="_EL8Lv30PEeyOAbB1Mx5Bgw">
+    <modelElement href="BallWorld.uml#_O1rKgn0PEeyOAbB1Mx5Bgw"/>
+  </nodes>
+</com.yattasolutions.uml.diagrams.classifier:ClassDiagram>

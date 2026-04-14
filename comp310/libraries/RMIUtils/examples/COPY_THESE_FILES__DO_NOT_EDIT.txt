@@ -1,0 +1,3 @@
+Do NOT edit anything in this package or its sub-packages!
+
+COPY (NOT move!) any desired code to a package OUTSIDE of the provided package and edit it there. 

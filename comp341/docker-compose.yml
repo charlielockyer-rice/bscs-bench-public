@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  comp341:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: comp341-runner
+    volumes:
+      - ${WORKSPACE:-.}:/workspace
+      - ./data:/data:ro
+    working_dir: /workspace
+    mem_limit: 8g
+    cpus: 4
+    environment:
+      - PYTHONPATH=/workspace

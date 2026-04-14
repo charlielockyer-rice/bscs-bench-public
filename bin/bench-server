@@ -1,0 +1,12 @@
+#!/usr/bin/env bun
+/**
+ * BSCS Bench API Server CLI
+ *
+ * Starts the TypeScript API server for streaming benchmark events.
+ *
+ * Usage:
+ *   bin/bench-server                    # Start on default port 3001
+ *   BENCH_API_PORT=3002 bin/bench-server # Start on custom port
+ */
+
+import "../agent/server"

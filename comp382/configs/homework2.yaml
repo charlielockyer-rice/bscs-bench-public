@@ -1,0 +1,121 @@
+assignment_number: 2
+assignment_name: "Advanced Tree Structures: Persistence, RB-Join, 2-3-4 Trees"
+display_name: "HW2: Advanced Tree Structures: Persistence, RB-Join, 2-3-4 Trees"
+course: "comp382"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+problems:
+  - number: 1
+    name: "Persistent Dynamic Sets"
+    points: 25
+    parts:
+      - part: "a"
+        points: 3
+        description: "Identify nodes that change on insert/delete"
+        rubric:
+          - "All ancestors of modified node must be copied: 3pts"
+      - part: "b"
+        points: 7
+        description: "PERSISTENT-TREE-INSERT pseudocode"
+        rubric:
+          - "Correct traversal and copying: 4pts"
+          - "New node creation and linking: 3pts"
+      - part: "c"
+        points: 5
+        description: "Time and space complexity"
+        rubric:
+          - "O(h) time: 2pts"
+          - "O(h) space (number of copied nodes): 3pts"
+      - part: "d"
+        points: 5
+        description: "Parent pointers require Omega(n)"
+        rubric:
+          - "Chain argument (root copy forces depth-1 copies, etc.): 3pts"
+          - "Formal Omega(n) conclusion: 2pts"
+      - part: "e"
+        points: 5
+        description: "O(log n) with red-black trees"
+        rubric:
+          - "No parent pointers strategy: 2pts"
+          - "O(h) = O(log n) ancestors/children to copy: 3pts"
+
+  - number: 2
+    name: "Join Operation on Red-Black Trees"
+    points: 35
+    parts:
+      - part: "a"
+        points: 5
+        description: "Maintain bh attribute without extra storage"
+        rubric:
+          - "bh changes by at most 1 on insert/delete: 2pts"
+          - "O(1) per node descent using decrement: 3pts"
+      - part: "b"
+        points: 7
+        description: "O(log n) algorithm to find black node y"
+        rubric:
+          - "Correct traversal of right spine: 4pts"
+          - "O(log n) time justification: 3pts"
+      - part: "c"
+        points: 5
+        description: "Replace T_y with T_y ∪ {x} ∪ T₂ in O(1)"
+        rubric:
+          - "Correct pointer reassignment: 3pts"
+          - "BST property preserved: 2pts"
+      - part: "d"
+        points: 8
+        description: "Color x and fix properties 2 and 4"
+        rubric:
+          - "Color x red (preserves properties 1, 3, 5): 3pts"
+          - "RB-INSERT-FIXUP for property 4: 3pts"
+          - "O(log n) time: 2pts"
+      - part: "e"
+        points: 5
+        description: "Symmetric case when T₁.bh ≤ T₂.bh"
+        rubric:
+          - "Correct symmetric description: 5pts"
+      - part: "f"
+        points: 5
+        description: "O(log n) total running time"
+        rubric:
+          - "Sum of all component times: 5pts"
+
+  - number: 3
+    name: "Joining and Splitting 2-3-4 Trees"
+    points: 40
+    parts:
+      - part: "a"
+        points: 8
+        description: "Maintain height attribute"
+        rubric:
+          - "Height update on split: 4pts"
+          - "Height update on delete: 2pts"
+          - "Asymptotic time preserved: 2pts"
+      - part: "b"
+        points: 10
+        description: "Join operation in O(1 + |h' - h''|)"
+        rubric:
+          - "Find correct insertion point: 4pts"
+          - "Merge with possible split: 3pts"
+          - "Time complexity: 3pts"
+      - part: "c"
+        points: 10
+        description: "Path decomposition into trees and keys"
+        rubric:
+          - "Correct identification of T'_i and k'_i: 4pts"
+          - "Height relationship (non-increasing): 3pts"
+          - "Symmetric S'' decomposition: 3pts"
+      - part: "d"
+        points: 12
+        description: "Split operation in O(log n)"
+        rubric:
+          - "Correct use of join to assemble T' and T'': 5pts"
+          - "Telescoping sum argument: 5pts"
+          - "O(log n) conclusion: 2pts"
+
+topics:
+  - "Persistent Data Structures"
+  - "Red-Black Trees"
+  - "2-3-4 Trees (B-Trees)"
+  - "Join and Split Operations"

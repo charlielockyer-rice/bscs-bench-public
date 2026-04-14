@@ -1,0 +1,232 @@
+#!/usr/bin/env bash
+#
+# bin/doctor — Validate BSCS Bench environment setup
+#
+# Checks prerequisites, dependencies, configuration, and connectivity.
+# Exit 0 if all required checks pass, 1 otherwise.
+
+set -euo pipefail
+
+# Color support
+if [ -n "${NO_COLOR:-}" ] || [ "${TERM:-}" = "dumb" ]; then
+  GREEN="" RED="" YELLOW="" BOLD="" RESET=""
+else
+  GREEN="\033[32m" RED="\033[31m" YELLOW="\033[33m" BOLD="\033[1m" RESET="\033[0m"
+fi
+
+PASS_COUNT=0
+FAIL_COUNT=0
+WARN_COUNT=0
+
+pass() {
+  printf "${GREEN}  ✓${RESET} %s\n" "$1"
+  PASS_COUNT=$((PASS_COUNT + 1))
+}
+
+fail() {
+  printf "${RED}  ✗${RESET} %s\n" "$1"
+  FAIL_COUNT=$((FAIL_COUNT + 1))
+}
+
+warn() {
+  printf "${YELLOW}  ⚠${RESET} %s\n" "$1"
+  WARN_COUNT=$((WARN_COUNT + 1))
+}
+
+header() {
+  printf "\n${BOLD}%s${RESET}\n" "$1"
+}
+
+# Resolve project root (parent of bin/)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+printf "${BOLD}BSCS Bench Doctor${RESET}\n"
+printf "Project root: %s\n" "$PROJECT_ROOT"
+
+# ─── Core Tools ───────────────────────────────────────────────
+
+header "Core Tools"
+
+# Python 3.10+
+if command -v python3 &>/dev/null; then
+  PY_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")')
+  PY_MAJOR=$(echo "$PY_VERSION" | cut -d. -f1)
+  PY_MINOR=$(echo "$PY_VERSION" | cut -d. -f2)
+  if [ "$PY_MAJOR" -ge 3 ] && [ "$PY_MINOR" -ge 10 ]; then
+    pass "Python $PY_VERSION"
+  else
+    fail "Python $PY_VERSION (need 3.10+)"
+  fi
+else
+  fail "Python 3 not found"
+fi
+
+# Bun
+if command -v bun &>/dev/null; then
+  BUN_VERSION=$(bun --version 2>/dev/null || echo "unknown")
+  pass "Bun $BUN_VERSION"
+else
+  fail "Bun not found (install: https://bun.sh)"
+fi
+
+# Opencode CLI (optional agent backend)
+if command -v opencode &>/dev/null; then
+  OPENCODE_VERSION=$(opencode --version 2>/dev/null || echo "unknown")
+  pass "Opencode CLI $OPENCODE_VERSION"
+else
+  warn "Opencode CLI not found (install: npm i -g opencode-ai)"
+fi
+
+# Docker
+DOCKER_RUNNING=false
+if command -v docker &>/dev/null; then
+  if docker info &>/dev/null; then
+    DOCKER_VERSION=$(docker --version | sed 's/Docker version //' | cut -d, -f1)
+    pass "Docker $DOCKER_VERSION (daemon running)"
+    DOCKER_RUNNING=true
+  else
+    warn "Docker installed but daemon not running"
+  fi
+else
+  warn "Docker not found (required for most courses)"
+fi
+
+# Git
+if command -v git &>/dev/null; then
+  GIT_VERSION=$(git --version | sed 's/git version //')
+  pass "Git $GIT_VERSION"
+else
+  fail "Git not found (required for workspace reset)"
+fi
+
+# rsync
+if command -v rsync &>/dev/null; then
+  pass "rsync"
+else
+  fail "rsync not found (required for workspace setup)"
+fi
+
+# ─── Python Packages ─────────────────────────────────────────
+
+header "Python Packages"
+
+if python3 -c "import yaml" &>/dev/null; then
+  pass "PyYAML"
+else
+  warn "PyYAML not installed (pip3 install pyyaml)"
+fi
+
+# ─── Node Dependencies ───────────────────────────────────────
+
+header "Node Dependencies"
+
+if [ -d "$PROJECT_ROOT/node_modules" ]; then
+  pass "node_modules/"
+else
+  fail "node_modules/ missing (run: bun install)"
+fi
+
+# ─── Docker Images ────────────────────────────────────────────
+
+header "Docker Images"
+
+if [ "$DOCKER_RUNNING" = true ]; then
+  for img in comp140-runner comp182-runner comp215-runner comp321-runner comp322-runner comp341-runner comp411-runner; do
+    if docker image inspect "$img" &>/dev/null; then
+      pass "$img"
+    else
+      warn "$img not built yet"
+    fi
+  done
+else
+  warn "Skipping image checks (Docker not running)"
+fi
+
+# ─── Configuration ────────────────────────────────────────────
+
+header "Configuration"
+
+if [ -f "$PROJECT_ROOT/.env" ]; then
+  pass ".env file exists"
+  # Load .env so subsequent var checks reflect configured values
+  # Uses setdefault behavior: don't override already-exported vars
+  while IFS='=' read -r key value; do
+    key=$(echo "$key" | xargs)
+    value=$(echo "$value" | xargs)
+    if [ -n "$key" ] && [ -z "${!key:-}" ]; then
+      export "$key=$value"
+    fi
+  done < <(grep -v '^\s*#' "$PROJECT_ROOT/.env" | grep '=')
+else
+  warn ".env missing (copy from .env.example)"
+fi
+
+if [ -n "${OPENROUTER_API_KEY:-}" ]; then
+  pass "OPENROUTER_API_KEY is set"
+else
+  warn "OPENROUTER_API_KEY not set (required for benchmarks)"
+fi
+
+if [ -n "${OPENCODE_CONFIG_CONTENT:-}" ]; then
+  pass "OPENCODE_CONFIG_CONTENT is set"
+elif [ -f "${XDG_DATA_HOME:-$HOME/.local/share}/opencode/auth.json" ]; then
+  pass "Opencode auth.json exists"
+else
+  warn "Opencode auth not configured (run: opencode auth login, or set OPENCODE_CONFIG_CONTENT)"
+fi
+
+if [ -n "${CLEAR_NETID:-}" ]; then
+  pass "CLEAR_NETID is set ($CLEAR_NETID)"
+else
+  warn "CLEAR_NETID not set (only needed for COMP 421 labs)"
+fi
+
+# ─── Course Directories ──────────────────────────────────────
+
+header "Course Directories"
+
+for course in comp140 comp182 comp215 comp321 comp322 comp341 comp382 comp411 comp421; do
+  if [ -d "$PROJECT_ROOT/$course/configs" ]; then
+    pass "$course/configs/"
+  else
+    warn "$course/configs/ not found"
+  fi
+done
+
+# ─── COMP 421 CLEAR Access ───────────────────────────────────
+
+if [ -n "${CLEAR_NETID:-}" ]; then
+  header "COMP 421 CLEAR Access"
+  if ssh -o BatchMode=yes -o ConnectTimeout=5 "${CLEAR_NETID}@ssh.clear.rice.edu" echo "ok" &>/dev/null; then
+    pass "SSH to CLEAR (${CLEAR_NETID}@ssh.clear.rice.edu)"
+  else
+    warn "Cannot SSH to CLEAR — check SSH key setup"
+  fi
+fi
+
+# ─── COMP 341 Data ───────────────────────────────────────────
+
+if [ -d "$PROJECT_ROOT/comp341" ]; then
+  header "COMP 341 Data"
+  if [ -d "$PROJECT_ROOT/comp341/data" ]; then
+    pass "comp341/data/ exists"
+  else
+    warn "comp341/data/ missing (run: bin/setup_comp341_data)"
+  fi
+fi
+
+# ─── Summary ──────────────────────────────────────────────────
+
+printf "\n${BOLD}Summary${RESET}: "
+printf "${GREEN}%d passed${RESET}, " "$PASS_COUNT"
+printf "${RED}%d failed${RESET}, " "$FAIL_COUNT"
+printf "${YELLOW}%d warnings${RESET}\n" "$WARN_COUNT"
+
+if [ "$FAIL_COUNT" -gt 0 ]; then
+  printf "\nFix the failures above before proceeding.\n"
+  exit 1
+else
+  printf "\nAll required checks passed.\n"
+  exit 0
+fi

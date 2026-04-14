@@ -1,0 +1,27 @@
+{
+  "name": "bscs-bench",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Agent evaluation framework for programming assignments",
+  "scripts": {
+    "bench": "bun run bin/bench",
+    "grade": "./bin/grade",
+    "setup": "./bin/setup_workspace",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.23",
+    "@openrouter/ai-sdk-provider": "^1.5.4",
+    "ai": "^6.0.0",
+    "diff": "^7.0.0",
+    "js-yaml": "^4.1.1",
+    "zod": "^3.23.0",
+    "@modelcontextprotocol/sdk": "^1.12.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/diff": "^7.0.0",
+    "@types/js-yaml": "^4.0.9",
+    "typescript": "^5.0.0"
+  }
+}

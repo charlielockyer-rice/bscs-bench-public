@@ -1,0 +1,10 @@
+assignment_number: 7
+assignment_name: "chatapp_design"
+display_name: "ChatApp API Design"
+language: proof
+grading:
+  total_points: 100
+  max_attempts: 1
+source_dir: "chatapp_design"
+source_files:
+  - path: "writeup.md"

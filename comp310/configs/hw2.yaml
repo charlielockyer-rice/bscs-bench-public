@@ -1,0 +1,20 @@
+assignment_number: 2
+assignment_name: "hw02"
+display_name: "Basic Ballworld"
+language: java
+runtime:
+  version: "17"
+grading:
+  total_points: 100
+  timeout_seconds: 60
+  max_attempts: 10
+source_dir: "hw02"
+source_files:
+  - path: "src/hw02/ball/ABall.java"
+  - path: "src/hw02/ball/BallModel.java"
+  - path: "src/hw02/ball/BounceUpBall.java"
+  - path: "src/hw02/ball/DVDLogoBall.java"
+  - path: "src/hw02/ball/SineSpeedBall.java"
+tests:
+  classes:
+    - "comp310.tests.hw02.BallTest"

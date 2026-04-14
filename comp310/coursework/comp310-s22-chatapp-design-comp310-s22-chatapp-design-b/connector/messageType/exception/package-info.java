@@ -1,0 +1,1 @@
+package common.connector.messageType.exception;

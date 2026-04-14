@@ -1,0 +1,1368 @@
+#!/usr/bin/env bash
+#
+# Workspace Setup
+#
+# Creates a flat single-task workspace directory.
+# Each workspace contains ONE module/homework/project with flat structure.
+#
+# Supports multiple course types:
+#   - COMP140 (Python): Module_N directories with template.py
+#   - COMP215 (Java): Homework_N directories with skeleton_code/
+#   - COMP321 (C): Project-named directories with skeleton_code/
+#   - COMP182/382 (Theoretical): Proof-based homeworks
+#
+# Usage: setup_workspace <course_dir> <module_number> [suffix]
+#        setup_workspace ./comp140 1              # Creates comp140_module1_circles
+#        setup_workspace ./comp140 1 agent1       # Creates comp140_module1_circles_agent1
+#        setup_workspace ./comp321 2 lockyer      # Creates comp321_hw2_count_lockyer
+#
+
+set -e
+
+# Get the directory where this script is located
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Check arguments
+if [ $# -lt 2 ]; then
+    echo "Usage: setup_workspace <course_dir> <module_number> [model-dir|suffix]"
+    echo ""
+    echo "Creates a flat single-task workspace for one module/homework/project."
+    echo ""
+    echo "Arguments:"
+    echo "  course_dir     Path to the course directory (e.g., ./comp140, ./comp215)"
+    echo "  module_number  Module/homework/project number to set up"
+    echo "  model-dir      Model directory name (e.g., claude-opus-4-6) — workspace created"
+    echo "                 inside workspaces/<model-dir>/<workspace-name>/"
+    echo "  suffix         Legacy: suffix appended to workspace name (e.g., agent1)"
+    echo ""
+    echo "The 3rd argument is treated as a model-dir if workspaces/<arg>/ already exists"
+    echo "or if it contains a dash and no flat workspace with that suffix exists."
+    echo ""
+    echo "Examples:"
+    echo "  setup_workspace ./comp140 1                        # Creates comp140_module1_circles"
+    echo "  setup_workspace ./comp140 1 claude-opus-4-6        # Creates workspaces/claude-opus-4-6/comp140_module1_circles"
+    echo "  setup_workspace ./comp140 1 agent1                 # Creates comp140_module1_circles_agent1 (legacy suffix)"
+    echo "  setup_workspace ./comp215 1              # Creates comp215_homework1"
+    echo "  setup_workspace ./comp321 2 lockyer      # Creates comp321_hw2_count_lockyer"
+    echo "  setup_workspace ./comp182 1              # Creates comp182_homework1"
+    exit 1
+fi
+
+COURSE_DIR="$(cd "$1" && pwd)"
+MODULE_OR_FLAG="$2"
+THIRD_ARG="${3:-}"
+
+# Determine whether 3rd arg is a model directory or a legacy suffix.
+# It's a model-dir if:
+#   1. workspaces/<arg>/ already exists as a directory, OR
+#   2. workspaces/<arg>/runs/ exists (clearly a model dir), OR
+#   3. The value is provided and starts with --model-dir= (explicit)
+# Otherwise, treat as legacy suffix.
+MODEL_DIR=""
+SUFFIX=""
+if [ -n "$THIRD_ARG" ]; then
+    # Explicit --model-dir= prefix
+    if [[ "$THIRD_ARG" == --model-dir=* ]]; then
+        MODEL_DIR="${THIRD_ARG#--model-dir=}"
+    else
+        # Always treat as model-dir (new default).
+        MODEL_DIR="$THIRD_ARG"
+    fi
+fi
+
+# Validate course directory
+if [ ! -d "$COURSE_DIR" ]; then
+    echo "Error: Course directory not found: $1"
+    exit 1
+fi
+
+COURSE_NAME=$(basename "$COURSE_DIR")
+
+# Detect course type based on config files
+detect_course_type() {
+    local configs_dir="$COURSE_DIR/configs"
+
+    if [ ! -d "$configs_dir" ]; then
+        echo "module"  # Default to module-based
+        return
+    fi
+
+    # Check for module-based configs first (COMP140 style)
+    if [ -n "$(find "$configs_dir" -maxdepth 1 -name 'module*.yaml' 2>/dev/null | head -1)" ]; then
+        echo "module"
+        return
+    fi
+
+    # Check for homework-based configs (COMP215 style or theoretical like COMP182/382)
+    if [ -n "$(find "$configs_dir" -maxdepth 1 -name 'homework*.yaml' 2>/dev/null | head -1)" ]; then
+        # Check if this is a theoretical (proof-based) course
+        local first_hw_config=$(find "$configs_dir" -maxdepth 1 -name 'homework*.yaml' 2>/dev/null | head -1)
+        local hw_type=$(grep "^type:" "$first_hw_config" 2>/dev/null | awk '{print $2}' | tr -d '"')
+        local hw_lang=$(grep "^language:" "$first_hw_config" 2>/dev/null | awk '{print $2}' | tr -d '"')
+        if [ "$hw_type" = "theoretical" ] || [ "$hw_lang" = "proof" ]; then
+            echo "theoretical-hw"
+            return
+        fi
+        echo "homework"
+        return
+    fi
+
+    # Check for hw-based configs (generic - detects language from config)
+    if [ -n "$(find "$configs_dir" -maxdepth 1 -name 'hw*.yaml' 2>/dev/null | head -1)" ]; then
+        # Determine language from first config file
+        local first_hw_config=$(find "$configs_dir" -maxdepth 1 -name 'hw*.yaml' 2>/dev/null | head -1)
+        local lang=$(grep "^language:" "$first_hw_config" 2>/dev/null | awk '{print $2}' | tr -d '"')
+        case "$lang" in
+            python)
+                echo "python-hw"
+                ;;
+            java)
+                echo "java-hw"
+                ;;
+            c)
+                echo "c-hw"
+                ;;
+            *)
+                # Default to java-hw for backwards compatibility
+                echo "java-hw"
+                ;;
+        esac
+        return
+    fi
+
+    # Check for assignment-based configs (COMP411 style - Java no-Maven)
+    if [ -n "$(find "$configs_dir" -maxdepth 1 -name 'assignment*.yaml' 2>/dev/null | head -1)" ]; then
+        echo "java-assignment"
+        return
+    fi
+
+    # Check for project-based configs (COMP321 style - C language or project_number)
+    if grep -qE "language: (c|go|typescript)" "$configs_dir"/*.yaml 2>/dev/null; then
+        echo "project"
+        return
+    fi
+    if grep -q "project_number:" "$configs_dir"/*.yaml 2>/dev/null; then
+        echo "project"
+        return
+    fi
+
+    # Default to module-based
+    echo "module"
+}
+
+# Get module name from config (for COMP140)
+get_module_name() {
+    local num=$1
+    local config_file="$COURSE_DIR/configs/module${num}.yaml"
+
+    if [ -f "$config_file" ]; then
+        # Extract module_name from YAML
+        local name=$(grep "^module_name:" "$config_file" | sed 's/module_name: *"\{0,1\}\([^"]*\)"\{0,1\}/\1/' | tr '[:upper:]' '[:lower:]' | tr ' ' '_')
+        if [ -n "$name" ]; then
+            echo "$name"
+            return
+        fi
+    fi
+
+    # Fallback names
+    case $num in
+        1) echo "circles" ;;
+        2) echo "spot_it" ;;
+        3) echo "stock_prediction" ;;
+        4) echo "kevin_bacon" ;;
+        5) echo "qr_code" ;;
+        6) echo "sports_analytics" ;;
+        7) echo "map_search" ;;
+        *) echo "module_$num" ;;
+    esac
+}
+
+# Get project name from project number (for COMP321)
+# Supports both legacy (project_number/project_name) and unified schema (assignment_number/assignment_name)
+get_project_name() {
+    local num=$1
+    local configs_dir="$COURSE_DIR/configs"
+
+    for config in "$configs_dir"/*.yaml; do
+        if [ -f "$config" ]; then
+            # Try legacy project_number first
+            local proj_num=$(grep "^project_number:" "$config" 2>/dev/null | awk '{print $2}')
+            if [ "$proj_num" = "$num" ]; then
+                grep "^project_name:" "$config" | awk '{print $2}' | tr -d '"'
+                return
+            fi
+            # Try unified schema assignment_number
+            local assign_num=$(grep "^assignment_number:" "$config" 2>/dev/null | awk '{print $2}')
+            if [ "$assign_num" = "$num" ]; then
+                grep "^assignment_name:" "$config" | awk '{print $2}' | tr -d '"'
+                return
+            fi
+        fi
+    done
+}
+
+# Check if legacy mode
+if [ "$MODULE_OR_FLAG" = "--legacy" ]; then
+    # Legacy mode - create multi-module workspace
+    MODULE_NUM="${EXTRA_ARG:-all}"
+    WORKSPACE="$PROJECT_ROOT/workspaces/$SESSION_ID"
+
+    if [ -d "$WORKSPACE" ]; then
+        echo "Warning: Workspace already exists: $WORKSPACE"
+        read -p "Overwrite? (y/N) " -n 1 -r
+        echo
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            echo "Aborted."
+            exit 0
+        fi
+        rm -rf "$WORKSPACE"
+    fi
+
+    echo "Creating legacy workspace: $WORKSPACE"
+    echo "Course: $COURSE_NAME"
+    mkdir -p "$WORKSPACE"
+
+    # Create symlink to lib
+    if [ -d "$COURSE_DIR/lib" ]; then
+        echo "Linking lib directory..."
+        ln -sf "$COURSE_DIR/lib" "$WORKSPACE/lib"
+    fi
+
+    # Create logs directory
+    mkdir -p "$WORKSPACE/logs"
+
+    # Function to set up a single module (legacy)
+    setup_module_legacy() {
+        local num=$1
+        local src_dir="$COURSE_DIR/Module_$num"
+        local dest_dir="$WORKSPACE/Module_$num"
+
+        if [ ! -d "$src_dir" ]; then
+            echo "Warning: Source module not found: $src_dir"
+            return
+        fi
+
+        echo "Setting up Module $num..."
+        mkdir -p "$dest_dir"
+
+        # Copy assignment instructions
+        if [ -f "$src_dir/Assignment.md" ]; then
+            cp "$src_dir/Assignment.md" "$dest_dir/instructions.md"
+        elif [ -f "$src_dir/instructions.md" ]; then
+            cp "$src_dir/instructions.md" "$dest_dir/"
+        fi
+
+        # Copy template file
+        local template="comp140_module${num}_template.py"
+        if [ -f "$src_dir/$template" ]; then
+            cp "$src_dir/$template" "$dest_dir/template.py"
+            cp "$src_dir/$template" "$dest_dir/solution.py"
+        fi
+
+        # Copy supplementary markdown files
+        for md_file in "$src_dir"/*.md; do
+            if [ -f "$md_file" ]; then
+                local basename=$(basename "$md_file")
+                if [ "$basename" != "Assignment.md" ] && [ "$basename" != "instructions.md" ]; then
+                    cp "$md_file" "$dest_dir/"
+                fi
+            fi
+        done
+
+        # Create empty writeup.md
+        cat > "$dest_dir/writeup.md" << EOF
+# Module $num Writeup
+
+## Student Responses
+
+<!-- Fill in your writeup responses below -->
+
+EOF
+    }
+
+    # Set up modules
+    if [ "$MODULE_NUM" = "all" ]; then
+        for i in 1 2 3 4 5 6 7; do
+            setup_module_legacy $i
+        done
+    else
+        if [[ "$MODULE_NUM" =~ ^[1-7]$ ]]; then
+            setup_module_legacy "$MODULE_NUM"
+        else
+            echo "Error: Invalid module number: $MODULE_NUM (must be 1-7)"
+            exit 1
+        fi
+    fi
+
+    # Create README for the workspace
+    cat > "$WORKSPACE/README.md" << EOF
+# Agent Workspace (Legacy Multi-Module)
+
+Course: $COURSE_NAME
+Session ID: $SESSION_ID
+Created: $(date -Iseconds)
+
+## Directory Structure
+
+- \`Module_N/\` - Assignment directories
+  - \`instructions.md\` - Assignment instructions
+  - \`template.py\` - Clean template (DO NOT MODIFY)
+  - \`solution.py\` - Your implementation (EDIT THIS FILE)
+  - \`writeup.md\` - Written responses
+- \`lib/\` - Helper modules (symlink to course lib)
+- \`logs/\` - Attempt tracking
+
+## Usage
+
+To run tests on your solution:
+\`\`\`bash
+../../bin/test <module_number> . --course ../../$COURSE_NAME
+\`\`\`
+EOF
+
+    echo ""
+    echo "Legacy workspace created successfully!"
+    echo "Location: $WORKSPACE"
+    exit 0
+fi
+
+# New mode - create flat single-task workspace
+MODULE_NUM="$MODULE_OR_FLAG"
+COURSE_TYPE=$(detect_course_type)
+
+echo "Course type: $COURSE_TYPE"
+
+# Get hw source directory name (for COMP322)
+get_hw_source_dir() {
+    local num=$1
+    local config_file="$COURSE_DIR/configs/hw${num}.yaml"
+
+    if [ -f "$config_file" ]; then
+        local src_dir=$(grep "^source_dir:" "$config_file" | sed 's/source_dir: *"\{0,1\}\([^"]*\)"\{0,1\}/\1/')
+        if [ -n "$src_dir" ]; then
+            echo "$src_dir"
+            return
+        fi
+    fi
+    # Fallback
+    echo "hw${num}"
+}
+
+# Determine workspace name based on course type
+case "$COURSE_TYPE" in
+    module)
+        if ! [[ "$MODULE_NUM" =~ ^[1-9][0-9]*$ ]]; then
+            echo "Error: Invalid module number: $MODULE_NUM (must be a positive integer)"
+            exit 1
+        fi
+        MODULE_NAME=$(get_module_name "$MODULE_NUM")
+        WORKSPACE_MODULE_NAME="module${MODULE_NUM}_${MODULE_NAME}"
+        ;;
+    homework)
+        if ! [[ "$MODULE_NUM" =~ ^[1-9][0-9]*$ ]]; then
+            echo "Error: Invalid homework number: $MODULE_NUM"
+            exit 1
+        fi
+        MODULE_NAME="homework${MODULE_NUM}"
+        WORKSPACE_MODULE_NAME="$MODULE_NAME"
+        ;;
+    theoretical-hw)
+        if ! [[ "$MODULE_NUM" =~ ^[1-9][0-9]*$ ]]; then
+            echo "Error: Invalid homework number: $MODULE_NUM"
+            exit 1
+        fi
+        MODULE_NAME="homework${MODULE_NUM}"
+        WORKSPACE_MODULE_NAME="$MODULE_NAME"
+        ;;
+    java-hw)
+        if ! [[ "$MODULE_NUM" =~ ^[1-9][0-9]*$ ]]; then
+            echo "Error: Invalid hw number: $MODULE_NUM"
+            exit 1
+        fi
+        MODULE_NAME="hw${MODULE_NUM}"
+        WORKSPACE_MODULE_NAME="$MODULE_NAME"
+        ;;
+    python-hw)
+        if ! [[ "$MODULE_NUM" =~ ^[1-9][0-9]*$ ]]; then
+            echo "Error: Invalid hw number: $MODULE_NUM"
+            exit 1
+        fi
+        MODULE_NAME="hw${MODULE_NUM}"
+        WORKSPACE_MODULE_NAME="$MODULE_NAME"
+        ;;
+    java-assignment)
+        if ! [[ "$MODULE_NUM" =~ ^[1-9][0-9]*$ ]]; then
+            echo "Error: Invalid assignment number: $MODULE_NUM"
+            exit 1
+        fi
+        MODULE_NAME="assignment${MODULE_NUM}"
+        WORKSPACE_MODULE_NAME="$MODULE_NAME"
+        ;;
+    project)
+        if ! [[ "$MODULE_NUM" =~ ^[1-9][0-9]*$ ]]; then
+            echo "Error: Invalid project number: $MODULE_NUM"
+            exit 1
+        fi
+        PROJECT_NAME=$(get_project_name "$MODULE_NUM")
+        if [ -z "$PROJECT_NAME" ]; then
+            echo "Error: No project found for number $MODULE_NUM"
+            exit 1
+        fi
+        MODULE_NAME="$PROJECT_NAME"
+        if [ "$COURSE_NAME" = "comp321" ]; then
+            WORKSPACE_MODULE_NAME="hw${MODULE_NUM}_${MODULE_NAME}"
+        else
+            WORKSPACE_MODULE_NAME="$MODULE_NAME"
+        fi
+        ;;
+esac
+
+# Read config for this assignment: display_name, depends_on, and course type override.
+# Single pass over config files instead of two separate loops.
+DISPLAY_NAME=""
+DEPENDS_ON=""
+OVERRIDE_DISPLAY_NAME=""
+OVERRIDE_ASSIGNMENT_MODE=""
+for config in "$COURSE_DIR/configs"/*.yaml; do
+    [ -f "$config" ] || continue
+    cfg_num=$(grep -E "^(assignment_number|module_number|homework_number|project_number):" "$config" 2>/dev/null | head -1 | awk '{print $2}' | tr -d '"')
+    if [ "$cfg_num" = "$MODULE_NUM" ]; then
+        DISPLAY_NAME=$(grep "^display_name:" "$config" 2>/dev/null | sed 's/display_name: *"\{0,1\}\([^"]*\)"\{0,1\}/\1/')
+        DEPENDS_ON=$(grep "^depends_on:" "$config" 2>/dev/null | sed 's/depends_on: *"\{0,1\}\([^"]*\)"\{0,1\}/\1/')
+        # Check if this assignment overrides the course type (e.g. theoretical exams in a C course)
+        cfg_type=$(grep "^type:" "$config" 2>/dev/null | awk '{print $2}' | tr -d '"')
+        cfg_lang=$(grep "^language:" "$config" 2>/dev/null | awk '{print $2}' | tr -d '"')
+        if [ "$cfg_type" = "theoretical" ] || [ "$cfg_lang" = "proof" ]; then
+            COURSE_TYPE="theoretical-hw"
+            OVERRIDE_DISPLAY_NAME="$DISPLAY_NAME"
+            echo "Course type overridden to: $COURSE_TYPE (per-config)"
+        fi
+        # Reverse override: theoretical course with a hybrid/code assignment (e.g. comp182 hw4)
+        cfg_mode=$(grep "^assignment_mode:" "$config" 2>/dev/null | awk '{print $2}' | tr -d '"')
+        if [ "$COURSE_TYPE" = "theoretical-hw" ] && { [ "$cfg_mode" = "hybrid" ] || [ "$cfg_mode" = "code" ]; }; then
+            if [ "$cfg_lang" = "python" ]; then
+                LANGUAGE="python"
+            elif [ -n "$cfg_lang" ] && [ "$cfg_lang" != "proof" ]; then
+                LANGUAGE="$cfg_lang"
+            fi
+            OVERRIDE_ASSIGNMENT_MODE="$cfg_mode"
+            echo "Assignment mode overridden to: $cfg_mode (per-config, language=$LANGUAGE)"
+        fi
+        break
+    fi
+done
+# Fall back to titlecased module name if config has no display_name
+if [ -z "$DISPLAY_NAME" ]; then
+    DISPLAY_NAME=$(echo "$MODULE_NAME" | sed 's/_/ /g' | awk '{for(i=1;i<=NF;i++) $i=toupper(substr($i,1,1)) substr($i,2)}1')
+fi
+
+# Build workspace name and path
+# Model-dir mode: workspaces/<model-dir>/<workspace-name>/  (name has NO suffix)
+# Legacy suffix mode: workspaces/<workspace-name>_<suffix>/
+# Default: workspaces/<workspace-name>/
+if [ -n "$MODEL_DIR" ]; then
+    WORKSPACE_NAME="${COURSE_NAME}_${WORKSPACE_MODULE_NAME}"
+    WORKSPACE="$PROJECT_ROOT/workspaces/$MODEL_DIR/$WORKSPACE_NAME"
+elif [ -n "$SUFFIX" ]; then
+    WORKSPACE_NAME="${COURSE_NAME}_${WORKSPACE_MODULE_NAME}_${SUFFIX}"
+    WORKSPACE="$PROJECT_ROOT/workspaces/$WORKSPACE_NAME"
+else
+    WORKSPACE_NAME="${COURSE_NAME}_${WORKSPACE_MODULE_NAME}"
+    WORKSPACE="$PROJECT_ROOT/workspaces/$WORKSPACE_NAME"
+fi
+
+if [ -d "$WORKSPACE" ]; then
+    echo "Warning: Workspace already exists: $WORKSPACE"
+    read -p "Overwrite? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Aborted."
+        exit 0
+    fi
+    rm -rf "$WORKSPACE"
+fi
+
+echo "Creating workspace: $WORKSPACE"
+echo "Course: $COURSE_NAME"
+
+case "$COURSE_TYPE" in
+    module)
+        echo "Module: $MODULE_NUM ($MODULE_NAME)"
+        ;;
+    homework)
+        echo "Homework: $MODULE_NUM"
+        ;;
+    theoretical-hw)
+        echo "Theoretical Homework: $MODULE_NUM"
+        ;;
+    java-hw)
+        echo "Java HW: $MODULE_NUM ($MODULE_NAME)"
+        ;;
+    python-hw)
+        echo "Python HW: $MODULE_NUM ($MODULE_NAME)"
+        ;;
+    java-assignment)
+        echo "Java Assignment: $MODULE_NUM ($MODULE_NAME)"
+        ;;
+    project)
+        echo "Project: $MODULE_NUM ($MODULE_NAME)"
+        ;;
+esac
+
+mkdir -p "$WORKSPACE"
+
+# Create symlink to lib if it exists
+if [ -d "$COURSE_DIR/lib" ]; then
+    echo "Linking lib directory..."
+    ln -sf "$COURSE_DIR/lib" "$WORKSPACE/lib"
+fi
+
+# Set up workspace based on course type
+case "$COURSE_TYPE" in
+    module)
+        # COMP140 style - Python modules
+        SRC_DIR="$COURSE_DIR/Module_$MODULE_NUM"
+
+        if [ ! -d "$SRC_DIR" ]; then
+            echo "Error: Source module not found: $SRC_DIR"
+            rm -rf "$WORKSPACE"
+            exit 1
+        fi
+
+        # Copy assignment instructions
+        if [ -f "$SRC_DIR/Assignment.md" ]; then
+            cp "$SRC_DIR/Assignment.md" "$WORKSPACE/instructions.md"
+        elif [ -f "$SRC_DIR/instructions.md" ]; then
+            cp "$SRC_DIR/instructions.md" "$WORKSPACE/"
+        fi
+
+        # Copy template file
+        TEMPLATE="comp140_module${MODULE_NUM}_template.py"
+        if [ -f "$SRC_DIR/$TEMPLATE" ]; then
+            cp "$SRC_DIR/$TEMPLATE" "$WORKSPACE/template.py"
+            cp "$SRC_DIR/$TEMPLATE" "$WORKSPACE/solution.py"
+        fi
+
+        # Copy supplementary markdown files
+        for md_file in "$SRC_DIR"/*.md; do
+            if [ -f "$md_file" ]; then
+                basename=$(basename "$md_file")
+                if [ "$basename" != "Assignment.md" ] && [ "$basename" != "instructions.md" ]; then
+                    cp "$md_file" "$WORKSPACE/"
+                fi
+            fi
+        done
+
+        # Create empty writeup.md
+        cat > "$WORKSPACE/writeup.md" << EOF
+# ${MODULE_NAME} Writeup
+
+## Student Responses
+
+<!-- Fill in your writeup responses below -->
+
+EOF
+        ;;
+
+    homework)
+        # COMP215 style - Java homeworks
+        SRC_DIR="$COURSE_DIR/Homework_$MODULE_NUM"
+
+        if [ ! -d "$SRC_DIR" ]; then
+            echo "Error: Source homework not found: $SRC_DIR"
+            rm -rf "$WORKSPACE"
+            exit 1
+        fi
+
+        # Copy instructions
+        if [ -f "$SRC_DIR/instructions.md" ]; then
+            cp "$SRC_DIR/instructions.md" "$WORKSPACE/"
+        elif [ -f "$SRC_DIR/Assignment.md" ]; then
+            cp "$SRC_DIR/Assignment.md" "$WORKSPACE/instructions.md"
+        fi
+
+        # Copy skeleton_code directory (this is the main working directory for Java)
+        if [ -d "$SRC_DIR/skeleton_code" ]; then
+            cp -r "$SRC_DIR/skeleton_code" "$WORKSPACE/"
+        fi
+
+        # Replace skeleton tests with custom tests if they exist
+        CUSTOM_TESTS="$COURSE_DIR/tests/homework$MODULE_NUM"
+        if [ -d "$CUSTOM_TESTS" ]; then
+            echo "Copying custom tests..."
+            # Remove skeleton tests and copy custom ones (preserve directory structure)
+            rm -rf "$WORKSPACE/skeleton_code/src/test/rice"
+            mkdir -p "$WORKSPACE/skeleton_code/src/test/rice"
+            cp -r "$CUSTOM_TESTS"/* "$WORKSPACE/skeleton_code/src/test/rice/"
+        fi
+
+        # Copy any other markdown files
+        for md_file in "$SRC_DIR"/*.md; do
+            if [ -f "$md_file" ]; then
+                basename=$(basename "$md_file")
+                if [ "$basename" != "Assignment.md" ] && [ "$basename" != "instructions.md" ]; then
+                    cp "$md_file" "$WORKSPACE/"
+                fi
+            fi
+        done
+        ;;
+
+    theoretical-hw)
+        # COMP182/COMP382 style - Theoretical (proof-based) homeworks
+        # Also used for mixed courses (e.g., comp421 exams) via per-config override
+        SRC_DIR="$COURSE_DIR/Homework_$MODULE_NUM"
+
+        # Fallback: try $COURSE_DIR/$MODULE_NAME (for mixed courses like comp421)
+        if [ ! -d "$SRC_DIR" ] && [ -n "$MODULE_NAME" ] && [ -d "$COURSE_DIR/$MODULE_NAME" ]; then
+            SRC_DIR="$COURSE_DIR/$MODULE_NAME"
+        fi
+
+        # Fallback: try source_dir from config (e.g., comp310 chatapp_design)
+        if [ ! -d "$SRC_DIR" ]; then
+            for config in "$COURSE_DIR/configs/"*.yaml; do
+                [ -f "$config" ] || continue
+                _num=$(grep "^assignment_number:" "$config" 2>/dev/null | awk '{print $2}')
+                if [ "$_num" = "$MODULE_NUM" ]; then
+                    _src_dir=$(grep "^source_dir:" "$config" | sed 's/source_dir: *"\{0,1\}\([^"]*\)"\{0,1\}/\1/')
+                    if [ -n "$_src_dir" ] && [ -d "$COURSE_DIR/$_src_dir" ]; then
+                        SRC_DIR="$COURSE_DIR/$_src_dir"
+                    fi
+                    break
+                fi
+            done
+        fi
+
+        if [ ! -d "$SRC_DIR" ]; then
+            echo "Error: Source homework not found: $SRC_DIR"
+            rm -rf "$WORKSPACE"
+            exit 1
+        fi
+
+        # Copy instructions
+        if [ -f "$SRC_DIR/instructions.md" ]; then
+            cp "$SRC_DIR/instructions.md" "$WORKSPACE/"
+        elif [ -f "$SRC_DIR/Assignment.md" ]; then
+            cp "$SRC_DIR/Assignment.md" "$WORKSPACE/instructions.md"
+        fi
+
+        # Copy any supplementary files (Python helpers, etc.)
+        for py_file in "$SRC_DIR"/*.py; do
+            if [ -f "$py_file" ]; then
+                cp "$py_file" "$WORKSPACE/"
+            fi
+        done
+
+        # Copy data files for hybrid assignments (e.g., .txt, .csv, .json)
+        if [ -n "$OVERRIDE_ASSIGNMENT_MODE" ]; then
+            for data_file in "$SRC_DIR"/*.txt "$SRC_DIR"/*.csv "$SRC_DIR"/*.json "$SRC_DIR"/*.repr; do
+                if [ -f "$data_file" ]; then
+                    cp "$data_file" "$WORKSPACE/"
+                fi
+            done
+        fi
+
+        # For hybrid assignments in theoretical courses, create solution.py from template
+        if [ -n "$OVERRIDE_ASSIGNMENT_MODE" ] && { [ "$OVERRIDE_ASSIGNMENT_MODE" = "hybrid" ] || [ "$OVERRIDE_ASSIGNMENT_MODE" = "code" ]; }; then
+            # Look for autograder_template.py first, then any *_template.py
+            if [ -f "$WORKSPACE/autograder_template.py" ]; then
+                cp "$WORKSPACE/autograder_template.py" "$WORKSPACE/template.py"
+                cp "$WORKSPACE/autograder_template.py" "$WORKSPACE/solution.py"
+            else
+                for tpl in "$WORKSPACE"/*_template.py; do
+                    if [ -f "$tpl" ]; then
+                        cp "$tpl" "$WORKSPACE/template.py"
+                        cp "$tpl" "$WORKSPACE/solution.py"
+                        break
+                    fi
+                done
+            fi
+        fi
+
+        # Copy any other markdown files
+        for md_file in "$SRC_DIR"/*.md; do
+            if [ -f "$md_file" ]; then
+                basename=$(basename "$md_file")
+                if [ "$basename" != "Assignment.md" ] && [ "$basename" != "instructions.md" ]; then
+                    cp "$md_file" "$WORKSPACE/"
+                fi
+            fi
+        done
+
+        # Create writeup.md template for student responses
+        COURSE_UPPER=$(echo "$COURSE_NAME" | tr '[:lower:]' '[:upper:]')
+        WRITEUP_TITLE="${OVERRIDE_DISPLAY_NAME:-Homework $MODULE_NUM}"
+        cat > "$WORKSPACE/writeup.md" << EOF
+# ${COURSE_UPPER} ${WRITEUP_TITLE}
+
+## Student Responses
+
+<!-- Write your solutions below. Add sections for each problem as needed. -->
+<!-- Use proper mathematical notation where applicable. -->
+
+[Your solutions here]
+
+EOF
+        echo "Theoretical homework setup complete (use --llm flag with test)."
+        ;;
+
+    python-hw)
+        # COMP341 style - Python ML homework
+        TEMPLATE_DIR="$COURSE_DIR/templates/hw${MODULE_NUM}"
+
+        if [ ! -d "$TEMPLATE_DIR" ]; then
+            echo "Error: Template directory not found: $TEMPLATE_DIR"
+            rm -rf "$WORKSPACE"
+            exit 1
+        fi
+
+        # Copy instructions
+        if [ -f "$TEMPLATE_DIR/instructions.md" ]; then
+            cp "$TEMPLATE_DIR/instructions.md" "$WORKSPACE/"
+        fi
+
+        # Copy template/solution files
+        if [ -f "$TEMPLATE_DIR/solution.py" ]; then
+            cp "$TEMPLATE_DIR/solution.py" "$WORKSPACE/template.py"
+            cp "$TEMPLATE_DIR/solution.py" "$WORKSPACE/solution.py"
+        fi
+
+        # Copy any other Python files
+        for py_file in "$TEMPLATE_DIR"/*.py; do
+            if [ -f "$py_file" ]; then
+                basename=$(basename "$py_file")
+                if [ "$basename" != "solution.py" ]; then
+                    cp "$py_file" "$WORKSPACE/"
+                fi
+            fi
+        done
+
+        # Symlink data directory
+        if [ -d "$COURSE_DIR/data/hw${MODULE_NUM}" ]; then
+            ln -sf "$COURSE_DIR/data/hw${MODULE_NUM}" "$WORKSPACE/data"
+        fi
+
+        # Create empty writeup.md
+        cat > "$WORKSPACE/writeup.md" << EOF
+# HW${MODULE_NUM} Writeup
+
+## Student Responses
+
+<!-- Fill in your writeup responses below -->
+
+EOF
+
+        echo "Python ML homework setup complete."
+        ;;
+
+    java-hw)
+        # Generic Java HW - javac or Maven (COMP 310, COMP 322)
+        HW_SRC_DIR=$(get_hw_source_dir "$MODULE_NUM")
+        SRC_DIR="$COURSE_DIR/$HW_SRC_DIR"
+
+        if [ ! -d "$SRC_DIR" ]; then
+            echo "Error: Source hw directory not found: $SRC_DIR"
+            rm -rf "$WORKSPACE"
+            exit 1
+        fi
+
+        echo "Copying project files from $HW_SRC_DIR..."
+
+        # Copy the project (excluding .git, build artifacts)
+        rsync -a --exclude='.git' --exclude='target' --exclude='Assignment.md' "$SRC_DIR/" "$WORKSPACE/"
+
+        # Copy HJlib Lab 1 documentation if present (comp322-specific)
+        if [ -f "$COURSE_DIR/comp322-s23-lab1.pdf" ]; then
+            cp "$COURSE_DIR/comp322-s23-lab1.pdf" "$WORKSPACE/hjlib-lab1-reference.pdf"
+        fi
+
+        echo "Java project setup complete."
+        ;;
+
+    java-assignment)
+        # COMP411 style - Java files in default package, no Maven
+        SRC_DIR="$COURSE_DIR/Assignment $MODULE_NUM"
+
+        if [ ! -d "$SRC_DIR" ]; then
+            echo "Error: Source not found: $SRC_DIR"
+            rm -rf "$WORKSPACE"
+            exit 1
+        fi
+
+        # Copy instructions
+        if [ -f "$SRC_DIR/Assignment.md" ]; then
+            cp "$SRC_DIR/Assignment.md" "$WORKSPACE/instructions.md"
+        fi
+
+        # Copy starter Java files (handles spaces in path)
+        STARTER_SRC="$SRC_DIR/Starter Repository/src"
+        if [ -d "$STARTER_SRC" ]; then
+            echo "Copying Java starter files..."
+            cp "$STARTER_SRC"/*.java "$WORKSPACE/" 2>/dev/null || true
+        else
+            echo "Warning: Starter source not found: $STARTER_SRC"
+        fi
+
+        # Check for solution files from previous assignment (needed for later assignments)
+        # COMP411 assignments build on each other - later assignments need prior solutions
+        SOLUTION_SRC=""
+        PREV_NUM=$((MODULE_NUM - 1))
+
+        # Check for assignment-(N-1)-solution-src in current assignment directory
+        if [ -d "$SRC_DIR/assignment-${PREV_NUM}-solution-src" ]; then
+            SOLUTION_SRC="$SRC_DIR/assignment-${PREV_NUM}-solution-src"
+        fi
+
+        if [ -n "$SOLUTION_SRC" ] && [ -d "$SOLUTION_SRC" ]; then
+            echo "Copying previous assignment solution files from assignment-${PREV_NUM}-solution-src..."
+            # Copy only .java files (not .class files)
+            for java_file in "$SOLUTION_SRC"/*.java; do
+                if [ -f "$java_file" ]; then
+                    # Don't overwrite test files from Starter Repository
+                    basename=$(basename "$java_file")
+                    if [[ ! "$basename" =~ ^Assign.*Test\.java$ ]]; then
+                        cp "$java_file" "$WORKSPACE/"
+                    fi
+                fi
+            done
+        fi
+
+        echo "Java (no-Maven) project setup complete."
+        ;;
+
+    project)
+        # COMP321/COMP318 style - C/Go projects
+        SRC_DIR="$COURSE_DIR/$MODULE_NAME"
+
+        if [ ! -d "$SRC_DIR" ]; then
+            echo "Error: Source project not found: $SRC_DIR"
+            rm -rf "$WORKSPACE"
+            exit 1
+        fi
+
+        # Copy instructions
+        if [ -f "$SRC_DIR/instructions.md" ]; then
+            cp "$SRC_DIR/instructions.md" "$WORKSPACE/"
+        elif [ -f "$SRC_DIR/Assignment.md" ]; then
+            cp "$SRC_DIR/Assignment.md" "$WORKSPACE/instructions.md"
+        fi
+
+        # Copy skeleton_code contents directly to workspace (flat structure)
+        if [ -d "$SRC_DIR/skeleton_code" ] && [ -n "$(ls -A "$SRC_DIR/skeleton_code" 2>/dev/null)" ]; then
+            cp -r "$SRC_DIR/skeleton_code"/* "$WORKSPACE/"
+        fi
+
+        # Copy include/ directory if present (e.g., Lab 1 headers for reference)
+        if [ -d "$SRC_DIR/include" ]; then
+            cp -r "$SRC_DIR/include" "$WORKSPACE/include"
+        fi
+
+        # Copy any other markdown or txt files
+        for file in "$SRC_DIR"/*.md "$SRC_DIR"/*.txt; do
+            if [ -f "$file" ]; then
+                basename=$(basename "$file")
+                if [ "$basename" != "Assignment.md" ] && [ "$basename" != "instructions.md" ]; then
+                    cp "$file" "$WORKSPACE/"
+                fi
+            fi
+        done
+        ;;
+esac
+
+# Determine language based on course type
+case "$COURSE_TYPE" in
+    module)
+        LANGUAGE="python"
+        ;;
+    homework)
+        LANGUAGE="java"
+        ;;
+    theoretical-hw)
+        # Respect per-assignment override (e.g., comp182 hw4 is hybrid Python)
+        if [ -z "$OVERRIDE_ASSIGNMENT_MODE" ]; then
+            LANGUAGE="proof"
+        fi
+        ;;
+    java-hw)
+        LANGUAGE="java"
+        ;;
+    python-hw)
+        LANGUAGE="python"
+        ;;
+    java-assignment)
+        LANGUAGE="java"
+        ;;
+    project)
+        # Read language from config file if available
+        for config in "$COURSE_DIR/configs"/*.yaml; do
+            if [ -f "$config" ]; then
+                # Try legacy project_number first, then unified assignment_number
+                proj_num=$(grep "^project_number:" "$config" 2>/dev/null | awk '{print $2}')
+                if [ -z "$proj_num" ]; then
+                    proj_num=$(grep "^assignment_number:" "$config" 2>/dev/null | awk '{print $2}')
+                fi
+                if [ "$proj_num" = "$MODULE_NUM" ]; then
+                    LANGUAGE=$(grep "^language:" "$config" 2>/dev/null | awk '{print $2}' | tr -d '"')
+                    break
+                fi
+            fi
+        done
+        # Default to C if not found
+        LANGUAGE="${LANGUAGE:-c}"
+        ;;
+    *)
+        LANGUAGE="python"
+        ;;
+esac
+
+# Copy writeup template if it exists (enables hybrid code+written assignments)
+# Check locations in order of specificity:
+# 1. Course templates directory with module name
+# 2. Source directory writeup_template.md
+# 3. Skeleton code writeup.md (or writeup.txt legacy fallback)
+copy_writeup_template() {
+    local found=0
+
+    # 1. Check for course-level template: $COURSE_DIR/templates/${MODULE_NAME}_writeup.md
+    if [ -f "$COURSE_DIR/templates/${MODULE_NAME}_writeup.md" ]; then
+        echo "Copying writeup template from templates/${MODULE_NAME}_writeup.md..."
+        cp "$COURSE_DIR/templates/${MODULE_NAME}_writeup.md" "$WORKSPACE/writeup.md"
+        found=1
+    # 2. Check for assignment-specific template with hw naming (flat)
+    elif [ -f "$COURSE_DIR/templates/hw${MODULE_NUM}_writeup.md" ]; then
+        echo "Copying writeup template from templates/hw${MODULE_NUM}_writeup.md..."
+        cp "$COURSE_DIR/templates/hw${MODULE_NUM}_writeup.md" "$WORKSPACE/writeup.md"
+        found=1
+    # 3. Check for hw subdirectory template (e.g., templates/hw1/writeup.md for COMP 341)
+    elif [ -f "$COURSE_DIR/templates/hw${MODULE_NUM}/writeup.md" ]; then
+        echo "Copying writeup template from templates/hw${MODULE_NUM}/writeup.md..."
+        cp "$COURSE_DIR/templates/hw${MODULE_NUM}/writeup.md" "$WORKSPACE/writeup.md"
+        found=1
+    # 4. Check source directory writeup_template.md
+    elif [ -n "$SRC_DIR" ] && [ -f "$SRC_DIR/writeup_template.md" ]; then
+        echo "Copying writeup template from source directory..."
+        cp "$SRC_DIR/writeup_template.md" "$WORKSPACE/writeup.md"
+        found=1
+    # 5. Check skeleton_code for writeup.md
+    elif [ -n "$SRC_DIR" ] && [ -f "$SRC_DIR/skeleton_code/writeup.md" ]; then
+        echo "Copying writeup.md from skeleton_code..."
+        cp "$SRC_DIR/skeleton_code/writeup.md" "$WORKSPACE/writeup.md"
+        found=1
+    # 6. Check skeleton_code for writeup.txt (legacy fallback)
+    elif [ -n "$SRC_DIR" ] && [ -f "$SRC_DIR/skeleton_code/writeup.txt" ]; then
+        echo "Copying writeup.txt from skeleton_code..."
+        cp "$SRC_DIR/skeleton_code/writeup.txt" "$WORKSPACE/writeup.md"
+        found=1
+    fi
+
+    # If found a template, notify
+    if [ $found -eq 1 ]; then
+        echo "  -> Writeup template copied (this assignment may have written questions)"
+    fi
+}
+
+# Copy custom writeup template if available (overwrites generic template)
+# Skip for theoretical courses which create their own template inline
+if [ "$COURSE_TYPE" != "theoretical-hw" ]; then
+    copy_writeup_template
+fi
+
+detect_assignment_mode() {
+    # Per-config override takes precedence (e.g., hybrid assignment in theoretical course)
+    if [ -n "$OVERRIDE_ASSIGNMENT_MODE" ]; then
+        echo "$OVERRIDE_ASSIGNMENT_MODE"
+        return
+    fi
+
+    if [ "$LANGUAGE" = "proof" ] || [ "$COURSE_TYPE" = "theoretical-hw" ]; then
+        echo "written"
+        return
+    fi
+
+    if [ -f "$WORKSPACE/writeup.md" ] || [ -f "$WORKSPACE/writeup.txt" ]; then
+        echo "hybrid"
+        return
+    fi
+
+    if [ -f "$COURSE_DIR/rubrics/${MODULE_NAME}_rubric.md" ] \
+        || [ -f "$COURSE_DIR/rubrics/module${MODULE_NUM}_rubric.md" ] \
+        || [ -f "$COURSE_DIR/rubrics/hw${MODULE_NUM}_rubric.md" ] \
+        || [ -f "$COURSE_DIR/rubrics/homework${MODULE_NUM}_rubric.md" ] \
+        || [ -f "$COURSE_DIR/rubrics/assignment${MODULE_NUM}_rubric.md" ] \
+        || [ -f "$COURSE_DIR/solutions/${MODULE_NAME}_rubric.md" ] \
+        || [ -f "$COURSE_DIR/solutions/homework${MODULE_NUM}_rubric.md" ]; then
+        echo "hybrid"
+        return
+    fi
+
+    echo "code"
+}
+
+ASSIGNMENT_MODE=$(detect_assignment_mode)
+CREATED_AT=$(date -Iseconds)
+
+# Create workspace.yaml metadata (unified schema + legacy aliases)
+cat > "$WORKSPACE/workspace.yaml" << EOF
+assignment_number: $MODULE_NUM
+assignment_name: "$MODULE_NAME"
+display_name: "$DISPLAY_NAME"
+course: "$COURSE_NAME"
+language: "$LANGUAGE"
+assignment_mode: "$ASSIGNMENT_MODE"
+created_at: "$CREATED_AT"
+module_number: $MODULE_NUM
+module_name: "$MODULE_NAME"
+EOF
+
+# Append depends_on if set in course config
+if [ -n "$DEPENDS_ON" ]; then
+    echo "depends_on: \"$DEPENDS_ON\"" >> "$WORKSPACE/workspace.yaml"
+fi
+
+# Also create workspace.json as fallback for systems without PyYAML
+if [ -n "$DEPENDS_ON" ]; then
+    cat > "$WORKSPACE/workspace.json" << EOF
+{
+  "assignment_number": $MODULE_NUM,
+  "assignment_name": "$MODULE_NAME",
+  "display_name": "$DISPLAY_NAME",
+  "course": "$COURSE_NAME",
+  "language": "$LANGUAGE",
+  "assignment_mode": "$ASSIGNMENT_MODE",
+  "created_at": "$CREATED_AT",
+  "module_number": $MODULE_NUM,
+  "module_name": "$MODULE_NAME",
+  "depends_on": "$DEPENDS_ON"
+}
+EOF
+else
+    cat > "$WORKSPACE/workspace.json" << EOF
+{
+  "assignment_number": $MODULE_NUM,
+  "assignment_name": "$MODULE_NAME",
+  "display_name": "$DISPLAY_NAME",
+  "course": "$COURSE_NAME",
+  "language": "$LANGUAGE",
+  "assignment_mode": "$ASSIGNMENT_MODE",
+  "created_at": "$CREATED_AT",
+  "module_number": $MODULE_NUM,
+  "module_name": "$MODULE_NAME"
+}
+EOF
+fi
+
+# Create public/agent test suite directories for suite-aware test/submit flow.
+# - tests/public: visible provided tests
+# - tests/agent: agent-authored additional tests (included in `test`, excluded from `submit`)
+setup_public_test_suite() {
+    # Theoretical assignments do not use code test suites.
+    if [ "$LANGUAGE" = "proof" ]; then
+        return
+    fi
+
+    mkdir -p "$WORKSPACE/tests/public" "$WORKSPACE/tests/agent"
+
+    # Helper README for agent-authored tests.
+    cat > "$WORKSPACE/tests/agent/README.md" << 'EOF'
+# Agent Tests
+
+Place additional tests in this directory.
+
+- Included by `test` (basic run: public + agent)
+- Excluded from `submit` (final run: public + private)
+EOF
+
+    case "$COURSE_NAME" in
+        comp140|comp182|comp341)
+            if [ -f "$COURSE_DIR/tests/test_module${MODULE_NUM}.py" ]; then
+                cp "$COURSE_DIR/tests/test_module${MODULE_NUM}.py" "$WORKSPACE/tests/public/"
+            fi
+            # Python test modules commonly depend on fixtures.py/helpers.
+            if [ -f "$COURSE_DIR/tests/fixtures.py" ]; then
+                cp "$COURSE_DIR/tests/fixtures.py" "$WORKSPACE/tests/public/"
+            fi
+            if [ -f "$COURSE_DIR/tests/__init__.py" ]; then
+                cp "$COURSE_DIR/tests/__init__.py" "$WORKSPACE/tests/public/"
+            fi
+            ;;
+
+        comp215)
+            if [ -d "$WORKSPACE/skeleton_code/src/test" ]; then
+                cp -R "$WORKSPACE/skeleton_code/src/test/." "$WORKSPACE/tests/public/"
+            fi
+            ;;
+
+        comp310)
+            # Config uses zero-padded names (hw01) but MODULE_NAME may be hw1.
+            # Preserve the hwNN/ subdirectory — build.sh expects $TEST_ROOT/$HW/.
+            PADDED_NAME=$(printf 'hw%02d' "$MODULE_NUM")
+            if [ -d "$COURSE_DIR/tests/$PADDED_NAME" ]; then
+                mkdir -p "$WORKSPACE/tests/public/$PADDED_NAME"
+                cp -R "$COURSE_DIR/tests/$PADDED_NAME/." "$WORKSPACE/tests/public/$PADDED_NAME/"
+            elif [ -d "$COURSE_DIR/tests/$MODULE_NAME" ]; then
+                mkdir -p "$WORKSPACE/tests/public/$MODULE_NAME"
+                cp -R "$COURSE_DIR/tests/$MODULE_NAME/." "$WORKSPACE/tests/public/$MODULE_NAME/"
+            fi
+            ;;
+
+        comp322)
+            if [ -d "$WORKSPACE/src/test" ]; then
+                cp -R "$WORKSPACE/src/test/." "$WORKSPACE/tests/public/"
+            fi
+            ;;
+
+        comp411)
+            find "$WORKSPACE" -maxdepth 1 -type f -name '*Test.java' -exec cp {} "$WORKSPACE/tests/public/" \;
+            ;;
+
+        comp321|comp421)
+            if [ -f "$COURSE_DIR/tests/test_${MODULE_NAME}.py" ]; then
+                cp "$COURSE_DIR/tests/test_${MODULE_NAME}.py" "$WORKSPACE/tests/public/"
+            fi
+            # COMP321 tests depend on shared fixtures and data assets.
+            if [ -f "$COURSE_DIR/tests/fixtures.py" ]; then
+                cp "$COURSE_DIR/tests/fixtures.py" "$WORKSPACE/tests/public/"
+            fi
+            if [ -d "$COURSE_DIR/tests/data" ]; then
+                cp -R "$COURSE_DIR/tests/data" "$WORKSPACE/tests/public/"
+            fi
+            ;;
+    esac
+
+    # Remove empty tests/public to avoid git-baseline false positives
+    # (git can't track empty dirs, so the submit validator can't find them
+    # in the initial commit and blocks grading)
+    if [ -d "$WORKSPACE/tests/public" ] && [ -z "$(ls -A "$WORKSPACE/tests/public" 2>/dev/null)" ]; then
+        rmdir "$WORKSPACE/tests/public"
+    fi
+}
+
+setup_public_test_suite
+
+echo ""
+echo "Workspace created successfully!"
+echo "Location: $WORKSPACE"
+echo ""
+echo "To start working:"
+echo "  cd $WORKSPACE"
+
+case "$COURSE_TYPE" in
+    module)
+        echo "  # Edit solution.py"
+        echo "  ../../bin/test ."
+        ;;
+    homework)
+        echo "  # Edit skeleton_code/src/main/.../*.java"
+        echo "  ../../bin/test ."
+        ;;
+    java-hw)
+        echo "  # Edit src/main/java/.../*.java"
+        echo "  ../../bin/test ."
+        ;;
+    python-hw)
+        echo "  # Edit solution.py"
+        echo "  ../../bin/test ."
+        ;;
+    java-assignment)
+        echo "  # Edit *.java files"
+        echo "  ../../bin/test ."
+        ;;
+    project)
+        echo "  # Edit *.c or *.go files"
+        echo "  ../../bin/test ."
+        ;;
+esac
+
+# Initialize git repository for workspace reset support
+init_git_repo() {
+    local ws_dir="$1"
+    local lang="$2"
+
+    # Check if git is available
+    if ! command -v git &> /dev/null; then
+        echo "Warning: git not found, skipping git initialization"
+        return
+    fi
+
+    cd "$ws_dir"
+
+    # Initialize git repo
+    git init --quiet
+
+    # Create .gitignore based on language
+    case "$lang" in
+        python)
+            cat > .gitignore << 'GITIGNORE_EOF'
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+
+# Workspace cache
+last_grade.json
+last_test.json
+last_test_meta.json
+last_stream.json
+last_perf.json
+attempts.json
+
+# Agent config
+.mcp.json
+.codex/
+GITIGNORE_EOF
+            ;;
+        java)
+            cat > .gitignore << 'GITIGNORE_EOF'
+# Java/Maven
+target/
+*.class
+*.jar
+*.war
+!lib/*.jar
+
+# IDE
+.idea/
+*.iml
+.classpath
+.project
+.settings/
+.vscode/
+
+# Build artifacts (Docker test runner)
+test-reports/
+submission.jar
+
+# Workspace cache
+last_grade.json
+last_test.json
+last_test_meta.json
+last_stream.json
+last_perf.json
+attempts.json
+
+# Agent config
+.mcp.json
+.codex/
+GITIGNORE_EOF
+            ;;
+        c)
+            cat > .gitignore << 'GITIGNORE_EOF'
+# C compilation
+*.o
+*.a
+*.so
+*.out
+
+# Executables (common project binaries)
+/mdriver
+/tsh
+/proxy
+/factors
+/count
+readjcf/readjcf
+
+# Workspace cache
+last_grade.json
+last_test.json
+last_test_meta.json
+last_stream.json
+last_perf.json
+attempts.json
+
+# Agent config
+.mcp.json
+.codex/
+GITIGNORE_EOF
+            ;;
+        go)
+            cat > .gitignore << 'GITIGNORE_EOF'
+# Go binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go test cache
+*.test
+*.out
+
+# Workspace cache
+last_grade.json
+last_test.json
+last_test_meta.json
+last_stream.json
+last_perf.json
+attempts.json
+
+# Agent config
+.mcp.json
+.codex/
+GITIGNORE_EOF
+            ;;
+        typescript)
+            cat > .gitignore << 'GITIGNORE_EOF'
+# Node
+node_modules/
+dist/
+.parcel-cache/
+.cache/
+
+# Coverage
+.nyc_output/
+coverage/
+
+# Cypress
+cypress/screenshots/
+cypress/videos/
+cypress/downloads/
+
+# Environment
+.env.local
+
+# Workspace cache
+last_grade.json
+last_test.json
+last_test_meta.json
+last_stream.json
+last_perf.json
+attempts.json
+
+# Agent config
+.mcp.json
+.codex/
+GITIGNORE_EOF
+            ;;
+        *)
+            # Default to python style
+            cat > .gitignore << 'GITIGNORE_EOF'
+# Workspace cache
+last_grade.json
+last_test.json
+last_test_meta.json
+last_stream.json
+last_perf.json
+attempts.json
+
+# Agent config
+.mcp.json
+.codex/
+GITIGNORE_EOF
+            ;;
+    esac
+
+    # Initial commit with starter code
+    git add -A
+    git commit --quiet -m "Initial starter code"
+
+    echo ""
+    echo "Git repository initialized with initial commit."
+}
+
+# Initialize git repo at the end of workspace setup
+init_git_repo "$WORKSPACE" "$LANGUAGE"

@@ -1,0 +1,95 @@
+credit_hours:
+  comp140: 3
+  comp182: 4
+  comp215: 3
+  comp310: 3
+  comp321: 4
+  comp322: 3
+  comp341: 3
+  comp382: 3
+  comp411: 3
+  comp421: 4
+
+# Keyed by assignment_number within each course.
+# Default weight is 1 if an assignment is missing from this config.
+assignment_weights:
+  comp140:
+    1: 1  # circles
+    2: 1  # spot_it
+    3: 1  # stock_prediction
+    4: 1  # kevin_bacon
+    5: 1  # qr_code
+    6: 1  # sports_analytics
+    7: 1  # map_search
+  comp182:
+    1: 1  # Algorithmic Thinking and Logic
+    2: 1  # Mathematical Induction and Graphs
+    3: 1  # Graph Algorithms
+    4: 1  # Counting and Probability
+    5: 1  # Asymptotic Analysis
+    6: 1  # Divide and Conquer
+    7: 1  # Dynamic Programming
+    8: 1  # Greedy Algorithms
+    9: 1  # NP-Completeness
+  comp215:
+    1: 1  # prime_factorization
+    2: 1  # python_object_system
+    3: 1  # pynode_iterables
+    4: 1  # concise_set_generator
+    5: 1  # tester_framework
+    6: 1  # config_file_parser
+  comp310:
+    1: 1  # hw1 (Shapes & GUI)
+    2: 1  # hw2 (Basic Ballworld)
+    3: 1  # hw3 (Strategy Ballworld)
+    4: 1  # hw4 (Paint & Visitor Ballworld)
+    5: 1  # hw5 (Interaction Ballworld)
+    6: 1  # hw6 (Extended Visitor Ballworld)
+    7: 1  # chatapp_design
+  comp321:
+    1: 1  # factors
+    2: 1  # count
+    3: 1  # linking
+    4: 1  # shell
+    5: 1  # malloc (perf index IS the score)
+    6: 1  # proxy
+  comp322:
+    1: 1  # hw1
+    2: 1  # hw2
+    3: 1  # hw3
+    4: 1  # hw4
+  comp341:
+    1: 1  # baby_names
+    2: 1  # movie_critics
+    3: 1  # stroke_prediction
+    4: 1  # house_prices_regression
+    5: 1  # text_classification
+    6: 1  # fashion_mnist
+    7: 1  # house_images
+  comp382:
+    1: 1  # Data Structures
+    2: 1  # Advanced Tree Structures
+    3: 1  # Dynamic Programming
+    4: 1  # Hashing
+    5: 1  # Greedy Algorithms
+    6: 1  # Network Flow
+    7: 1  # NP-Completeness
+  comp411:
+    1: 1  # assignment1
+    2: 1  # assignment2
+    3: 1  # assignment3
+    4: 1  # assignment4
+    5: 1  # assignment5
+    6: 1  # assignment6
+  comp421:
+    1: 1  # lab1 (MonTTY)
+    2: 2  # lab2 (Yalnix Kernel) — double weight
+    3: 1  # lab3 (Yalnix FS)
+    4: 1  # midterm
+    5: 1  # final
+
+# How to combine code and written scores for hybrid courses.
+# Each entry is [code_weight, written_weight] — they are normalized to sum to 1.
+# Default is [1, 1] (50/50) if a course is not listed here.
+hybrid_weights:
+  default: [1, 1]

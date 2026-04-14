@@ -1,0 +1,1323 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<title>COMP 411 Principles of Programming Languages</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:"Calibri Light";
+	panose-1:2 15 3 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+h1
+	{mso-style-link:"Heading 1 Char";
+	margin-top:12.0pt;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:0in;
+	margin-bottom:.0001pt;
+	page-break-after:avoid;
+	font-size:16.0pt;
+	font-family:"Calibri Light",sans-serif;
+	color:#2E74B5;
+	font-weight:normal;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-right:0in;
+	margin-left:0in;
+	font-size:18.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;
+	font-weight:bold;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-right:0in;
+	margin-left:0in;
+	font-size:13.5pt;
+	font-family:"Arial",sans-serif;
+	color:windowtext;
+	font-weight:bold;}
+p.MsoBodyTextIndent, li.MsoBodyTextIndent, div.MsoBodyTextIndent
+	{mso-style-link:"Body Text Indent Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+a:link, span.MsoHyperlink
+	{color:#0000EE;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#551A8B;
+	text-decoration:underline;}
+p
+	{margin-right:0in;
+	margin-left:.5in;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+code
+	{font-family:"Courier New";}
+pre
+	{mso-style-link:"HTML Preformatted Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Courier New";
+	color:windowtext;}
+tt
+	{font-family:"Courier New";}
+p.MsoListParagraph, li.MsoListParagraph, div.MsoListParagraph
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+span.Heading1Char
+	{mso-style-name:"Heading 1 Char";
+	mso-style-link:"Heading 1";
+	font-family:"Calibri Light",sans-serif;
+	color:#2E74B5;}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:"Calibri Light",sans-serif;
+	color:#2E74B5;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:"Calibri Light",sans-serif;
+	color:#1F4D78;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-link:"HTML Preformatted";
+	font-family:Consolas;
+	color:black;}
+span.BodyTextIndentChar
+	{mso-style-name:"Body Text Indent Char";
+	mso-style-link:"Body Text Indent";
+	font-family:"Arial",sans-serif;
+	color:black;}
+p.msolistparagraphcxspfirst, li.msolistparagraphcxspfirst, div.msolistparagraphcxspfirst
+	{mso-style-name:msolistparagraphcxspfirst;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+p.msolistparagraphcxspmiddle, li.msolistparagraphcxspmiddle, div.msolistparagraphcxspmiddle
+	{mso-style-name:msolistparagraphcxspmiddle;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+p.msolistparagraphcxsplast, li.msolistparagraphcxsplast, div.msolistparagraphcxsplast
+	{mso-style-name:msolistparagraphcxsplast;
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+p.class1, li.class1, div.class1
+	{mso-style-name:class1;
+	margin-right:0in;
+	margin-left:.5in;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+p.msochpdefault, li.msochpdefault, div.msochpdefault
+	{mso-style-name:msochpdefault;
+	margin-right:0in;
+	margin-left:.5in;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+span.m
+	{mso-style-name:m;}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body bgcolor=white lang=EN-US link="#0000EE" vlink="#551A8B" alink="#ff0000">
+
+<div class=WordSection1>
+
+<table class=MsoNormalTable border=0 cellpadding=0 width="100%"
+ style='width:100.0%'>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal style='margin-right:7.5pt'><span style='font-size:14.0pt;
+  font-family:"Times New Roman",serif'><img width=122 height=123
+  src="https://www.cs.rice.edu/~javaplt/411/22-spring/logo.gif"
+  alt="Rice University"></span><sup><span style='font-size:80.0pt;font-family:
+  "Times New Roman",serif'>&nbsp;</span></sup><b><sup><span style='font-size:
+  48.0pt;font-family:"Times New Roman",serif'>COMP 411/511 (Spring 2024)</span></sup></b><sup><span
+  style='font-size:80.0pt;font-family:"Times New Roman",serif'> </span></sup><span
+  style='font-size:14.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+  <p class=class1><b><span style='font-size:32.0pt;font-family:"Times New Roman",serif;
+  color:#3366FF'>Project 2:&nbsp; Three Interpreters for Jam</span></b></p>
+  <p class=class1><span style='font-size:28.0pt;font-family:"Times New Roman",serif'>Due:
+  Monday, Feb 5, 10:00 am</span></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-size:14.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+  </td>
+ </tr>
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-size:14.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal><span style='font-size:14.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+  </td>
+ </tr>
+</table>
+
+<h2><span style='font-size:20.0pt;font-family:"Times New Roman",serif'>Points:
+100</span></h2>
+
+<h3><span style='font-size:16.0pt;font-family:Consolas'>Files</span></h3>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>A starter
+repository is created when you accept the assignment in GitHub Classrom.&nbsp;
+Do not accept this assignment before completing Assignment 1.</span></p>
+
+<h3><span style='font-size:16.0pt;font-family:Consolas'>Overview</span></h3>
+
+<p><b><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Preparation</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> &nbsp; Examine
+the files in the repository created for you by GitHub Classroom.&nbsp; The
+support files are identical to those provided for Project 1 except that the
+file Parser.java contains the class solution instead of your solution to
+Project 1.&nbsp; You are free to use your version or the classroom solution
+version of </span><b><span style='font-size:16.0pt;font-family:Consolas'>Parser.java</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>. If you use your
+own parser, make sure that the </span><tt><b><span style='font-size:16.0pt;
+font-family:Consolas'>map</span></b></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> construct accepts an empty parameter
+list. </span></p>
+
+<p><b><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Task</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> &nbsp; Your task
+is to write three interpreters for the <i>Jam</i> language syntax from Project
+1: one that performs <em>call-by-value</em> evaluation, one that performs <em>call-by-name
+</em>evaluation, and one that performs <em>call-by-need</em> evaluation. The
+input to your interpreter will be a Jam program in the abstract syntax
+generated by the parser from Project 1.&nbsp; Call-by-need evaluation has the
+same syntactic semantics as call-by-name but the implementation of call-by-need
+is an &quot;optimization&quot; of call-by-name, so we must explain call-by-name
+evaluation first. The difference between call-by-value evaluation and
+call-by-name evaluation is straightforward. Consider a syntactic semantics for
+Jam analogous to the one we gave in Lecture 4 for the language <b>LC</b>. In
+the subsequent discussion of Jam evaluation, we will call Jam </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>map</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>s <i>procedures</i>
+which is consistent with language-independent programming language terminology.
+&nbsp;Similarly, in <b>LC</b>, </span><tt><b><span style='font-size:16.0pt;
+font-family:Consolas'>lambda</span></b></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>-abstractions are procedures. In call-by-value
+evaluation, the arguments in a procedure application (class </span><tt><span
+style='font-size:16.0pt;font-family:Consolas'>App</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> in the Java
+representation of Jam abstract syntax) are reduced to values before the
+arguments are substituted into the procedure body. &nbsp;In call-by-name
+evaluation, the argument expressions are substituted into the procedure body <em>without</em>
+being evaluated! These argument expressions are evaluated if and when their
+values are demanded during the evaluation of the body. This difference is
+codified by the reduction rules for procedure applications. </span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>In
+call-by-value,</span></p>
+
+<blockquote style='margin-left:1.0in;margin-top:5.0pt;margin-bottom:5.0pt'>
+
+<p class=MsoNormal><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>(map <i>x1,…,xn </i>to <i>E</i>) (<i>V1,…,Vn</i>) &#8594; E</span></b></tt><span
+class=MsoHyperlink><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext;text-decoration:none'>[</span></b></span><tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>x1 </span></i></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>&#8592; <i>V1,...,xn
+</i>&#8592; <i>Vn</i>]<i> </i></span></b></tt></p>
+
+</blockquote>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>where </span><tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>V1</span></i></b></tt><tt><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>,…,<b>Vn</b></span></i></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> are <em>values</em>.
+Hence, the procedure body in an application is not evaluated until the
+arguments are reduced to values.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>In
+call-by-name,</span></p>
+
+<blockquote style='margin-left:1.0in;margin-top:5.0pt;margin-bottom:5.0pt'>
+
+<p class=MsoNormal><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>(map <i>x1,…,xn </i>to <i>E</i>) (<i>M1,…,Mn</i>) &#8594; E</span></b></tt><span
+class=MsoHyperlink><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext;text-decoration:none'>[</span></b></span><tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>x1 </span></i></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>&#8592; <i>M1,...,xn
+</i>&#8592; <i>Mn</i>]</span></b></tt></p>
+
+</blockquote>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>where </span><tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>M1</span></i></b></tt><tt><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>,…,<b>Mn</b></span></i></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> are <i>arbitrary</i>
+<em>expressions</em>. This rule performs the substitution immediately rather
+than reducing </span><tt><b><i><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>M1</span></i></b></tt><tt><i><span style='font-size:16.0pt;
+font-family:Consolas;color:windowtext'>,…,<b>Mn</b></span></i></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> to values first.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Since
+call-by-name defers the evaluation of arguments in procedure applications, some
+of those arguments may never be evaluated in some cases. As a result, there are
+Jam programs that converge to an answer for call-by-name but diverge of abort
+with an error for call-by-value (because an argument in a function application
+that is never demanded in call-by-name evaluation diverges or aborts in
+call-by-value evaluation).</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>For the
+sake of efficiency, your interpreter must be a &quot;meta-interpreter&quot;
+that maintains an environment of variable bindings instead of performing explicit
+substitutions. In the environment, each variable must be bound to a
+representation that can be evaluated on demand. <b>Warning</b>: beware of
+scoping problems in your call-by-name interpreter. <em>Make sure that you
+evaluate each argument expression in the proper environment.</em> <b>Hint</b>:
+it may be helpful to think of each argument expression as a procedure of no
+arguments. If you use the correct representation for call-by-name bindings, the
+implementation of call-by-name requires very little code and the call-by-name
+and call-by-value interpreters can share most of their code. </span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>We
+recommend that you use the generic </span><b><span style='font-size:16.0pt;
+font-family:Consolas'>PureList</span></b><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> class in </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>PureList.java</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> to represent an
+environment. </span></p>
+
+<p><b><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Call-by-need</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>&nbsp; The
+call-by-name approach to evaluation is wasteful because it re-evaluates an
+argument expression <em>every</em> time the corresponding parameter is
+evaluated. By using the list representation for environments and performing
+destructive operations on the data representation of bindings (name/value
+pairs) in the environment, it is possible to eliminate this wasteful practice
+and only evaluate each argument expression once, the first time its value is
+demanded. (Note that the side-effects of mutating of the environment are
+benign.&nbsp; The behavior of the API supported by the environment does not
+change--only the efficiency of the implementation changes.&nbsp; This
+evaluation protocol is called <em>call-by-need</em>. For functional languages
+like Jam, there is no difference in the observable behavior or call-by-name and
+call-by-need, except that the latter is generally more efficient. </span></p>
+
+<p><b><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Testing</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> &nbsp; You are
+expected to write unit tests for all of your non-trivial methods or functions <em>and
+submit your test code as part of your program</em>. For more information, refer
+back to Project 1. Since there is no straightforward way to inspect closures or
+environments (without presuming a particular implementation), the direct output
+of environments or closures will not be tested. We can still however indirectly
+test closures by testing the application of closures to arguments and observing
+the arity of closures, <i>e.g.</i>, </span><span style='font-size:16.0pt;
+font-family:Consolas'>arity(map x to x)</span><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+visible part (for testing) of your program must include the top-level class: </span><tt><span
+style='font-size:16.0pt;font-family:Consolas'>Interpreter</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> containing the
+methods</span></p>
+
+<p style='margin-top:0in;margin-right:0in;margin-bottom:3.0pt;margin-left:.75in'><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>JamVal callByValue()</span></b></tt></p>
+
+<p style='margin-top:0in;margin-right:0in;margin-bottom:3.0pt;margin-left:.75in'><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>JamVal callByName()</span></b></tt></p>
+
+<p style='margin-top:0in;margin-right:0in;margin-bottom:3.0pt;margin-left:.75in'><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>JamVal callByNeed()</span></b></tt><b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>.</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> </span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+interface </span><tt><b><span style='font-size:16.0pt;font-family:Consolas'>JamVal</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> is defined in the
+provided support files. </span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The </span><tt><span
+style='font-size:16.0pt;font-family:Consolas'>Interpreter</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> class must
+support two constructors: </span><tt><b><span style='font-size:16.0pt;
+font-family:Consolas'>Interpreter(String filename)</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> which takes input
+from the specified file and </span><tt><b><span style='font-size:16.0pt;
+font-family:Consolas'>Interpreter(Reader</span></b></tt><tt><span
+style='font-size:16.0pt;font-family:Consolas'> <b>inputStream)</b></span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> which takes input
+from the specified </span><tt><b><span style='font-size:16.0pt;font-family:
+Consolas'>Reader</span></b></tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>.
+You do not need to test the constructor that takes a </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>String</span></b></tt><tt><span
+style='font-size:16.0pt;font-family:Consolas'> <b>filename</b></span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> argument.&nbsp;
+Store your source program in a file named </span><tt><b><span style='font-size:
+16.0pt;font-family:Consolas'>Interpreter.java</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>. In summary, you
+should create a source file </span><tt><b><span style='font-size:16.0pt;
+font-family:Consolas'>Interpreter.java</span></b></tt><span style='font-size:
+16.0pt;font-family:"Times New Roman",serif'> matching the following template:</span></p>
+
+<pre><b><span style='font-size:16.0pt;font-family:Consolas'>/** file Interpreter.java **/</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>class EvalException extends RuntimeException {</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'> &nbsp;&nbsp;&nbsp;EvalException(String msg) { super(msg); }</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>}</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>&nbsp;</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>class Interpreter {</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>&nbsp;&nbsp; Interpreter(String fileName) throws IOException;</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>&nbsp;&nbsp; Interpreter(Reader reader);</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>&nbsp;</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>&nbsp;&nbsp; public JamVal callByValue() { ... };</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>&nbsp;&nbsp; public JamVal callByName()&nbsp; { ... };</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>&nbsp;&nbsp; public JamVal callByNeed()&nbsp; { ... };</span></b></pre><pre><b><span
+style='font-size:16.0pt;font-family:Consolas'>}</span></b></pre>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The file </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>Interp.java</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> in your
+repository already contains the preceding code.</span></p>
+
+<p><b><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Choice
+of Language</span></b><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>
+&nbsp; Your program must compile and run correctly using Java 8.</span></p>
+
+<h3><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Input
+Language Specification</span></h3>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+following paragraphs define the <i>Jam</i> subset that your interpreter should
+handle and the new parser's input language.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Your
+interpreter should accept the <i>Jam</i> language including:</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'>the unary operators </span><tt><b><span style='font-size:
+16.0pt;font-family:Consolas;color:windowtext'>+</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>-</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>
+and </span><code><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>~</span></b></code><span style='font-size:16.0pt;font-family:
+"Times New Roman",serif;color:windowtext'>; </span></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'>the binary operators </span><tt><b><span style='font-size:
+16.0pt;font-family:Consolas;color:windowtext'>&gt;</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>&gt;=</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>!=</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>+</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>-</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><code><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>/</span></b></code><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>*</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>=</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>&lt;</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>&lt;=</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><code><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>&amp;</span></b></code><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>
+and </span><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>|</span></b></tt><span style='font-size:16.0pt;font-family:
+"Times New Roman",serif;color:windowtext'>; and</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'>the primitive Jam operations </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>cons?</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>empty?</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'> </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>number?</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>function?</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>arity</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>list?</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>cons</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>first</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>,
+and </span><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>rest</span></b></tt><span style='font-size:16.0pt;font-family:
+"Times New Roman",serif;color:windowtext'>. </span></p>
+
+<!--<p>If you encounter an unsupported operator, you may raise an evaluation exception/error.</p>-->
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+supported operators have exactly the same meaning as their Scheme counterparts
+(where the unary operator </span><code><b><span style='font-size:16.0pt;
+font-family:Consolas'>~</span></b></code><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> is identified with the Scheme </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>not</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> function, and the
+binary operators </span><code><b><span style='font-size:16.0pt;font-family:
+Consolas'>&amp;</span></b></code><span style='font-size:16.0pt;font-family:
+"Times New Roman",serif'> and </span><code><b><span style='font-size:16.0pt;
+font-family:Consolas'>|</span></b></code><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> are identified with the Scheme </span><code><b><span
+style='font-size:16.0pt;font-family:Consolas'>and</span></b></code><b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> </span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>and </span><code><b><span
+style='font-size:16.0pt;font-family:Consolas'>or</span></b></code><b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> </span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>operators) with
+two exceptions: </span></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><code><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>/</span></b></code><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>
+means the integer division, </span></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>=</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>
+and </span><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>!=</span></b></tt><span style='font-size:16.0pt;font-family:
+"Times New Roman",serif;color:windowtext'> mean equality and inequality on
+arbitrary objects. </span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+binary operator </span><tt><span style='font-size:16.0pt;font-family:Consolas'>=</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> behaves exactly
+like the Scheme </span><tt><b><span style='font-size:16.0pt;font-family:Consolas'>equal?</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> function, <i>i.e.</i>
+structural equality for objects and identity for closures (functions). For
+closures, the only way that functions can be equal is if they are actually the
+same object, <i>i.e.</i> they were created by the same closure allocation.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Some
+instructive examples of Jam semantics include:</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>5
+= 5</span></b></tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'>&nbsp;&nbsp; evaluates to </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>true</span></b></tt></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>5
+= 6</span></b></tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'>&nbsp; evaluates to </span><tt><b><span style='font-size:
+16.0pt;font-family:Consolas;color:windowtext'>false</span></b></tt></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>cons(1,cons(2,empty))=cons(1,cons(2,empty))</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;
+evaluates to </span><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>true</span></b></tt></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>cons(1,cons(2,empty))=cons(1,cons(3,empty))</span></b></tt><tt><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'> </span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>evaluates
+to </span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>false</span></b></tt></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>cons(1,cons(2,empty))=cons(1,empty)</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;
+evaluates to </span><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>false</span></b></tt></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>cons?
+= cons?</span></b></tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'>&nbsp; evaluates to </span><tt><b><span style='font-size:
+16.0pt;font-family:Consolas;color:windowtext'>true</span></b></tt></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>cons?
+= empty?</span></b></tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'>&nbsp; evaluates to </span><tt><b><span style='font-size:
+16.0pt;font-family:Consolas;color:windowtext'>false</span></b></tt></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>cons?
+= (map x to x)</span></b></tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'>&nbsp; evaluates to </span><tt><b><span style='font-size:
+16.0pt;font-family:Consolas;color:windowtext'>false</span></b></tt></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>(map
+x to x)</span></b></tt><b><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'> = </span></b><tt><b><span style='font-size:16.0pt;
+font-family:Consolas;color:windowtext'>(map x to x)</span></b></tt><tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>
+evaluates</span></tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'> to </span><tt><b><span style='font-size:16.0pt;font-family:
+Consolas;color:windowtext'>false</span></b></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif;color:windowtext'>, because the two maps
+are distinct objects in memory.</span></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'>·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas;color:windowtext'>let
+m:=(map x to x); in m = m</span></b></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif;color:windowtext'>&nbsp; evaluates to </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>true</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'> in
+call-by-value because the right-hand side of the definition is evaluated once,
+and from that point on </span><tt><span style='font-size:16.0pt;font-family:
+Consolas;color:windowtext'>m</span></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif;color:windowtext'> refers to the same
+object; to </span><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>false</span></b></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif;color:windowtext'> in call-by-name, because
+the right-hand side is evaluated each time </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>m</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>
+is used, so the two objects being compared are not created during the same
+allocation; and to </span><tt><b><span style='font-size:16.0pt;font-family:
+Consolas;color:windowtext'>true</span></b></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif;color:windowtext'> in call-by-need, because
+the right-hand side of the definition is evaluated the first time </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>m</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>
+is used and from then on refers to that object.&nbsp; This apparent anomaly
+does not contradict the theorem asserting that call-by-name and call-by-need
+yield identical results for functional languages because the </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>=</span></b></tt><tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif;color:windowtext'>
+operator is not purely functional in Jam.&nbsp; It treats procedure (function)
+values as locations rather than mathematical functions because function equality
+is undecidable.</span></tt></p>
+
+<p class=MsoNormal style='margin-left:1.0in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol;color:windowtext'><!--In OCaml, you can compare if two closures are the same object in memory using &quot;shallow&quot; equality (==).-->·</span><span
+style='font-size:7.0pt;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:16.0pt;font-family:"Times New Roman",serif;
+color:windowtext'>The equality operation defined on closures in the two bullets
+above has implications on the equality of lists: you have to compare two lists
+item by item using Jam =.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>By
+Scheme, we mean the <i>intermediate language with lambda</i> defined in
+DrRacket used in Comp 311. </span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+preceding definition of equality for closures is what is commonly done in
+languages like Scheme, Java, and C#, but it is unappealing from a mathematical
+perspective. In these languages, many common algebraic transformations break if
+closures are involved. There are more elegant ways to define equality on
+closures but they are more expensive. If we &quot;flatten&quot; closure
+representations so that a closure consists of a lambda-expression (</span><span
+style='font-size:16.0pt;font-family:Consolas'>AST</span><span style='font-size:
+16.0pt;font-family:"Times New Roman",serif'> </span><span style='font-size:
+16.0pt;font-family:Consolas'>map</span><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>) </span><b><span style='font-size:16.0pt;
+font-family:Consolas'>M</span></b><span style='font-size:16.0pt;font-family:
+"Times New Roman",serif'> and a list of the bindings of the free variables in </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>M</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, then we can
+compare the lambda-expressions (as </span><span style='font-size:16.0pt;
+font-family:Consolas'>AST</span><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>s)
+and the bindings of the free variables (recursively invoking equality testing
+of objects). For this assignment, we are using the common, inelegant definition
+which is easy to implement. Statically-typed functional languages typically
+exclude functions from the domain of the </span><b><span style='font-size:16.0pt;
+font-family:Consolas'>=</span></b><span style='font-size:16.0pt;font-family:
+"Times New Roman",serif'> operator; programs that attempt to compare functions
+do not type check.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+meanings of the primitive functions are as follows: </span></p>
+
+<p class=MsoListParagraph style='margin-left:.75in;text-indent:-.25in;
+line-height:110%'><tt><span style='font-size:16.0pt;line-height:110%;
+font-family:Symbol;color:windowtext'>·</span></tt><tt><span style='font-size:
+7.0pt;line-height:110%;font-family:"Times New Roman",serif;color:windowtext'>&nbsp;
+</span></tt><tt><b><span style='font-size:16.0pt;line-height:110%;font-family:
+Consolas;color:windowtext'>cons?(p)</span></b></tt><tt><span style='font-size:
+16.0pt;line-height:110%;font-family:Consolas;color:windowtext'> </span></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>returns </span><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>true</span></b><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> if </span><tt><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> was created by </span><tt><b><span style='font-size:16.0pt;
+line-height:110%;font-family:Consolas;color:windowtext'>cons()</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>.&nbsp; Hence, </span><tt><b><span style='font-size:16.0pt;
+line-height:110%;font-family:Consolas;color:windowtext'>cons?(empty) = false</span></b></tt><tt><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>.</span></tt></p>
+
+<p class=MsoListParagraph style='margin-left:.75in;text-indent:-.25in;
+line-height:110%'><span style='font-size:14.0pt;line-height:110%;font-family:
+Symbol'>·</span><span style='font-size:7.0pt;line-height:110%;font-family:"Times New Roman",serif'>&nbsp;
+</span><tt><b><span style='font-size:16.0pt;line-height:110%;font-family:Consolas;
+color:windowtext'>empty?(p)</span></b></tt><tt><span style='font-size:16.0pt;
+line-height:110%;font-family:Consolas;color:windowtext'> </span></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>returns </span><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>true</span></b><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> if </span><tt><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> is </span><tt><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>empty</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> (the empty list).</span></p>
+
+<p class=MsoListParagraph style='margin-left:.75in;text-indent:-.25in;
+line-height:110%'><span style='font-size:16.0pt;line-height:110%;font-family:
+Symbol;color:windowtext'>·</span><span style='font-size:7.0pt;line-height:110%;
+font-family:"Times New Roman",serif;color:windowtext'>&nbsp; </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>number?(p)</span></b></tt><tt><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>
+</span></tt><span style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>returns </span><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>true</span></b><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> if </span><tt><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> is a number</span></p>
+
+<p class=MsoListParagraph style='margin-left:.75in;text-indent:-.25in;
+line-height:110%'><span style='font-size:16.0pt;line-height:110%;font-family:
+Symbol;color:windowtext'>·</span><span style='font-size:7.0pt;line-height:110%;
+font-family:"Times New Roman",serif;color:windowtext'>&nbsp; </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>function?(p)</span></b></tt><tt><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>
+</span></tt><span style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>returns </span><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>true</span></b><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> if </span><tt><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> is a function (<i>i.e</i>., a </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>map</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> or a primitive function)</span></p>
+
+<p class=MsoListParagraph style='margin-left:.75in;text-indent:-.25in;
+line-height:110%'><span style='font-size:16.0pt;line-height:110%;font-family:
+Symbol;color:windowtext'>·</span><span style='font-size:7.0pt;line-height:110%;
+font-family:"Times New Roman",serif;color:windowtext'>&nbsp; </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>list?(p)</span></b></tt><tt><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>
+</span></tt><span style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>returns </span><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>true</span></b><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> if </span><tt><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> is a list (anything constructed by </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>cons()</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>, and </span><b><span style='font-size:16.0pt;line-height:
+110%;font-family:Consolas;color:windowtext'>empty</span></b><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>)</span></p>
+
+<p class=MsoListParagraph style='margin-left:.75in;text-indent:-.25in;
+line-height:110%'><span style='font-size:16.0pt;line-height:110%;font-family:
+Symbol;color:windowtext'>·</span><span style='font-size:7.0pt;line-height:110%;
+font-family:"Times New Roman",serif;color:windowtext'>&nbsp; </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>arity(p)</span></b></tt><tt><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>
+</span></tt><span style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>returns how many parameters the function </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> takes.&nbsp; It returns an evaluation error if </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> is not a function. </span></p>
+
+<p class=MsoListParagraph style='margin-left:.75in;text-indent:-.25in;
+line-height:110%'><span style='font-size:16.0pt;line-height:110%;font-family:
+Symbol;color:windowtext'>·</span><span style='font-size:7.0pt;line-height:110%;
+font-family:"Times New Roman",serif;color:windowtext'>&nbsp; </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>cons(p,q)</span></b></tt><tt><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>
+</span></tt><span style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>returns a list consisting of the list </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>q</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> with the value </span><tt><b><span style='font-size:16.0pt;
+line-height:110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> added to the front.&nbsp; It returns an evaluation error if </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>q</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> is not a list.</span></p>
+
+<p class=MsoListParagraph style='margin-left:.75in;text-indent:-.25in;
+line-height:110%'><span style='font-size:16.0pt;line-height:110%;font-family:
+Symbol;color:windowtext'>·</span><span style='font-size:7.0pt;line-height:110%;
+font-family:"Times New Roman",serif;color:windowtext'>&nbsp; </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>first(p)</span></b></tt><tt><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>
+</span></tt><span style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>returns the first element of list </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>.&nbsp; It returns an evaluation error if </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> is not a list.</span></p>
+
+<p class=MsoListParagraph style='margin-left:.75in;text-indent:-.25in;
+line-height:110%'><span style='font-size:16.0pt;line-height:110%;font-family:
+Symbol;color:windowtext'>·</span><span style='font-size:7.0pt;line-height:110%;
+font-family:"Times New Roman",serif;color:windowtext'>&nbsp; </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>rest(p)</span></b></tt><tt><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>
+</span></tt><span style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>returns all but the first element of </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>.&nbsp; It returns an evaluation error if </span><tt><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>p</span></b></tt><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'> is not a list.</span></p>
+
+<p class=MsoListParagraph style='margin-left:.75in;line-height:110%'><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>&nbsp;</span></p>
+
+<p class=MsoListParagraph style='line-height:110%'><span style='font-size:16.0pt;
+line-height:110%;font-family:"Times New Roman",serif;color:windowtext'>For all
+other inputs, the predicates (boolean-returning functions) above return </span><b><span
+style='font-size:16.0pt;line-height:110%;font-family:Consolas;color:windowtext'>false</span></b><span
+style='font-size:16.0pt;line-height:110%;font-family:"Times New Roman",serif;
+color:windowtext'>.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+language constructs </span><tt><b><span style='font-size:16.0pt;font-family:
+Consolas'>if</span></b></tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>,
+</span><tt><b><span style='font-size:16.0pt;font-family:Consolas'>map</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>let</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, and application
+in JAM have the same meaning as </span><tt><span style='font-size:16.0pt;
+font-family:Consolas'>if</span></tt><span style='font-size:16.0pt;font-family:
+"Times New Roman",serif'>, </span><tt><span style='font-size:16.0pt;font-family:
+Consolas'>lambda</span></tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>,
+</span><tt><span style='font-size:16.0pt;font-family:Consolas'>let</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, and application in
+Racket/Scheme with two exceptions. First, the call-by-name version of Jam uses
+call-by-name semantics for the application of program-defined functions (</span><b><span
+style='font-size:16.0pt;font-family:Consolas'>map</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>s). Second, when
+Jam </span><tt><b><span style='font-size:16.0pt;font-family:Consolas'>if</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> is given a
+non-Boolean input in the test position, it reports an evaluation error.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Your
+interpreter should report errors by throwing an </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>EvalException</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> containing an
+appropriate message.&nbsp; All errors abort execution.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The Jam </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>let</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> construct is
+simply an abbreviation for the corresponding lambda application. Hence </span></p>
+
+<blockquote style='margin-left:1.0in;margin-top:5.0pt;margin-bottom:5.0pt'>
+
+<p class=MsoNormal><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>let </span></b></tt><b><i><span style='font-size:16.0pt;
+font-family:Consolas;color:windowtext'>v</span></i></b><tt><b><sub><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>1</span></sub></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'> := </span></b></tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>M</span></i></b><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>1; </span></b></tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'><br>
+&nbsp;&nbsp;&nbsp; ...<br>
+<i>&nbsp;&nbsp;&nbsp; v</i></span></b><tt><b><sub><span style='font-size:10.0pt;
+font-family:Consolas;color:windowtext'>n</span></sub></b></tt><tt><b><span
+style='font-size:10.0pt;font-family:Consolas;color:windowtext'> := </span></b></tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>M</span></i></b><tt><b><span
+style='font-size:10.0pt;font-family:Consolas;color:windowtext'>n; </span></b></tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'><br>
+</span></b><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>in</span></b></tt><tt><b><span style='font-size:10.0pt;
+font-family:Consolas;color:windowtext'> </span></b></tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>E</span></i></b></p>
+
+</blockquote>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>has
+exactly the same meaning as</span></p>
+
+<blockquote style='margin-left:1.0in;margin-top:5.0pt;margin-bottom:5.0pt'>
+
+<p class=MsoNormal><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>(</span></b><tt><b><span style='font-size:16.0pt;font-family:
+Consolas;color:windowtext'>map </span></b></tt><b><i><span style='font-size:
+16.0pt;font-family:Consolas;color:windowtext'>v</span></i></b><tt><b><sub><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>1</span></sub></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>, ..., </span></b></tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>v</span></i></b><tt><b><sub><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>n</span></sub></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'> to </span></b></tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>E</span></i></b><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>)(</span></b></tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>M</span></i></b><tt><b><sub><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>1</span></sub></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>, ..., </span></b></tt><b><i><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>M</span></i></b><tt><b><sub><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>n</span></sub></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>) </span></b></tt></p>
+
+</blockquote>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Hence, a </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>let</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> is a combination
+of a </span><tt><b><span style='font-size:16.0pt;font-family:Consolas'>map</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> and an
+application. Note that the semantics of </span><tt><b><span style='font-size:
+16.0pt;font-family:Consolas'>let</span></b></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> depends on whether the interpreter is using
+call-by-value or call-by-name.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Lists are
+created using </span><tt><b><span style='font-size:16.0pt;font-family:Consolas'>cons</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> and </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>empty</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, where </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>empty</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> is the empty
+list. The one-element list </span><tt><b><span style='font-size:16.0pt;
+font-family:Consolas'>(1)</span></b></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> is created by the expression </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>cons(1,empty)</span></b></tt><tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>.</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> Since the values
+returned by </span><tt><b><span style='font-size:16.0pt;font-family:Consolas'>cons(...)</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> and </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>empty</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> are lists, </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>list?</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> returns </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>true</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> for both of them.
+The following program evaluates to </span><tt><b><span style='font-size:16.0pt;
+font-family:Consolas;color:windowtext'>cons</span></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>(true,cons(true,empty))</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>:</span></p>
+
+<blockquote style='margin-left:1.0in;margin-top:5.0pt;margin-bottom:5.0pt'>
+
+<p class=MsoNormal><tt><b><span style='font-size:16.0pt;font-family:Consolas;
+color:windowtext'>cons(list?(cons(5,</span></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>empty</span></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>)),cons(list?(</span></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>empty</span></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>),</span></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>empty</span></b></tt><tt><b><span
+style='font-size:16.0pt;font-family:Consolas;color:windowtext'>)) </span></b></tt></p>
+
+</blockquote>
+
+<p><tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+binary infix operators <b>&amp;</b> (“and</span></tt><span style='font-size:
+16.0pt;font-family:"Times New Roman",serif'>”) and </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>|</span></b></tt><tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> (“or”)</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> denote the <em>short-circuit</em>
+versions of those operations even in call-by-value Jam. The evaluation of
+primitive operations is not affected by the policy for evaluating </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>map</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> applications. That
+means these operations look just at their first operand and try to determine
+the result; only if they cannot determine it from just the first operand do
+they look at the second at the second operand. For example, </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>(true | x)</span></b></tt><b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> </span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>evaluates to </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>true</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> regardless of
+what value </span><tt><b><span style='font-size:16.0pt;font-family:Consolas'>x</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> has.</span></p>
+
+<p><tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+ternary</span></tt><tt><span style='font-size:16.0pt;font-family:Consolas'>
+if-then-else</span></tt><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>
+operation works in a similar way: It first evaluates the test expression
+appearing between </span><tt><span style='font-size:16.0pt;font-family:Consolas'>if</span></tt><tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> and </span></tt><tt><span
+style='font-size:16.0pt;font-family:Consolas'>then</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>. If it evaluates
+to </span><tt><span style='font-size:16.0pt;font-family:Consolas'>true</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, </span><tt><span
+style='font-size:16.0pt;font-family:Consolas'>if-then-else</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> evaluates the
+consequence expression immediately following </span><tt><span style='font-size:
+16.0pt;font-family:Consolas'>then</span></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>; if it is </span><tt><span
+style='font-size:16.0pt;font-family:Consolas'>false</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, it evaluates the
+alternative expression immediately following </span><tt><span style='font-size:
+16.0pt;font-family:Consolas'>else</span></tt><tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>.</span></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> </span><tt><span style='font-size:16.0pt;
+font-family:Consolas'>if-then-else</span></tt><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> never evaluates both the consequence and
+alternative expressions.</span></p>
+
+<h3><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Representation
+of Program Values</span></h3>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>A Jam
+program manipulates data values that are either numbers, booleans, lists, or
+function representations (closures). To standardize the visible behavior of Jam
+interpreters, we stipulate that Jam interpreters <em>must</em> observe the
+following conventions concerning the representation of Jam values in Java. Jam
+values must be represented using the </span><b><span style='font-size:16.0pt;
+font-family:Consolas'>JamVal</span></b><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> interface and subclasses as defined in
+each of the three parser library files. </span></p>
+
+<h3><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Commenting,
+Testing and Submitting Your Program</span></h3>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>src</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> folder in the provided
+code base includes some Junit4 test classes which are not comprehensive.&nbsp;
+You need to add more test cases; you should to check every base constant (other
+than all numbers) and every compound construction as shown in the syntax
+diagrams.&nbsp; </span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Edit the </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>README</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> file for your
+repository so that it</span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol'>·</span><span style='font-size:
+7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>outlines
+the organization of your program, </span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol'>·</span><span style='font-size:
+7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>specifies
+any compatible additions that you made the provided API (unnecessary for most
+submissions), and</span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol'>·</span><span style='font-size:
+7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>specifies
+what testing process you used to confirm the correctness of your program.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Each
+procedure or method in your program should include a short </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>javadoc</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> comment stating
+precisely what it does at the level of abstraction expected by clients of the
+method.&nbsp; Note that the<b> </b></span><b><span style='font-size:16.0pt;
+font-family:Consolas'>README</span></b><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> file is a GitHub “MarkDown” file, which
+is text augmented by a few simple formatting annotations.&nbsp; MarkDown (MD)
+is much less powerful than HTML but much easier to use.&nbsp; The webpage <a
+href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown-cheat-sheet</a>
+is a good summary for learning MarkDown and a useful reference.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Your test
+suite should comprehensively test all the distinct constructions of data values
+of the primary type processed by each method (most often </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>this</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>).&nbsp; Each
+combination of inputs requiring different processing should be tested; this is
+a property of the method contract, not the code implementing it.&nbsp; Ideally,
+the suite of tests should probe every feasible control path in your code.&nbsp;
+In practice, actual code often contains unreachable error reports.&nbsp; Such
+control paths obviously cannot be traversed by any test case.&nbsp; We expect
+you to come close to ideal coverage.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>All JUnit
+test classes submitted for grading should be compatible with a generic solution
+that conforms to the public interface provided by the stub files in the
+provided support code. In other words, we should be able to compile and run
+your unit tests against a reference solution used for grading, which has the
+same public interface as the support code. Your test classes should be defined
+in files matching the pattern </span><tt><span style='font-size:16.0pt;
+font-family:Consolas'>&quot;<b>*Assign#Test.java</b>&quot;</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, where </span><tt><span
+style='font-size:16.0pt;font-family:Consolas'>&quot;<b>#</b>&quot;</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> is the current
+assignment number. For example, </span><tt><span style='font-size:16.0pt;
+font-family:Consolas'>&quot;<b>MyAssign2Test.java</b>&quot;</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> would be a valid
+name for Assignment 2 unit tests. If you want to include other tests that you do
+not want graded (e.g., to test your private interfaces), then simply use a
+different suffix than &quot;Test&quot; for the test class names (e.g., </span><tt><span
+style='font-size:16.0pt;font-family:Consolas'>&quot;<b>Assign1Test#.java</b>&quot;</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>). If you have
+additional utility classes that are required dependences of your unit test
+classes, please name those classes using the pattern </span><tt><span
+style='font-size:16.0pt;font-family:Consolas'>&quot;<b>*Assign#TestSupport.java</b>&quot;</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, which signals
+that the class is required to support your unit tests, but is not a unit test
+class that should be independently launched. You may also include test support
+files with names matching the pattern </span><tt><span style='font-size:16.0pt;
+font-family:Consolas'>&quot;<b>*AssignAllTestSupport.java</b>&quot;</span></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, which can
+contain common test support code that can be reused across multiple assignment
+submissions without needing to rename the file.&nbsp; Note that our class
+solutions to the assignments do not rely on such utility classes.&nbsp; We
+anticipate that most solutions will only include test files of the form </span><tt><span
+style='font-size:16.0pt;font-family:Consolas'>&quot;<b>*Assign#Test.java</b>&quot;<b>.</b></span></tt></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>You
+obviously do not need to “submit” your program, since you are creating it
+inside a repository on the ownership of the course staff.&nbsp; We can easily
+access all student repositories.</span></p>
+
+<h3><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Implementation
+Hints</span></h3>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>In your
+call-by-name interpreter, the argument expressions must be evaluated in the
+environment corresponding to their lexical context in the program. The free
+variables in argument expressions behave <em>exactly</em> like the free
+variables in functions. </span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The form
+of your interpreters should be very similar to the environment-based
+interpreters presented in class. You should represent ground values by their </span><em><b><span
+style='font-size:16.0pt;font-family:Consolas;font-style:normal'>Object</span></b></em><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> equivalents
+(where lists are represented using the </span><tt><b><span style='font-size:
+16.0pt;font-family:Consolas'>PureList</span></b></tt><b><span style='font-size:
+16.0pt;font-family:Consolas'> </span></b><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'>class in the parser library file) and
+function values (closures) as anonymous inner classes (the strategy pattern for
+representing functions). Implement each of the primitives using the
+corresponding Java primitive when possible. Of course, you will have to
+implement the </span><tt><b><span style='font-size:16.0pt;font-family:Consolas'>function?</span></b></tt><b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> </span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>and </span><tt><b><span
+style='font-size:16.0pt;font-family:Consolas'>arity</span></b></tt><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> primitives on
+your own since there are no Java equivalents.&nbsp; Fortunately, this task is
+straightforward.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Your
+interpreters should return the Java data values (</span><b><span
+style='font-size:16.0pt;font-family:Consolas'>JamVal</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>s or aborting </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>Exception</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>s) representing
+the results of the specified Jam computations.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Note that
+unary and binary operators are <em>not</em> values while primitives are. Unary
+and binary operators are not legal expressions; hence, they can never be used
+as values. In addition, note that the binary operators<b> </b></span><code><b><span
+style='font-size:16.0pt;font-family:Consolas'>&amp;</span></b></code><b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> </span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>and </span><code><b><span
+style='font-size:16.0pt;font-family:Consolas'>|</span></b></code><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> are special: they
+do not evaluate their second arguments unless it is necessary.&nbsp; Of course,
+a Jam programmer can always define </span><span style='font-size:16.0pt;
+font-family:Consolas'>map</span><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>s
+that define the functions corresponding to operators.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>In writing
+your interpreters: follow the definition of the data. Your interpreters should
+contain a separate visitor </span><b><span style='font-size:16.0pt;font-family:
+Consolas'>for<i>&lt;class-name&gt;</i></span></b><span style='font-size:16.0pt;
+font-family:"Times New Roman",serif'> method for each abstract syntax
+constructor type. </span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Remember
+to &quot;factor out&quot; repeated code patterns which you presumably learned
+in Comp 215 and/or Comp 310.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>Initially
+confine your attention to a small subset of the primitive operations first
+(such as integer arithmetic including a few relational operators) and get
+everything debugged for that subset. &nbsp;Develop an interpreter for this
+subset that only handles programs without program-defined functions (</span><b><span
+style='font-size:16.0pt;font-family:Consolas'>map</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>s).&nbsp; Then
+extend that interpreter to support the call-by-value evaluation of </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>map</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>s followed by
+adding support for call-by-name and call-by-need.&nbsp; In the process, share
+code using inheritance wherever possible.&nbsp; When you implement each
+interpreter as an </span><b><span style='font-size:16.0pt;font-family:Consolas'>AST</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> visitor, you can
+share most of the code across the three interpreters using inheritance.
+&nbsp;(If you write your interpreter by filling in the stub file, this sharing
+will automatically happen.) &nbsp;.&nbsp;&nbsp; Once all three interpreters are
+working for the selected subset of operations, add support for the operations
+that you initially left out.&nbsp; You can initially ignore the commented out
+tests in </span><b><span style='font-size:16.0pt;font-family:Consolas'>Assign2Test.java</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> and run them
+after your interpreter works for all simple tests.&nbsp; The tests in </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>Assign2Test.java</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> are a minimal set
+of demonstration tests.&nbsp; You need to thoroughly test your program
+achieving a high level of code coverage (80% is a good target, but perhaps you
+can do significantly better).</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>This is a
+much more challenging assignment that Assignment 1.&nbsp; We strongly recommend
+that you start working on this assignment immediately.&nbsp; You have two weeks
+plus a weekend to complete it.&nbsp; If you produce a working solution before
+the due date, you can write more tests and perhaps refactor and improve your
+code.&nbsp; The stub file </span><b><span style='font-size:16.0pt;font-family:
+Consolas'>Interp.java</span></b><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>
+corresponds to the class solution which has a long evolution behind it.&nbsp;
+It is a coherent design that achieves a high degree of code sharing.&nbsp; The
+complete solution file only contains about 450 lines and it contains more blank
+lines the stubbed file which is about 300 lines.&nbsp; If you construct a
+solution by filling in the stubbed methods in the stub file, you only have to
+write about 200 lines of code.&nbsp; This total is higher than the difference
+in lengths of the two files because about 50 lines in the stubbed file are
+stubbed lines that you must replace.&nbsp; Developing these ~200 lines requires
+a lot of thought. &nbsp;&nbsp;You will need understand all of the code in the
+Starter Repository.</span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>The
+provided repository compiles without generating any errors or warnings, but it
+fails every test in </span><b><span style='font-size:16.0pt;font-family:Consolas'>Assign2Test.java</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> with a null
+pointer exception because many of the methods required to interpret Jam code
+are stubbed out.&nbsp; About half of the tests in </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>Assign2Test.java</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'> are commented out
+because they are involve a higher level of complexity, namely the use of the Y
+combinator to perform recursion.&nbsp; Assignment 2 Jam has no mechanism for
+directly specifying recursive bindings (<i>e.g</i>., recursive function definitions),
+but the Y operator, invented by Alonzo Church and his fellow wizards at
+Princeton in 1930’s, easily works around this restriction.&nbsp; The existence
+of the Y operator (which is different for call-by-value than for call-by-name)
+demonstrates that direct recursive bindings is conceptually unnecessary, albeit
+much less efficient than direct recursive binding, which we will add in
+Assignment 3. &nbsp;Once your interpreters work for the simple tests, you need
+to uncomment the tests that use the Y operator and confirm that your
+interpreter works for these more involved computations.&nbsp; </span></p>
+
+<p><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>You
+conceivably may find it easier to completely rewrite the code for </span><b><span
+style='font-size:16.0pt;font-family:Consolas'>Interp.java</span></b><span
+style='font-size:16.0pt;font-family:"Times New Roman",serif'>, perhaps using
+the stub file as a rough guide for designing your program.&nbsp; You are
+welcome to do so, but we expect your code to be clean, intelligible and
+commented with contracts for all non-trivial methods.</span></p>
+
+<div>
+
+<p class=MsoNormal><span style='font-size:16.0pt;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

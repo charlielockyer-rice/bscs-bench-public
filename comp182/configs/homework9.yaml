@@ -1,0 +1,33 @@
+assignment_number: 9
+assignment_name: "NP-Completeness"
+display_name: "HW9: NP-Completeness"
+course: "comp182"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+llm_grading:
+  rubric: "solutions/homework9_rubric.md"
+
+problems:
+  - number: 1
+    name: "P and NP"
+    points: 30
+    description: "Definitions and properties of P and NP"
+
+  - number: 2
+    name: "NP-Completeness Proofs"
+    points: 40
+    description: "Prove problems are NP-complete via reductions"
+
+  - number: 3
+    name: "Reductions"
+    points: 30
+    description: "Polynomial-time reductions"
+
+topics:
+  - "P vs NP"
+  - "NP-Completeness"
+  - "Polynomial Reductions"
+  - "Cook-Levin Theorem"
+  - "Common NP-Complete Problems"

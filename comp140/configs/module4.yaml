@@ -1,0 +1,93 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 4
+assignment_name: "kevin_bacon"
+display_name: "Kevin Bacon"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: python
+runtime:
+  version: "3.11"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 39
+  total_points: 20
+  timeout_seconds: 15
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "solution.py"
+    functions:
+      - Queue.__init__
+      - Queue.__len__
+      - Queue.__str__
+      - Queue.push
+      - Queue.pop
+      - Queue.clear
+      - bfs
+      - distance_histogram
+      - find_path
+      - play_kevin_bacon_game
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  discovery: "auto"
+  pattern: "test_module4.py"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # Queue tests (6 points)
+  queue_init_empty: 0.5
+  queue_len_empty: 0.5
+  queue_len_after_push: 0.5
+  queue_str_returns_string: 0.5
+  queue_push_pop_order: 1
+  queue_pop_returns_oldest: 1
+  queue_clear_empties: 1
+  queue_multiple_push_pop: 1
+
+  # bfs tests (6 points)
+  bfs_single_node: 1
+  bfs_two_nodes: 1
+  bfs_line_graph: 1
+  bfs_distances_correct: 1
+  bfs_parents_correct: 1
+  bfs_unreachable_infinity: 1
+
+  # distance_histogram tests (3 points)
+  distance_histogram_single: 1
+  distance_histogram_line: 1
+  distance_histogram_complete: 1
+
+  # find_path tests (3 points)
+  find_path_adjacent: 1
+  find_path_multi_hop: 1
+  find_path_format_correct: 1
+
+  # play_kevin_bacon_game tests (2 points)
+  play_game_prints_output: 1
+  play_game_correct_path: 1
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+docs:
+  writeup_sections:
+    - "Recipe for find_path"
+    - "Discussion: Graph diameter"
+    - "Discussion: Finding hubs"
+    - "Discussion: Important movies"
+    - "Discussion: Histogram comparison"

@@ -1,0 +1,659 @@
+#!/usr/bin/env python3
+"""
+Unified Autograder CLI
+
+Detects course language (Python, Java, or C) and dispatches to the appropriate runner.
+
+Usage:
+    grade <workspace_path>                          # New format - reads workspace.yaml
+    grade <module> <workspace_path> --course <course_path>   # Legacy format
+
+Examples:
+    grade ./workspaces/agent_circles              # New format (flat workspace)
+    grade 1 ./workspace --course ./comp140        # Python (COMP140)
+    grade 1 ./workspace --course ./comp215        # Java (COMP215)
+    grade 2 ./workspace --course ./comp321        # C (COMP321)
+"""
+
+import sys
+import os
+import subprocess
+import json
+import shutil
+import contextlib
+from datetime import datetime, timezone
+from pathlib import Path
+
+# Add the project root to Python path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
+
+# Shared utilities
+sys.path.insert(0, os.path.join(project_root, "bin"))
+from _lib import load_dotenv
+
+# Load .env file if present (Bun auto-loads for TS; we need this for Python)
+load_dotenv()
+
+from framework.config import load_workspace_config
+from framework.config_compat import get_assignment_number, get_assignment_name
+from framework.test_suites import (
+    _assemble_suite_for_run_type,
+    _load_yaml_config,
+    _validate_submit_private_suite,
+    build_suite_audit_payload,
+    format_suite_audit_text,
+)
+
+# Import YAML with optional fallback (same pattern as framework/config.py)
+try:
+    import yaml
+    HAS_YAML = True
+except ImportError:
+    HAS_YAML = False
+
+
+@contextlib.contextmanager
+def _env_override(suite_dir, run_type: str):
+    """Temporarily set BSCS_TEST_SUITE_DIR and BSCS_RUN_TYPE, restoring on exit."""
+    prev_suite = os.environ.get("BSCS_TEST_SUITE_DIR")
+    prev_run_type = os.environ.get("BSCS_RUN_TYPE")
+    try:
+        if suite_dir:
+            os.environ["BSCS_TEST_SUITE_DIR"] = str(suite_dir)
+        os.environ["BSCS_RUN_TYPE"] = run_type
+        yield
+    finally:
+        if prev_suite is None:
+            os.environ.pop("BSCS_TEST_SUITE_DIR", None)
+        else:
+            os.environ["BSCS_TEST_SUITE_DIR"] = prev_suite
+        if prev_run_type is None:
+            os.environ.pop("BSCS_RUN_TYPE", None)
+        else:
+            os.environ["BSCS_RUN_TYPE"] = prev_run_type
+
+
+def _handle_audit_suite(workspace_path, suite_dir, suite_meta, valid, msg, *, use_json: bool) -> int:
+    """Print --audit-suite output and return exit code."""
+    payload = build_suite_audit_payload(
+        workspace_path, suite_dir, suite_meta,
+        is_valid=valid, validation_message=msg,
+    )
+    if use_json:
+        print(json.dumps(payload, indent=2))
+    else:
+        print(format_suite_audit_text(payload))
+    return 0 if valid else 1
+
+
+def read_workspace_info(workspace_path: Path) -> dict | None:
+    """Read workspace.yaml or workspace.json to get module info.
+
+    Delegates to framework.config.load_workspace_config() for parsing,
+    then returns the subset of fields needed by the grade CLI.
+    Also reads assignment_mode directly from raw config (not in WorkspaceConfig).
+    """
+    try:
+        ws = load_workspace_config(workspace_path)
+    except Exception:
+        return None
+
+    # Read assignment_mode from raw config (not modeled in framework.config)
+    assignment_mode = None
+    for config_file in ["workspace.yaml", "workspace.json"]:
+        cfg_path = workspace_path / config_file
+        if cfg_path.exists():
+            try:
+                if config_file.endswith(".yaml") and HAS_YAML:
+                    with open(cfg_path) as f:
+                        raw = yaml.safe_load(f)
+                else:
+                    with open(cfg_path) as f:
+                        raw = json.load(f)
+                assignment_mode = raw.get("assignment_mode")
+            except Exception:
+                pass
+            break
+
+    return {
+        "module_number": ws.module_number,
+        "course": ws.course,
+        "module_name": ws.module_name,
+        "language": ws.language or None,
+        "assignment_mode": assignment_mode,
+    }
+
+
+def detect_language(course_path: Path, module_number: int) -> str:
+    """
+    Detect course language from config files.
+
+    Returns 'java', 'c', 'go', 'typescript', or 'python'.
+    """
+    configs_dir = course_path / "configs"
+    if not configs_dir.exists():
+        return "python"
+
+    # Check for homework config (Java courses like COMP215)
+    hw_config = configs_dir / f"homework{module_number}.yaml"
+    data = _load_yaml_config(hw_config)
+    if data and data.get("language") == "java":
+        return "java"
+
+    # Check for module config (Python courses like COMP140)
+    mod_config = configs_dir / f"module{module_number}.yaml"
+    if mod_config.exists():
+        return "python"
+
+    # Check for project-based configs (C courses like COMP321, COMP421)
+    # Support both legacy (project_number) and unified (assignment_number) schemas
+    for config_file in configs_dir.glob("*.yaml"):
+        data = _load_yaml_config(config_file)
+        if not data:
+            continue
+        num = get_assignment_number(data)
+        if num == module_number:
+            lang = data.get("language")
+            if lang:
+                lang = str(lang).lower()
+                if lang in ("c", "java", "go", "typescript"):
+                    return lang
+
+    return "python"
+
+
+def get_project_name_for_number(course_path: Path, module_number: int) -> str | None:
+    """
+    For project-based courses (like COMP321, COMP421), find the project name for a given number.
+    Supports both legacy (project_number/project_name) and unified (assignment_number/assignment_name) schemas.
+    Returns None if not found.
+    """
+    configs_dir = course_path / "configs"
+    if not configs_dir.exists():
+        return None
+
+    for config_file in configs_dir.glob("*.yaml"):
+        data = _load_yaml_config(config_file)
+        if not data:
+            continue
+        num = get_assignment_number(data)
+        if num == module_number:
+            return get_assignment_name(data)
+
+    return None
+
+
+def main():
+    import argparse
+
+    # Check for new format: grade <workspace_path> [options]
+    # New format is detected when first positional arg is a path with workspace.yaml
+    if len(sys.argv) >= 2 and not sys.argv[1].startswith('-'):
+        first_arg = sys.argv[1]
+        workspace_candidate = Path(first_arg).resolve()
+        workspace_info = None
+        if workspace_candidate.exists() and workspace_candidate.is_dir():
+            workspace_info = read_workspace_info(workspace_candidate)
+
+        if workspace_info:
+            # New format detected - parse with simplified args
+            new_parser = argparse.ArgumentParser(
+                prog="grade",
+                description="Unified Autograder - supports Python, Java, and C courses",
+                formatter_class=argparse.RawDescriptionHelpFormatter,
+                epilog="""
+Examples:
+  grade ./workspaces/agent_circles           New format (reads workspace.yaml)
+  grade ./workspaces/agent_circles -v        Verbose output
+  grade ./workspaces/agent_circles --history Show grading history
+""",
+            )
+            new_parser.add_argument(
+                "workspace",
+                type=str,
+                help="Path to the workspace directory (with workspace.yaml)",
+            )
+            new_parser.add_argument("-v", "--verbose", action="store_true")
+            new_parser.add_argument("--history", action="store_true")
+            new_parser.add_argument("--json", action="store_true")
+            new_parser.add_argument("--check", action="store_true")
+            new_parser.add_argument(
+                "--audit-suite",
+                action="store_true",
+                help="Show the effective public/private/agent test suite and exit",
+            )
+            new_parser.add_argument(
+                "--run-type",
+                choices=["test", "submit"],
+                default="test",
+                help="test: public+agent, submit: public+private",
+            )
+            docker_group = new_parser.add_mutually_exclusive_group()
+            docker_group.add_argument("--docker", action="store_true", help="Run tests in Docker container (default for Python)")
+            docker_group.add_argument("--no-docker", action="store_true", help="Run tests on host (Python only)")
+
+            args = new_parser.parse_args()
+            workspace_path = workspace_candidate
+            module_number = workspace_info["module_number"]
+            course_name = workspace_info["course"]
+
+            # Derive course path.
+            # In containers, workspace is at /workspace (not under project root),
+            # so use the script-derived project_root instead.
+            if os.environ.get("BSCS_IN_CONTAINER") == "1":
+                project_root_path = Path(project_root)
+            else:
+                # Host: walk up from workspace until we find the course dir.
+                # Supports both flat (workspaces/<ws>) and nested (workspaces/<model>/<ws>).
+                candidate = workspace_path.parent.parent
+                if not (candidate / course_name).exists():
+                    candidate = candidate.parent  # try one more level up
+                project_root_path = candidate
+            course_path = project_root_path / course_name
+
+            if not course_path.exists():
+                print(f"Error: Course directory not found: {course_path}", file=sys.stderr)
+                return 1
+
+            # For new format workspaces, use the framework's new mode directly
+            # First check if workspace_info already has language (from workspace.yaml/json)
+            # This avoids needing to parse course configs which require PyYAML
+            language = workspace_info.get("language")
+            if not language:
+                language = detect_language(course_path, module_number)
+
+            # Build effective suite path for this run mode.
+            suite_dir, temp_dirs, suite_meta = _assemble_suite_for_run_type(
+                args.run_type,
+                workspace_path,
+                project_root_path,
+                course_name,
+                module_number,
+                workspace_info.get("module_name"),
+            )
+
+            # Persist metadata for UI/archive consumers.
+            try:
+                meta_path = workspace_path / "last_test_meta.json"
+                meta_path.write_text(json.dumps({
+                    **suite_meta,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                }, indent=2))
+            except Exception:
+                pass
+
+            try:
+                valid_submit_suite, submit_suite_msg = _validate_submit_private_suite(
+                    args.run_type, suite_meta
+                )
+                if submit_suite_msg:
+                    print(submit_suite_msg, file=sys.stderr)
+                if args.audit_suite:
+                    return _handle_audit_suite(
+                        workspace_path, suite_dir, suite_meta,
+                        valid_submit_suite, submit_suite_msg, use_json=args.json,
+                    )
+                if not valid_submit_suite:
+                    return 1
+
+                if language in ("java", "c"):
+                    # Java/C courses use their own runners
+                    module_name = workspace_info.get("module_name")
+                    return _run_grading(
+                        workspace_path,
+                        course_path,
+                        module_number,
+                        args,
+                        module_name,
+                        language,
+                        suite_dir=suite_dir,
+                    )
+                elif language in ("go", "typescript"):
+                    # Go/TypeScript courses use course-specific runners
+                    course_runner = course_path / "runner.py"
+                    if course_runner.exists():
+                        module_name = workspace_info.get("module_name") or workspace_info.get("assignment_name")
+                        if not module_name:
+                            module_name = f"assignment{module_number}"
+                        cmd = ["python3", str(course_runner), module_name, str(workspace_path)]
+                        if args.verbose:
+                            cmd.append("--verbose")
+                        if args.json:
+                            cmd.append("--json")
+                        if getattr(args, 'no_docker', False):
+                            cmd.append("--no-docker")
+                        env = os.environ.copy()
+                        if suite_dir:
+                            env["BSCS_TEST_SUITE_DIR"] = str(suite_dir)
+                        env["BSCS_RUN_TYPE"] = args.run_type
+                        result = subprocess.run(cmd, env=env)
+                        return result.returncode
+                    else:
+                        print(f"Error: {language} runner not found: {course_runner}", file=sys.stderr)
+                        return 1
+                else:
+                    # Python courses - check for course-specific runner first
+                    course_runner = course_path / "runner.py"
+                    if course_runner.exists():
+                        # Use course-specific runner (e.g., comp341)
+                        # Construct hw identifier consistently (prefer module_name, fallback to hw{N})
+                        module_name = workspace_info.get("module_name")
+                        if module_name:
+                            hw_identifier = module_name
+                        else:
+                            # Default to hw{N} format for Python hw-based courses
+                            hw_identifier = f"hw{module_number}"
+                        cmd = ["python3", str(course_runner), hw_identifier, str(workspace_path)]
+                        if args.verbose:
+                            cmd.append("--verbose")
+                        if args.json:
+                            cmd.append("--json")
+                        env = os.environ.copy()
+                        if suite_dir:
+                            env["BSCS_TEST_SUITE_DIR"] = str(suite_dir)
+                        env["BSCS_RUN_TYPE"] = args.run_type
+                        result = subprocess.run(cmd, env=env)
+                        return result.returncode
+
+                    use_docker = not args.no_docker
+
+                    # Fall back to host framework if no Docker runner exists
+                    docker_runner = course_path / "docker_runner.py"
+                    if use_docker and not docker_runner.exists():
+                        print(f"Warning: No docker_runner.py for {course_name}, falling back to host framework", file=sys.stderr)
+                        use_docker = False
+
+                    if use_docker:
+                        cmd = ["python3", str(docker_runner), str(workspace_path)]
+                        if args.verbose:
+                            cmd.append("--verbose")
+                        if args.json:
+                            cmd.append("--json")
+                        if args.history:
+                            cmd.append("--history")
+                        if args.check:
+                            cmd.append("--check")
+
+                        env = os.environ.copy()
+                        if suite_dir:
+                            env["BSCS_TEST_SUITE_DIR"] = str(suite_dir)
+                        env["BSCS_RUN_TYPE"] = args.run_type
+                        result = subprocess.run(cmd, env=env)
+                        return result.returncode
+                    else:
+                        # Use Python framework on host
+                        from framework.cli import main as python_main
+                        cli_args = [str(workspace_path)]
+                        if args.verbose:
+                            cli_args.append("--verbose")
+                        if args.json:
+                            cli_args.append("--json")
+                        if args.history:
+                            cli_args.append("--history")
+                        if args.check:
+                            cli_args.append("--check")
+
+                        with _env_override(suite_dir, args.run_type):
+                            return python_main(cli_args)
+            finally:
+                for temp_dir in temp_dirs:
+                    shutil.rmtree(temp_dir, ignore_errors=True)
+
+    # Legacy format: grade <module> <workspace_path> --course <course_path>
+    parser = argparse.ArgumentParser(
+        prog="grade",
+        description="Unified Autograder - supports Python, Java, and C courses",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  grade ./workspaces/agent_circles          New format (reads workspace.yaml)
+  grade 1 ./workspace --course ./comp140    Legacy: Grade Module 1 (Python/COMP140)
+  grade 1 ./workspace --course ./comp215    Legacy: Grade Homework 1 (Java/COMP215)
+  grade 2 ./workspace --course ./comp321    Legacy: Grade Project 2 (C/COMP321)
+""",
+    )
+
+    parser.add_argument(
+        "module",
+        type=int,
+        metavar="MODULE",
+        help="Module/homework number",
+    )
+
+    parser.add_argument(
+        "workspace",
+        type=str,
+        help="Path to the agent's workspace directory",
+    )
+
+    parser.add_argument(
+        "-c", "--course",
+        type=str,
+        required=True,
+        help="Path to the course directory",
+    )
+
+    parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Show detailed test output",
+    )
+
+    parser.add_argument(
+        "--history",
+        action="store_true",
+        help="Show attempt history instead of running tests",
+    )
+
+    parser.add_argument(
+        "--json",
+        action="store_true",
+        help="Output results as JSON",
+    )
+
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Only check if submission is valid (don't run tests)",
+    )
+    parser.add_argument(
+        "--audit-suite",
+        action="store_true",
+        help="Show the effective public/private/agent test suite and exit",
+    )
+    parser.add_argument(
+        "--run-type",
+        choices=["test", "submit"],
+        default="test",
+        help="test: public+agent, submit: public+private",
+    )
+
+    docker_group = parser.add_mutually_exclusive_group()
+    docker_group.add_argument(
+        "--docker",
+        action="store_true",
+        help="Run tests in Docker container (default for Python)",
+    )
+    docker_group.add_argument(
+        "--no-docker",
+        action="store_true",
+        help="Run tests on host (Python only)",
+    )
+
+    args = parser.parse_args()
+
+    workspace_path = Path(args.workspace).resolve()
+    course_path = Path(args.course).resolve()
+    module_number = args.module
+
+    # Build effective suite path for this run mode (legacy path).
+    project_root_path = course_path.parent
+    suite_dir, temp_dirs, suite_meta = _assemble_suite_for_run_type(
+        args.run_type,
+        workspace_path,
+        project_root_path,
+        course_path.name,
+        module_number,
+        None,
+    )
+    try:
+        valid_submit_suite, submit_suite_msg = _validate_submit_private_suite(
+            args.run_type, suite_meta
+        )
+        if submit_suite_msg:
+            print(submit_suite_msg, file=sys.stderr)
+        if args.audit_suite:
+            return _handle_audit_suite(
+                workspace_path, suite_dir, suite_meta,
+                valid_submit_suite, submit_suite_msg, use_json=args.json,
+            )
+        if not valid_submit_suite:
+            return 1
+
+        return _run_grading(workspace_path, course_path, module_number, args, suite_dir=suite_dir)
+    finally:
+        for temp_dir in temp_dirs:
+            shutil.rmtree(temp_dir, ignore_errors=True)
+
+
+def _run_grading(
+    workspace_path: Path,
+    course_path: Path,
+    module_number: int,
+    args,
+    module_name: str | None = None,
+    language: str | None = None,
+    suite_dir: Path | None = None,
+) -> int:
+    """Common grading logic for both new and legacy formats."""
+
+    # Validate paths
+    if not workspace_path.exists():
+        print(f"Error: Workspace not found: {workspace_path}", file=sys.stderr)
+        return 1
+
+    if not course_path.exists():
+        print(f"Error: Course directory not found: {course_path}", file=sys.stderr)
+        return 1
+
+    # Use provided language or detect from course configs
+    if not language:
+        language = detect_language(course_path, module_number)
+
+    # Determine Docker mode
+    use_docker = not getattr(args, 'no_docker', False)
+
+    runner_env = os.environ.copy()
+    if suite_dir:
+        runner_env["BSCS_TEST_SUITE_DIR"] = str(suite_dir)
+    runner_env["BSCS_RUN_TYPE"] = getattr(args, "run_type", "test")
+
+    if language in ("java", "c"):
+        # Dispatch to language-specific runner
+        runner_path = course_path / "runner.py"
+        if not runner_path.exists():
+            print(f"Error: {language.upper()} runner not found: {runner_path}", file=sys.stderr)
+            return 1
+
+        # For C courses, use module_name as project name (e.g., "factors", "malloc")
+        if language == "c":
+            # module_name from workspace.json contains the project name
+            project_name = module_name if module_name else get_project_name_for_number(course_path, module_number)
+            if not project_name:
+                print(f"Error: No project found for number {module_number}", file=sys.stderr)
+                return 1
+            project_arg = project_name
+            # Check if project files are in a subdirectory (all-projects setup)
+            project_subdir = workspace_path / project_name
+            if project_subdir.exists() and project_subdir.is_dir():
+                actual_workspace = project_subdir
+            else:
+                actual_workspace = workspace_path
+        else:
+            # For Java courses, determine the correct argument format:
+            # - comp322: expects "hw1", "hw2", etc. (use module_name)
+            # - comp411: expects "assignment1", etc. (use module_name)
+            # - comp215: expects integer (use module_number)
+            if module_name and (module_name.startswith("hw") or module_name.startswith("assignment")):
+                # COMP 322/411 style: use module_name directly
+                project_arg = module_name
+            else:
+                # COMP 215 style: just the number
+                project_arg = str(module_number)
+            actual_workspace = workspace_path
+
+        # COMP 421 labs require CLEAR_NETID for SSH access
+        if course_path.name == "comp421" and language == "c":
+            netid = os.environ.get("CLEAR_NETID")
+            if not netid and not getattr(args, 'netid', None):
+                print("Error: COMP 421 labs require CLEAR_NETID environment variable (or --netid flag)", file=sys.stderr)
+                print("  Set it with: export CLEAR_NETID=your_netid", file=sys.stderr)
+                return 1
+
+        cmd = ["python3", str(runner_path), project_arg, str(actual_workspace)]
+        if args.verbose:
+            cmd.append("--verbose")
+        if args.json:
+            cmd.append("--json")
+        if getattr(args, 'no_docker', False):
+            cmd.append("--no-docker")
+
+        # Note: --history and --check not yet supported by Java/C runners
+        if args.history:
+            print(f"Warning: --history not yet supported for {language.upper()} courses", file=sys.stderr)
+            return 1
+        if args.check:
+            print(f"Warning: --check not yet supported for {language.upper()} courses", file=sys.stderr)
+            return 1
+
+        result = subprocess.run(cmd, env=runner_env)
+        return result.returncode
+
+    else:
+        # Python courses
+        if use_docker:
+            # Use Docker runner for isolation
+            docker_runner = course_path / "docker_runner.py"
+            if not docker_runner.exists():
+                print(f"Error: Docker runner not found: {docker_runner}", file=sys.stderr)
+                print("Use --no-docker to run on host.", file=sys.stderr)
+                return 1
+
+            cmd = ["python3", str(docker_runner), str(workspace_path)]
+            if args.verbose:
+                cmd.append("--verbose")
+            if args.json:
+                cmd.append("--json")
+            if args.history:
+                cmd.append("--history")
+            if args.check:
+                cmd.append("--check")
+
+            result = subprocess.run(cmd, env=runner_env)
+            return result.returncode
+        else:
+            # Use Python framework on host
+            from framework.cli import main as python_main
+
+            # Reconstruct args for the Python CLI
+            cli_args = [
+                str(module_number),
+                str(workspace_path),
+                "--course", str(course_path),
+            ]
+            if args.verbose:
+                cli_args.append("--verbose")
+            if args.json:
+                cli_args.append("--json")
+            if args.history:
+                cli_args.append("--history")
+            if args.check:
+                cli_args.append("--check")
+
+            with _env_override(suite_dir, getattr(args, "run_type", "test")):
+                return python_main(cli_args)
+
+
+if __name__ == "__main__":
+    sys.exit(main())

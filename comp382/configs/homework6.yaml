@@ -1,0 +1,100 @@
+assignment_number: 6
+assignment_name: "Network Flow"
+display_name: "HW6: Network Flow"
+course: "comp382"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+problems:
+  - number: 1
+    name: "True or False"
+    points: 20
+    parts:
+      - part: "a"
+        points: 5
+        description: "Max flow without positive-flow cycles"
+        rubric:
+          - "Correct answer (TRUE): 1pt"
+          - "Conservation of flow argument: 2pts"
+          - "Cycle reduction procedure: 2pts"
+      - part: "b"
+        points: 5
+        description: "Distinct capacities implies unique max flow"
+        rubric:
+          - "Correct answer (FALSE): 1pt"
+          - "Valid counterexample: 4pts"
+      - part: "c"
+        points: 5
+        description: "Scaling capacities by λ preserves min-cut"
+        rubric:
+          - "Correct answer (TRUE): 1pt"
+          - "Relative order unchanged argument: 4pts"
+      - part: "d"
+        points: 5
+        description: "Adding λ to capacities preserves min-cut"
+        rubric:
+          - "Correct answer (FALSE): 1pt"
+          - "Valid counterexample with specific λ: 4pts"
+
+  - number: 2
+    name: "Flow Reduction"
+    points: 20
+    parts:
+      - part: "1"
+        points: 20
+        description: "Delete k edges to maximally reduce max flow"
+        rubric:
+          - "Min-cut identification: 5pts"
+          - "Delete k edges from min-cut: 5pts"
+          - "Optimality proof (any F of size k leaves ≥ f-k flow): 7pts"
+          - "Polynomial time algorithm: 3pts"
+
+  - number: 3
+    name: "Node Capacities"
+    points: 20
+    parts:
+      - part: "1"
+        points: 20
+        description: "Transform node capacities to edge capacities"
+        rubric:
+          - "Node splitting (v_in, v_out): 5pts"
+          - "Internal edge capacity c_v: 3pts"
+          - "External edges infinite capacity: 3pts"
+          - "Correctness proof (both directions): 5pts"
+          - "Complexity analysis: 4pts"
+
+  - number: 4
+    name: "Station Closing"
+    points: 20
+    parts:
+      - part: "1"
+        points: 20
+        description: "Min vertex cut via max flow"
+        rubric:
+          - "Node splitting transformation: 5pts"
+          - "Internal edge capacity 1: 3pts"
+          - "s = A_out, t = B_in: 3pts"
+          - "Min cut corresponds to min stations: 5pts"
+          - "Complexity analysis: 4pts"
+
+  - number: 5
+    name: "Exam Scheduling"
+    points: 20
+    parts:
+      - part: "1"
+        points: 20
+        description: "Max-flow formulation for exam room/time assignment"
+        rubric:
+          - "Correct node structure (classes, rooms, times, s, t): 5pts"
+          - "Correct edge capacities: 5pts"
+          - "E[i] < S[j] constraint: 3pts"
+          - "Flow = n iff valid assignment: 4pts"
+          - "Complexity analysis: 3pts"
+
+topics:
+  - "Maximum Flow"
+  - "Minimum Cut"
+  - "Max-Flow Min-Cut Theorem"
+  - "Flow Network Modeling"
+  - "Node Capacities"

@@ -1,0 +1,86 @@
+assignment_number: 5
+assignment_name: "Greedy Algorithms"
+display_name: "HW5: Greedy Algorithms"
+course: "comp382"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+problems:
+  - number: 1
+    name: "Greedy Trucking"
+    points: 20
+    parts:
+      - part: "1"
+        points: 20
+        description: "Prove greedy uses fewest trucks"
+        rubric:
+          - "Stays-ahead lemma formulation: 5pts"
+          - "Base case (k=1): 3pts"
+          - "Inductive step: 7pts"
+          - "Conclusion (optimality): 5pts"
+
+  - number: 2
+    name: "Smallest Set of Intervals Containing Points"
+    points: 20
+    parts:
+      - part: "1"
+        points: 20
+        description: "Greedy algorithm for minimum intervals"
+        rubric:
+          - "Correct algorithm description: 6pts"
+          - "Leftmost point argument: 5pts"
+          - "Optimality proof: 5pts"
+          - "Time complexity: 4pts"
+
+  - number: 3
+    name: "All Spanning Trees"
+    points: 20
+    parts:
+      - part: "1"
+        points: 20
+        description: "Make any MST the unique output of Kruskal's"
+        rubric:
+          - "Edge perturbation scheme: 6pts"
+          - "Distinct weights after perturbation: 4pts"
+          - "Sorted order preserved: 4pts"
+          - "T has maximum weight reduction: 4pts"
+          - "Uniqueness conclusion: 2pts"
+
+  - number: 4
+    name: "Oscillating Subsequence"
+    points: 20
+    parts:
+      - part: "1"
+        points: 20
+        description: "Longest alternating subsequence algorithm"
+        rubric:
+          - "Run identification: 5pts"
+          - "Algorithm: take endpoints of runs: 5pts"
+          - "Correctness proof: 7pts"
+          - "Linear time: 3pts"
+
+  - number: 5
+    name: "Coin Changing"
+    points: 20
+    parts:
+      - part: "a"
+        points: 12
+        description: "Greedy optimality for powers of c"
+        rubric:
+          - "Correct greedy algorithm: 3pts"
+          - "Proof x_i < c for all i: 5pts"
+          - "Uniqueness of representation: 4pts"
+      - part: "b"
+        points: 8
+        description: "Counterexample for arbitrary denominations"
+        rubric:
+          - "Valid counterexample: 4pts"
+          - "Showing greedy is suboptimal: 4pts"
+
+topics:
+  - "Greedy Algorithms"
+  - "Exchange Arguments"
+  - "Stays-Ahead Proofs"
+  - "Minimum Spanning Trees"
+  - "Kruskal's Algorithm"

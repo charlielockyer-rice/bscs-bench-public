@@ -1,0 +1,85 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 6
+assignment_name: "sports_analytics"
+display_name: "Sports Analytics"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: python
+runtime:
+  version: "3.11"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 25
+  total_points: 22
+  timeout_seconds: 30
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "solution.py"
+    functions:
+      - LinearModel.__init__
+      - LinearModel.predict
+      - LinearModel.mse
+      - read_matrix
+      - fit_least_squares
+      - fit_lasso
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  discovery: "auto"
+  pattern: "test_module6.py"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # LinearModel tests (6 points)
+  linear_model_init: 1
+  linear_model_predict_simple: 1
+  linear_model_predict_multiple_features: 1
+  linear_model_mse_perfect: 1
+  linear_model_mse_nonzero: 1
+  linear_model_coefficients: 1
+
+  # read_matrix tests (4 points)
+  read_matrix_single_row: 1
+  read_matrix_multiple_rows: 1
+  read_matrix_shape: 1
+  read_matrix_values: 1
+
+  # fit_least_squares tests (6 points)
+  fit_least_squares_perfect: 1
+  fit_least_squares_simple: 1
+  fit_least_squares_multiple_features: 1
+  fit_least_squares_overdetermined: 1
+  fit_least_squares_returns_model: 1
+  fit_least_squares_accuracy: 1
+
+  # fit_lasso tests (6 points)
+  fit_lasso_returns_model: 1
+  fit_lasso_simple: 1
+  fit_lasso_sparsity: 1
+  fit_lasso_lambda_effect: 1
+  fit_lasso_high_lambda: 1
+  fit_lasso_zero_lambda: 1
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+docs:
+  writeup_sections:
+    - "Linear regression discussion"
+    - "LASSO regularization analysis"
+    - "Feature importance discussion"

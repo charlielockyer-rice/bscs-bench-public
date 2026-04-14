@@ -1,0 +1,80 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 3
+assignment_name: "stock_prediction"
+display_name: "Stock Prediction"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: python
+runtime:
+  version: "3.11"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 39
+  total_points: 20
+  timeout_seconds: 30
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "solution.py"
+    functions:
+      - markov_chain
+      - predict
+      - mse
+      - run_experiments
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  discovery: "auto"
+  pattern: "test_module3.py"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # markov_chain tests (6 points)
+  markov_chain_all_same: 1
+  markov_chain_alternating: 1
+  markov_chain_two_states: 1
+  markov_chain_three_states: 1
+  markov_chain_probabilities_sum: 1
+  markov_chain_edge_case: 1
+
+  # predict tests (5 points)
+  predict_deterministic: 1
+  predict_length: 1
+  predict_starts_correct: 1
+  predict_uses_chain: 1
+  predict_random_valid: 1
+
+  # mse tests (4 points)
+  mse_zero: 1
+  mse_simple: 1
+  mse_asymmetric: 1
+  mse_float_precision: 1
+
+  # run_experiments tests (5 points)
+  run_experiments_returns_list: 1
+  run_experiments_correct_length: 1
+  run_experiments_all_positive: 1
+  run_experiments_deterministic_mse: 1
+  run_experiments_varying_order: 1
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+docs:
+  writeup_sections:
+    - "Recipe for markov_chain"
+    - "Analysis of results discussion"

@@ -1,0 +1,45 @@
+assignment_number: 6
+assignment_name: "fashion_mnist"
+display_name: "Fashion-MNIST Deep Learning"
+language: python
+description: "Image classification using PyTorch CNN"
+
+source_files:
+  - path: "solution.py"
+    classes:
+      - StylishNN
+    functions:
+      - create_data_loaders
+      - count_labels
+      - train_epoch
+      - validate
+      - plot_loss_curves
+      - create_confusion_matrix
+
+data_files:
+  - source: "data/hw6/FashionMNIST"
+    description: "Pre-downloaded FashionMNIST — run bin/setup_comp341_data --hw 6 (Docker has no network)"
+
+dependencies:
+  - torch
+  - torchvision
+  - numpy
+  - sklearn
+
+grading:
+  total_points: 100
+  total_tests: 10
+  timeout_seconds: 600
+  max_attempts: 10
+
+test_points:
+  test_data_loader_creation: 5
+  test_label_counts: 5
+  test_model_architecture_conv1: 10
+  test_model_architecture_conv2: 10
+  test_model_architecture_fc: 10
+  test_forward_pass_shape: 10
+  test_training_loop: 15
+  test_validation_accuracy: 15
+  test_loss_decreases: 10
+  test_confusion_matrix: 10

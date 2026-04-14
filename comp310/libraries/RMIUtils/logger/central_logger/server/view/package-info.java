@@ -1,0 +1,1 @@
+package provided.rmiUtils.logger.central_logger.server.view;

@@ -1,0 +1,568 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<com.yattasolutions.uml.diagrams.classifier:ClassDiagram xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:com.yattasolutions.diagrams="http://ns.yatta-solutions.com/umllab/diagrams/1.1.0" xmlns:com.yattasolutions.uml.diagrams.classifier="http://ns.yatta-solutions.com/umllab/diagrams/classifier/1.1.0" xmi:id="_tDrSMHyjEeyqPtdb1vr-DA">
+  <modelElement href="AShape.uml#_tWI7MHyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_tcRYYHyjEeyqPtdb1vr-DA" sourceAnchor="375.0,0.0" targetAnchor="138.0,185.0" target="_tdUhQHyjEeyqPtdb1vr-DA" source="_tcXfAHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYS3UHyjEeyqPtdb1vr-DA"/>
+    <stereotypes xmi:id="_tcRYYXyjEeyqPtdb1vr-DA" name="Reference">
+      <modelElement href="AShape.uml#_tYTeYHyjEeyqPtdb1vr-DA"/>
+    </stereotypes>
+    <nameVisual xmi:id="_tcRYYnyjEeyqPtdb1vr-DA" text="">
+      <visualProperties xmi:id="_tqXewHyjEeyqPtdb1vr-DA" position="11.000000000000057,-79.99999999999997"/>
+    </nameVisual>
+    <sourceRole xmi:id="_tcRYY3yjEeyqPtdb1vr-DA" aggregationKind="NONE" name="">
+      <modelElement href="AShape.uml#_tYS3UXyjEeyqPtdb1vr-DA"/>
+      <visualProperties xmi:id="_tqWQo3yjEeyqPtdb1vr-DA" position="-18.0,-83.0"/>
+      <visibility xmi:id="_tcRYZHyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tcRYZXyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_tcRYZnyjEeyqPtdb1vr-DA" aggregationKind="NONE" name="shape1" navigable="true">
+      <modelElement href="AShape.uml#_tX6c0HyjEeyqPtdb1vr-DA"/>
+      <visualProperties xmi:id="_tqXewXyjEeyqPtdb1vr-DA" position="-126.0,118.0"/>
+      <visibility xmi:id="_tcRYZ3yjEeyqPtdb1vr-DA" label="-"/>
+      <cardinality xmi:id="_tcRYaHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_tcR_cHyjEeyqPtdb1vr-DA" sourceAnchor="405.0,0.0" targetAnchor="168.0,185.0" target="_tdUhQHyjEeyqPtdb1vr-DA" source="_tcXfAHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYTeYXyjEeyqPtdb1vr-DA"/>
+    <stereotypes xmi:id="_tcR_cXyjEeyqPtdb1vr-DA" name="Reference">
+      <modelElement href="AShape.uml#_tYUsgHyjEeyqPtdb1vr-DA"/>
+    </stereotypes>
+    <nameVisual xmi:id="_tcR_cnyjEeyqPtdb1vr-DA" text="">
+      <visualProperties xmi:id="_tqYs4HyjEeyqPtdb1vr-DA" position="21.000000000000057,-80.0"/>
+    </nameVisual>
+    <sourceRole xmi:id="_tcSmgHyjEeyqPtdb1vr-DA" aggregationKind="NONE" name="">
+      <modelElement href="AShape.uml#_tYTeYnyjEeyqPtdb1vr-DA"/>
+      <visualProperties xmi:id="_tqYF0HyjEeyqPtdb1vr-DA" position="-18.0,-83.0"/>
+      <visibility xmi:id="_tcSmgXyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tcSmgnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_tcSmg3yjEeyqPtdb1vr-DA" aggregationKind="NONE" name="shape2" navigable="true">
+      <modelElement href="AShape.uml#_tX7D4XyjEeyqPtdb1vr-DA"/>
+      <visualProperties xmi:id="_tqZT8HyjEeyqPtdb1vr-DA" position="-136.0,118.0"/>
+      <visibility xmi:id="_tcSmhHyjEeyqPtdb1vr-DA" label="-"/>
+      <cardinality xmi:id="_tcSmhXyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_tcTNkXyjEeyqPtdb1vr-DA" targetItem="_tdUhQHyjEeyqPtdb1vr-DA" sourceItem="_tcTNkHyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_tcT0oHyjEeyqPtdb1vr-DA" sourceAnchor="272.0,0.0" targetAnchor="108.0,185.0" superClass="_tdUhQHyjEeyqPtdb1vr-DA" subClass="_tcXfAHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tXpXEHyjEeyqPtdb1vr-DA"/>
+    <bendpoints xmi:id="_tqVCgHyjEeyqPtdb1vr-DA" sourceY="-213" targetX="-73" targetY="28"/>
+    <bendpoints xmi:id="_tqVCgXyjEeyqPtdb1vr-DA" sourceX="73" sourceY="-213" targetY="28"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_tcUbsXyjEeyqPtdb1vr-DA" targetItem="_tdUhTHyjEeyqPtdb1vr-DA" sourceItem="_tcUbsHyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_tcVCwXyjEeyqPtdb1vr-DA" targetItem="_tdUhUnyjEeyqPtdb1vr-DA" sourceItem="_tcVCwHyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_tcVp0XyjEeyqPtdb1vr-DA" targetItem="_tdUhV3yjEeyqPtdb1vr-DA" sourceItem="_tcVp0HyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_tcWQ4XyjEeyqPtdb1vr-DA" targetItem="_tdUhXXyjEeyqPtdb1vr-DA" sourceItem="_tcWQ4HyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_tdJiIHyjEeyqPtdb1vr-DA" sourceAnchor="108.0,0.0" targetAnchor="108.0,185.0" superClass="_tdUhQHyjEeyqPtdb1vr-DA" subClass="_tdNzkHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tXmTwHyjEeyqPtdb1vr-DA"/>
+    <bendpoints xmi:id="_tqVpkHyjEeyqPtdb1vr-DA" sourceY="-27" targetX="-283" targetY="28"/>
+    <bendpoints xmi:id="_tqVpkXyjEeyqPtdb1vr-DA" sourceX="283" sourceY="-27" targetY="28"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_tdKJMHyjEeyqPtdb1vr-DA" targetItem="_tdNzkHyjEeyqPtdb1vr-DA" sourceItem="_tdJiIXyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:AssociationVisual" xmi:id="_tdKJMXyjEeyqPtdb1vr-DA" source="_tdNzkHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYRpMHyjEeyqPtdb1vr-DA"/>
+    <stereotypes xmi:id="_tdL-Y3yjEeyqPtdb1vr-DA" name="Reference">
+      <modelElement href="AShape.uml#_tYSQQHyjEeyqPtdb1vr-DA"/>
+    </stereotypes>
+    <nameVisual xmi:id="_tdL-YHyjEeyqPtdb1vr-DA" text=""/>
+    <sourceRole xmi:id="_tdL-YXyjEeyqPtdb1vr-DA" aggregationKind="NONE" name="">
+      <modelElement href="AShape.uml#_tYRpMXyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tdMlcXyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tdMlcHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+    </sourceRole>
+    <targetRole xmi:id="_tdL-YnyjEeyqPtdb1vr-DA" aggregationKind="NONE" name="color" navigable="true">
+      <modelElement href="AShape.uml#_tX51wHyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tdMlc3yjEeyqPtdb1vr-DA" label="#"/>
+      <cardinality xmi:id="_tdMlcnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+    </targetRole>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_tdKwQXyjEeyqPtdb1vr-DA" targetItem="_tdNzmHyjEeyqPtdb1vr-DA" sourceItem="_tdKwQHyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_tdLXUXyjEeyqPtdb1vr-DA" targetItem="_tdNznnyjEeyqPtdb1vr-DA" sourceItem="_tdLXUHyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_tdvYAXyjEeyqPtdb1vr-DA" targetItem="_tdxNMHyjEeyqPtdb1vr-DA" sourceItem="_tdvYAHyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_td0QgHyjEeyqPtdb1vr-DA" sourceAnchor="541.0,69.0" targetAnchor="0.0,58.0" superClass="_tdNzkHyjEeyqPtdb1vr-DA" subClass="_td6XIHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tXqlMHyjEeyqPtdb1vr-DA"/>
+    <bendpoints xmi:id="_tqVpk3yjEeyqPtdb1vr-DA" sourceX="42" targetX="-19" targetY="182"/>
+    <bendpoints xmi:id="_tqWQoHyjEeyqPtdb1vr-DA" sourceX="42" sourceY="-182" targetX="-19"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_td03kHyjEeyqPtdb1vr-DA" targetItem="_td6XIHyjEeyqPtdb1vr-DA" sourceItem="_td0QgXyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_td03kXyjEeyqPtdb1vr-DA" sourceAnchor="231.0,0.0" targetAnchor="0.0,69.0" superClass="_td6XIHyjEeyqPtdb1vr-DA" subClass="_tdxNMHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tXnh4HyjEeyqPtdb1vr-DA"/>
+    <bendpoints xmi:id="_tqVpknyjEeyqPtdb1vr-DA" sourceY="-125" targetX="-304"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_td3T0XyjEeyqPtdb1vr-DA" targetItem="_td6XLXyjEeyqPtdb1vr-DA" sourceItem="_td3T0HyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_td364XyjEeyqPtdb1vr-DA" targetItem="_td6XQnyjEeyqPtdb1vr-DA" sourceItem="_td364HyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.uml.diagrams.classifier:GeneralizationVisual" xmi:id="_teAdwHyjEeyqPtdb1vr-DA" sourceAnchor="587.0,69.0" targetAnchor="0.0,58.0" superClass="_tdNzkHyjEeyqPtdb1vr-DA" subClass="_teEvMHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tXrzUHyjEeyqPtdb1vr-DA"/>
+    <bendpoints xmi:id="_tqWQoXyjEeyqPtdb1vr-DA" sourceX="19" targetX="-19" targetY="388"/>
+    <bendpoints xmi:id="_tqWQonyjEeyqPtdb1vr-DA" sourceX="19" sourceY="-388" targetX="-19"/>
+  </edges>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_teBE0XyjEeyqPtdb1vr-DA" targetItem="_teEvMHyjEeyqPtdb1vr-DA" sourceItem="_teBE0HyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_teC6AXyjEeyqPtdb1vr-DA" targetItem="_teEvPXyjEeyqPtdb1vr-DA" sourceItem="_teC6AHyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_teDhEXyjEeyqPtdb1vr-DA" targetItem="_teEvUnyjEeyqPtdb1vr-DA" sourceItem="_teDhEHyjEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_i-pJoHyoEeyqPtdb1vr-DA" targetItem="_tcXfAHyjEeyqPtdb1vr-DA" sourceItem="_i-oikHyoEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_i-y6oHyoEeyqPtdb1vr-DA" targetItem="_tcXfDXyjEeyqPtdb1vr-DA" sourceItem="_i-xsgHyoEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_i-5BQHyoEeyqPtdb1vr-DA" targetItem="_tcXfGXyjEeyqPtdb1vr-DA" sourceItem="_i-4aMHyoEeyqPtdb1vr-DA"/>
+  <edges xsi:type="com.yattasolutions.diagrams:ConnectionVisual" xmi:id="_i_F1kHyoEeyqPtdb1vr-DA" targetItem="_tcXfH3yjEeyqPtdb1vr-DA" sourceItem="_i-8roHyoEeyqPtdb1vr-DA"/>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_tcTNkHyjEeyqPtdb1vr-DA" sourceConnectionVisual="_tcTNkXyjEeyqPtdb1vr-DA" text="&#xD;&#xA;@author charlielockyer&#xD;&#xA;An abstract class describing an abstract shape on a 2D plane, like a screen" item="_tdUhQHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYOl4HyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_tcUbsHyjEeyqPtdb1vr-DA" sourceConnectionVisual="_tcUbsXyjEeyqPtdb1vr-DA" text="Sets the x position to an input integer&#xD;&#xA;&#x9; * @param xPos the shape's x position" item="_tdUhTHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYOl4XyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_tcVCwHyjEeyqPtdb1vr-DA" sourceConnectionVisual="_tcVCwXyjEeyqPtdb1vr-DA" text="&#xD;&#xA;&#x9; * @return the shape's x position" item="_tdUhUnyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYOl4nyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_tcVp0HyjEeyqPtdb1vr-DA" sourceConnectionVisual="_tcVp0XyjEeyqPtdb1vr-DA" text="Sets the color of the shape to an input color defined by the Color class&#xD;&#xA;&#x9; * @param color the color of the shape" item="_tdUhV3yjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYOl43yjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_tcWQ4HyjEeyqPtdb1vr-DA" sourceConnectionVisual="_tcWQ4XyjEeyqPtdb1vr-DA" text="Paints the shape on the screen, abstract because each different shape is painted differently&#xD;&#xA;&#x9; * @param g the graphics object on which the shape will be painted" item="_tdUhXXyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYOl5HyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_tdJiIXyjEeyqPtdb1vr-DA" sourceConnectionVisual="_tdKJMHyjEeyqPtdb1vr-DA" text="&#xD;&#xA;@author charlielockyer&#xD;&#xA;An abstract class describing an abstract simple shape on a 2D plane, like a screen&#xD;&#xA;A simple shape has its own custom painting instructions, and is not composed of other shapes&#xD;&#xA;Simple shapes are the most basic shapes and inherently have a color" item="_tdNzkHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYPM8HyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_tdKwQHyjEeyqPtdb1vr-DA" sourceConnectionVisual="_tdKwQXyjEeyqPtdb1vr-DA" text="Sets the color of the shape as written in AShape" item="_tdNzmHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYPM8XyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_tdLXUHyjEeyqPtdb1vr-DA" sourceConnectionVisual="_tdLXUXyjEeyqPtdb1vr-DA" text="Paints the shape on the screen, abstract because each different shape is painted differently" item="_tdNznnyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYPM8nyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_tdvYAHyjEeyqPtdb1vr-DA" sourceConnectionVisual="_tdvYAXyjEeyqPtdb1vr-DA" text="&#xD;&#xA;A concrete class representing a circle that can be painted on a graphics object" item="_tdxNMHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYPM83yjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_td0QgXyjEeyqPtdb1vr-DA" sourceConnectionVisual="_td03kHyjEeyqPtdb1vr-DA" text="&#xD;&#xA;@author charlielockyer&#xD;&#xA;A concrete class representing an ellipse that can be painted on a graphics object" item="_td6XIHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYPM-HyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_td3T0HyjEeyqPtdb1vr-DA" sourceConnectionVisual="_td3T0XyjEeyqPtdb1vr-DA" text="Constructs an ellipse object&#xD;&#xA;&#x9; * @param xPos the x position (top left corner of bounding rectangle)&#xD;&#xA;&#x9; * @param yPos the y position (top left corner of bounding rectangle)&#xD;&#xA;&#x9; * @param width the width of the ellipse (horizontal)&#xD;&#xA;&#x9; * @param height the height of the ellipse (vertical)&#xD;&#xA;&#x9; * @param color the color of the ellipse (Color class)" item="_td6XLXyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYPM-XyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_td364HyjEeyqPtdb1vr-DA" sourceConnectionVisual="_td364XyjEeyqPtdb1vr-DA" text="Paints the ellipse on the Graphics object g" item="_td6XQnyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYPM-nyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_teBE0HyjEeyqPtdb1vr-DA" sourceConnectionVisual="_teBE0XyjEeyqPtdb1vr-DA" text="&#xD;&#xA;@author charlielockyer&#xD;&#xA;A concrete class representing a rectangle that can be painted on a graphics object" item="_teEvMHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYP0AHyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_teC6AHyjEeyqPtdb1vr-DA" sourceConnectionVisual="_teC6AXyjEeyqPtdb1vr-DA" text="Constructs a rectangle object&#xD;&#xA;&#x9; * @param xPos the x position (top left corner)&#xD;&#xA;&#x9; * @param yPos the y position (top left corner)&#xD;&#xA;&#x9; * @param width the width of the rectangle (horizontal)&#xD;&#xA;&#x9; * @param height the height of the rectangle (vertical)&#xD;&#xA;&#x9; * @param color the color of the rectangle (Color class)" item="_teEvPXyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYP0AXyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_teDhEHyjEeyqPtdb1vr-DA" sourceConnectionVisual="_teDhEXyjEeyqPtdb1vr-DA" text="Paints the rectangle on the Graphics object g" item="_teEvUnyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tYP0AnyjEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_tcXfAHyjEeyqPtdb1vr-DA" comments="_i-oikHyoEeyqPtdb1vr-DA" targetConnectionVisual="_i-pJoHyoEeyqPtdb1vr-DA" name="CompositeShape" associationsOut="_tcRYYHyjEeyqPtdb1vr-DA _tcR_cHyjEeyqPtdb1vr-DA" generalizations="_tcT0oHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tW0QoHyjEeyqPtdb1vr-DA"/>
+    <visualProperties xmi:id="_tcXfAXyjEeyqPtdb1vr-DA" position="30.0,30.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_tcXfAnyjEeyqPtdb1vr-DA" label="+"/>
+    <attributes xmi:id="_tcXfA3yjEeyqPtdb1vr-DA" name="shape1">
+      <modelElement href="AShape.uml#_tX6c0HyjEeyqPtdb1vr-DA"/>
+      <stereotypes xmi:id="_tcXfBHyjEeyqPtdb1vr-DA" name="LegacyStyledElement">
+        <modelElement href="AShape.uml#_tX7D4HyjEeyqPtdb1vr-DA"/>
+      </stereotypes>
+      <visibility xmi:id="_tcXfBXyjEeyqPtdb1vr-DA" label="-"/>
+      <cardinality xmi:id="_tcXfBnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <type xmi:id="_tcXfB3yjEeyqPtdb1vr-DA" name="AShape">
+        <modelElement href="AShape.uml#_tWkZAHyjEeyqPtdb1vr-DA"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_tcXfCHyjEeyqPtdb1vr-DA" name="shape2">
+      <modelElement href="AShape.uml#_tX7D4XyjEeyqPtdb1vr-DA"/>
+      <stereotypes xmi:id="_tcXfCXyjEeyqPtdb1vr-DA" name="LegacyStyledElement">
+        <modelElement href="AShape.uml#_tX7q8HyjEeyqPtdb1vr-DA"/>
+      </stereotypes>
+      <visibility xmi:id="_tcXfCnyjEeyqPtdb1vr-DA" label="-"/>
+      <cardinality xmi:id="_tcXfC3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <type xmi:id="_tcXfDHyjEeyqPtdb1vr-DA" name="AShape">
+        <modelElement href="AShape.uml#_tWkZAHyjEeyqPtdb1vr-DA"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_tcXfDXyjEeyqPtdb1vr-DA" comments="_i-xsgHyoEeyqPtdb1vr-DA" targetConnectionVisual="_i-y6oHyoEeyqPtdb1vr-DA" name="CompositeShape">
+      <modelElement href="AShape.uml#_tXowAHyjEeyqPtdb1vr-DA"/>
+      <keywords xmi:id="_tcXfDnyjEeyqPtdb1vr-DA" keyword="create"/>
+      <visibility xmi:id="_tcXfD3yjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tcXfEHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_tcXfEXyjEeyqPtdb1vr-DA">
+        <modelElement href="AShape.uml#_tXowBXyjEeyqPtdb1vr-DA"/>
+        <type xmi:id="_tcXfEnyjEeyqPtdb1vr-DA" name="CompositeShape">
+          <modelElement href="AShape.uml#_tW0QoHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_tcXfE3yjEeyqPtdb1vr-DA" name="shape1">
+        <modelElement href="AShape.uml#_tXowAXyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tcXfFHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tcXfFXyjEeyqPtdb1vr-DA" name="AShape">
+          <modelElement href="AShape.uml#_tWkZAHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_tcXfFnyjEeyqPtdb1vr-DA" name="shape2">
+        <modelElement href="AShape.uml#_tXowAnyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tcXfF3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tcXfGHyjEeyqPtdb1vr-DA" name="AShape">
+          <modelElement href="AShape.uml#_tWkZAHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_tcXfGXyjEeyqPtdb1vr-DA" comments="_i-4aMHyoEeyqPtdb1vr-DA" targetConnectionVisual="_i-5BQHyoEeyqPtdb1vr-DA" name="setColor">
+      <modelElement href="AShape.uml#_tXzIEHyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tcXfGnyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tcXfG3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <parameters xmi:id="_tcXfHHyjEeyqPtdb1vr-DA" name="color">
+        <modelElement href="AShape.uml#_tXzIEXyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tcXfHXyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tcXfHnyjEeyqPtdb1vr-DA" name="Color">
+          <modelElement href="AShape.uml#_tXhbQHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_tcXfH3yjEeyqPtdb1vr-DA" comments="_i-8roHyoEeyqPtdb1vr-DA" targetConnectionVisual="_i_F1kHyoEeyqPtdb1vr-DA" name="paint">
+      <modelElement href="AShape.uml#_tXzvIHyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tcXfIHyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tcXfIXyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <parameters xmi:id="_tcXfInyjEeyqPtdb1vr-DA" name="g">
+        <modelElement href="AShape.uml#_tXzvIXyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tcXfI3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tcXfJHyjEeyqPtdb1vr-DA" name="Graphics">
+          <modelElement href="AShape.uml#_tXjQcHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_tdNzkHyjEeyqPtdb1vr-DA" comments="_tdJiIXyjEeyqPtdb1vr-DA" targetConnectionVisual="_tdKJMHyjEeyqPtdb1vr-DA" name="ASimpleShape" abstractClass="true" associationsOut="_tdKJMXyjEeyqPtdb1vr-DA" generalizations="_tdJiIHyjEeyqPtdb1vr-DA" subclassedBy="_td0QgHyjEeyqPtdb1vr-DA _teAdwHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tWvYIHyjEeyqPtdb1vr-DA"/>
+    <visualProperties xmi:id="_tdNzkXyjEeyqPtdb1vr-DA" position="-16.0,-156.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_tdNzknyjEeyqPtdb1vr-DA" label="+"/>
+    <attributes xmi:id="_tdNzk3yjEeyqPtdb1vr-DA" name="color">
+      <modelElement href="AShape.uml#_tX51wHyjEeyqPtdb1vr-DA"/>
+      <stereotypes xmi:id="_tdNzlHyjEeyqPtdb1vr-DA" name="LegacyStyledElement">
+        <modelElement href="AShape.uml#_tX51wXyjEeyqPtdb1vr-DA"/>
+      </stereotypes>
+      <visibility xmi:id="_tdNzlXyjEeyqPtdb1vr-DA" label="#"/>
+      <cardinality xmi:id="_tdNzlnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <type xmi:id="_tdNzl3yjEeyqPtdb1vr-DA" name="Color">
+        <modelElement href="AShape.uml#_tXhbQHyjEeyqPtdb1vr-DA"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_tdNzmHyjEeyqPtdb1vr-DA" comments="_tdKwQHyjEeyqPtdb1vr-DA" targetConnectionVisual="_tdKwQXyjEeyqPtdb1vr-DA" name="setColor">
+      <modelElement href="AShape.uml#_tXwr0HyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tdNzmXyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tdNzmnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <parameters xmi:id="_tdNzm3yjEeyqPtdb1vr-DA" name="color">
+        <modelElement href="AShape.uml#_tXwr0XyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tdNznHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tdNznXyjEeyqPtdb1vr-DA" name="Color">
+          <modelElement href="AShape.uml#_tXhbQHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_tdNznnyjEeyqPtdb1vr-DA" comments="_tdLXUHyjEeyqPtdb1vr-DA" targetConnectionVisual="_tdLXUXyjEeyqPtdb1vr-DA" abstractOperation="true" name="paint">
+      <modelElement href="AShape.uml#_tXxS4HyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tdNzn3yjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tdNzoHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <parameters xmi:id="_tdNzoXyjEeyqPtdb1vr-DA" name="g">
+        <modelElement href="AShape.uml#_tXxS4XyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tdNzonyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tdNzo3yjEeyqPtdb1vr-DA" name="Graphics">
+          <modelElement href="AShape.uml#_tXjQcHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_tdUhQHyjEeyqPtdb1vr-DA" comments="_tcTNkHyjEeyqPtdb1vr-DA" targetConnectionVisual="_tcTNkXyjEeyqPtdb1vr-DA" name="AShape" abstractClass="true" associationsIn="_tcRYYHyjEeyqPtdb1vr-DA _tcR_cHyjEeyqPtdb1vr-DA" subclassedBy="_tcT0oHyjEeyqPtdb1vr-DA _tdJiIHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tWkZAHyjEeyqPtdb1vr-DA"/>
+    <visualProperties xmi:id="_tdUhQXyjEeyqPtdb1vr-DA" position="267.0,-396.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_tdUhQnyjEeyqPtdb1vr-DA" label="+"/>
+    <attributes xmi:id="_tdUhQ3yjEeyqPtdb1vr-DA" name="xPos">
+      <modelElement href="AShape.uml#_tX4AkHyjEeyqPtdb1vr-DA"/>
+      <stereotypes xmi:id="_tdUhRHyjEeyqPtdb1vr-DA" name="LegacyStyledElement">
+        <modelElement href="AShape.uml#_tX4noHyjEeyqPtdb1vr-DA"/>
+      </stereotypes>
+      <visibility xmi:id="_tdUhRXyjEeyqPtdb1vr-DA" label="-"/>
+      <cardinality xmi:id="_tdUhRnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <type xmi:id="_tdUhR3yjEeyqPtdb1vr-DA" name="int">
+        <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_tdUhSHyjEeyqPtdb1vr-DA" name="yPos">
+      <modelElement href="AShape.uml#_tX5OsHyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tdUhSXyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tdUhSnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <type xmi:id="_tdUhS3yjEeyqPtdb1vr-DA" name="int">
+        <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_tdUhTHyjEeyqPtdb1vr-DA" comments="_tcUbsHyjEeyqPtdb1vr-DA" targetConnectionVisual="_tcUbsXyjEeyqPtdb1vr-DA" name="setXPos">
+      <modelElement href="AShape.uml#_tWqfoHyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tdUhTXyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tdUhTnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <parameters xmi:id="_tdUhT3yjEeyqPtdb1vr-DA" name="xPos">
+        <modelElement href="AShape.uml#_tWrGsHyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tdUhUHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tdUhUXyjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_tdUhUnyjEeyqPtdb1vr-DA" comments="_tcVCwHyjEeyqPtdb1vr-DA" targetConnectionVisual="_tcVCwXyjEeyqPtdb1vr-DA" name="getXPos">
+      <modelElement href="AShape.uml#_tWrtwHyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tdUhU3yjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tdUhVHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_tdUhVXyjEeyqPtdb1vr-DA">
+        <modelElement href="AShape.uml#_tWsU0HyjEeyqPtdb1vr-DA"/>
+        <type xmi:id="_tdUhVnyjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </outParameters>
+    </operations>
+    <operations xmi:id="_tdUhV3yjEeyqPtdb1vr-DA" comments="_tcVp0HyjEeyqPtdb1vr-DA" targetConnectionVisual="_tcVp0XyjEeyqPtdb1vr-DA" abstractOperation="true" name="setColor">
+      <modelElement href="AShape.uml#_tXu2oHyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tdUhWHyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tdUhWXyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <parameters xmi:id="_tdUhWnyjEeyqPtdb1vr-DA" name="color">
+        <modelElement href="AShape.uml#_tXvdsHyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tdUhW3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tdUhXHyjEeyqPtdb1vr-DA" name="Color">
+          <modelElement href="AShape.uml#_tXhbQHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_tdUhXXyjEeyqPtdb1vr-DA" comments="_tcWQ4HyjEeyqPtdb1vr-DA" targetConnectionVisual="_tcWQ4XyjEeyqPtdb1vr-DA" abstractOperation="true" name="paint">
+      <modelElement href="AShape.uml#_tXwEwHyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_tdUhXnyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tdUhX3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <parameters xmi:id="_tdUhYHyjEeyqPtdb1vr-DA" name="g">
+        <modelElement href="AShape.uml#_tXwEwXyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tdUhYXyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tdUhYnyjEeyqPtdb1vr-DA" name="Graphics">
+          <modelElement href="AShape.uml#_tXjQcHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_tdxNMHyjEeyqPtdb1vr-DA" comments="_tdvYAHyjEeyqPtdb1vr-DA" targetConnectionVisual="_tdvYAXyjEeyqPtdb1vr-DA" name="Circle" generalizations="_td03kXyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tWybcHyjEeyqPtdb1vr-DA"/>
+    <visualProperties xmi:id="_tdxNMXyjEeyqPtdb1vr-DA" position="-1153.0,209.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_tdxNMnyjEeyqPtdb1vr-DA" label="+"/>
+    <operations xmi:id="_tdxNM3yjEeyqPtdb1vr-DA" name="Circle">
+      <modelElement href="AShape.uml#_tXx58HyjEeyqPtdb1vr-DA"/>
+      <keywords xmi:id="_tdxNNHyjEeyqPtdb1vr-DA" keyword="create"/>
+      <visibility xmi:id="_tdxNNXyjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_tdxNNnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_tdxNN3yjEeyqPtdb1vr-DA">
+        <modelElement href="AShape.uml#_tXyhBHyjEeyqPtdb1vr-DA"/>
+        <type xmi:id="_tdxNOHyjEeyqPtdb1vr-DA" name="Circle">
+          <modelElement href="AShape.uml#_tWybcHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_tdxNOXyjEeyqPtdb1vr-DA" name="xPos">
+        <modelElement href="AShape.uml#_tXx58XyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tdxNOnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tdxNO3yjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_tdxNPHyjEeyqPtdb1vr-DA" name="yPos">
+        <modelElement href="AShape.uml#_tXx58nyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tdxNPXyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tdxNPnyjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_tdxNP3yjEeyqPtdb1vr-DA" name="diameter">
+        <modelElement href="AShape.uml#_tXyhAHyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tdxNQHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tdxNQXyjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_tdxNQnyjEeyqPtdb1vr-DA" name="color">
+        <modelElement href="AShape.uml#_tXyhAXyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_tdxNQ3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_tdxNRHyjEeyqPtdb1vr-DA" name="Color">
+          <modelElement href="AShape.uml#_tXhbQHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_td6XIHyjEeyqPtdb1vr-DA" comments="_td0QgXyjEeyqPtdb1vr-DA" targetConnectionVisual="_td03kHyjEeyqPtdb1vr-DA" name="Ellipse" generalizations="_td0QgHyjEeyqPtdb1vr-DA" subclassedBy="_td03kXyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tW5wMHyjEeyqPtdb1vr-DA"/>
+    <visualProperties xmi:id="_td6XIXyjEeyqPtdb1vr-DA" position="-618.0,15.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_td6XInyjEeyqPtdb1vr-DA" label="+"/>
+    <attributes xmi:id="_td6XI3yjEeyqPtdb1vr-DA" name="width">
+      <modelElement href="AShape.uml#_tX7q8XyjEeyqPtdb1vr-DA"/>
+      <stereotypes xmi:id="_td6XJHyjEeyqPtdb1vr-DA" name="LegacyStyledElement">
+        <modelElement href="AShape.uml#_tX8SAHyjEeyqPtdb1vr-DA"/>
+      </stereotypes>
+      <visibility xmi:id="_td6XJXyjEeyqPtdb1vr-DA" label="-"/>
+      <cardinality xmi:id="_td6XJnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <type xmi:id="_td6XJ3yjEeyqPtdb1vr-DA" name="int">
+        <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_td6XKHyjEeyqPtdb1vr-DA" name="height">
+      <modelElement href="AShape.uml#_tX8SAXyjEeyqPtdb1vr-DA"/>
+      <stereotypes xmi:id="_td6XKXyjEeyqPtdb1vr-DA" name="LegacyStyledElement">
+        <modelElement href="AShape.uml#_tX85EHyjEeyqPtdb1vr-DA"/>
+      </stereotypes>
+      <visibility xmi:id="_td6XKnyjEeyqPtdb1vr-DA" label="-"/>
+      <cardinality xmi:id="_td6XK3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <type xmi:id="_td6XLHyjEeyqPtdb1vr-DA" name="int">
+        <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_td6XLXyjEeyqPtdb1vr-DA" comments="_td3T0HyjEeyqPtdb1vr-DA" targetConnectionVisual="_td3T0XyjEeyqPtdb1vr-DA" name="Ellipse">
+      <modelElement href="AShape.uml#_tX0WMHyjEeyqPtdb1vr-DA"/>
+      <keywords xmi:id="_td6XLnyjEeyqPtdb1vr-DA" keyword="create"/>
+      <visibility xmi:id="_td6XL3yjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_td6XMHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_td6XMXyjEeyqPtdb1vr-DA">
+        <modelElement href="AShape.uml#_tX09Q3yjEeyqPtdb1vr-DA"/>
+        <type xmi:id="_td6XMnyjEeyqPtdb1vr-DA" name="Ellipse">
+          <modelElement href="AShape.uml#_tW5wMHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_td6XM3yjEeyqPtdb1vr-DA" name="xPos">
+        <modelElement href="AShape.uml#_tX0WMXyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_td6XNHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_td6XNXyjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_td6XNnyjEeyqPtdb1vr-DA" name="yPos">
+        <modelElement href="AShape.uml#_tX0WMnyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_td6XN3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_td6XOHyjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_td6XOXyjEeyqPtdb1vr-DA" name="width">
+        <modelElement href="AShape.uml#_tX0WM3yjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_td6XOnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_td6XO3yjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_td6XPHyjEeyqPtdb1vr-DA" name="height">
+        <modelElement href="AShape.uml#_tX0WNHyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_td6XPXyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_td6XPnyjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_td6XP3yjEeyqPtdb1vr-DA" name="color">
+        <modelElement href="AShape.uml#_tX09QHyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_td6XQHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_td6XQXyjEeyqPtdb1vr-DA" name="Color">
+          <modelElement href="AShape.uml#_tXhbQHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_td6XQnyjEeyqPtdb1vr-DA" comments="_td364HyjEeyqPtdb1vr-DA" targetConnectionVisual="_td364XyjEeyqPtdb1vr-DA" name="paint">
+      <modelElement href="AShape.uml#_tX09RHyjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_td6XQ3yjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_td6XRHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <parameters xmi:id="_td6XRXyjEeyqPtdb1vr-DA" name="g">
+        <modelElement href="AShape.uml#_tX1kUHyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_td6XRnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_td6XR3yjEeyqPtdb1vr-DA" name="Graphics">
+          <modelElement href="AShape.uml#_tXjQcHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.uml.diagrams.classifier:ClassifierVisual" xmi:id="_teEvMHyjEeyqPtdb1vr-DA" comments="_teBE0HyjEeyqPtdb1vr-DA" targetConnectionVisual="_teBE0XyjEeyqPtdb1vr-DA" name="Rectangle" generalizations="_teAdwHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_tW9akHyjEeyqPtdb1vr-DA"/>
+    <visualProperties xmi:id="_teEvMXyjEeyqPtdb1vr-DA" position="-641.0,221.0" size="-1.0,-1.0"/>
+    <visibility xmi:id="_teEvMnyjEeyqPtdb1vr-DA" label="+"/>
+    <attributes xmi:id="_teEvM3yjEeyqPtdb1vr-DA" name="width">
+      <modelElement href="AShape.uml#_tX85EXyjEeyqPtdb1vr-DA"/>
+      <stereotypes xmi:id="_teEvNHyjEeyqPtdb1vr-DA" name="LegacyStyledElement">
+        <modelElement href="AShape.uml#_tX9gIHyjEeyqPtdb1vr-DA"/>
+      </stereotypes>
+      <visibility xmi:id="_teEvNXyjEeyqPtdb1vr-DA" label="-"/>
+      <cardinality xmi:id="_teEvNnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <type xmi:id="_teEvN3yjEeyqPtdb1vr-DA" name="int">
+        <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+      </type>
+    </attributes>
+    <attributes xmi:id="_teEvOHyjEeyqPtdb1vr-DA" name="height">
+      <modelElement href="AShape.uml#_tX-HMHyjEeyqPtdb1vr-DA"/>
+      <stereotypes xmi:id="_teEvOXyjEeyqPtdb1vr-DA" name="LegacyStyledElement">
+        <modelElement href="AShape.uml#_tX-HMXyjEeyqPtdb1vr-DA"/>
+      </stereotypes>
+      <visibility xmi:id="_teEvOnyjEeyqPtdb1vr-DA" label="-"/>
+      <cardinality xmi:id="_teEvO3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <type xmi:id="_teEvPHyjEeyqPtdb1vr-DA" name="int">
+        <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+      </type>
+    </attributes>
+    <operations xmi:id="_teEvPXyjEeyqPtdb1vr-DA" comments="_teC6AHyjEeyqPtdb1vr-DA" targetConnectionVisual="_teC6AXyjEeyqPtdb1vr-DA" name="Rectangle">
+      <modelElement href="AShape.uml#_tX2LYHyjEeyqPtdb1vr-DA"/>
+      <keywords xmi:id="_teEvPnyjEeyqPtdb1vr-DA" keyword="create"/>
+      <visibility xmi:id="_teEvP3yjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_teEvQHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <outParameters xmi:id="_teEvQXyjEeyqPtdb1vr-DA">
+        <modelElement href="AShape.uml#_tX2ycnyjEeyqPtdb1vr-DA"/>
+        <type xmi:id="_teEvQnyjEeyqPtdb1vr-DA" name="Rectangle">
+          <modelElement href="AShape.uml#_tW9akHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </outParameters>
+      <parameters xmi:id="_teEvQ3yjEeyqPtdb1vr-DA" name="xPos">
+        <modelElement href="AShape.uml#_tX2LYXyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_teEvRHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_teEvRXyjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_teEvRnyjEeyqPtdb1vr-DA" name="yPos">
+        <modelElement href="AShape.uml#_tX2LYnyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_teEvR3yjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_teEvSHyjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_teEvSXyjEeyqPtdb1vr-DA" name="width">
+        <modelElement href="AShape.uml#_tX2LY3yjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_teEvSnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_teEvS3yjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_teEvTHyjEeyqPtdb1vr-DA" name="height">
+        <modelElement href="AShape.uml#_tX2LZHyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_teEvTXyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_teEvTnyjEeyqPtdb1vr-DA" name="int">
+          <modelElement href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+        </type>
+      </parameters>
+      <parameters xmi:id="_teEvT3yjEeyqPtdb1vr-DA" name="color">
+        <modelElement href="AShape.uml#_tX2LZXyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_teEvUHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_teEvUXyjEeyqPtdb1vr-DA" name="Color">
+          <modelElement href="AShape.uml#_tXhbQHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+    <operations xmi:id="_teEvUnyjEeyqPtdb1vr-DA" comments="_teDhEHyjEeyqPtdb1vr-DA" targetConnectionVisual="_teDhEXyjEeyqPtdb1vr-DA" name="paint">
+      <modelElement href="AShape.uml#_tX2yc3yjEeyqPtdb1vr-DA"/>
+      <visibility xmi:id="_teEvU3yjEeyqPtdb1vr-DA" label="+"/>
+      <cardinality xmi:id="_teEvVHyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+      <parameters xmi:id="_teEvVXyjEeyqPtdb1vr-DA" name="g">
+        <modelElement href="AShape.uml#_tX3ZgHyjEeyqPtdb1vr-DA"/>
+        <cardinality xmi:id="_teEvVnyjEeyqPtdb1vr-DA" label="1" max="1" min="1"/>
+        <type xmi:id="_teEvV3yjEeyqPtdb1vr-DA" name="Graphics">
+          <modelElement href="AShape.uml#_tXjQcHyjEeyqPtdb1vr-DA"/>
+        </type>
+      </parameters>
+    </operations>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_i-oikHyoEeyqPtdb1vr-DA" sourceConnectionVisual="_i-pJoHyoEeyqPtdb1vr-DA" text="&#xD;&#xA;@author charlielockyer&#xD;&#xA;An concrete class describing a composite shape on a 2D plane, like a screen&#xD;&#xA;A composite shape is composed of two other shapes and delegates its painting instructions to&#xD;&#xA;those shapes.&#xD;&#xA;Composite shapes can be composed to an arbitrary degree and do not inherently have color" item="_tcXfAHyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_i-agIHyoEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_i-xsgHyoEeyqPtdb1vr-DA" sourceConnectionVisual="_i-y6oHyoEeyqPtdb1vr-DA" text="Constructs a CompositeShape object&#xD;&#xA;&#x9; * @param shape1 the first component shape of the CompositeShape&#xD;&#xA;&#x9; * @param shape2 the other component shape of the CompositeShape" item="_tcXfDXyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_i-agIXyoEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_i-4aMHyoEeyqPtdb1vr-DA" sourceConnectionVisual="_i-5BQHyoEeyqPtdb1vr-DA" text="Sets the color of the shape to an input color defined by the Color class by delegating&#xD;&#xA;&#x9; * to the component shapes&#xD;&#xA;&#x9; * @param color the color of the shape" item="_tcXfGXyjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_i-agInyoEeyqPtdb1vr-DA"/>
+  </nodes>
+  <nodes xsi:type="com.yattasolutions.diagrams:CommentVisual" xmi:id="_i-8roHyoEeyqPtdb1vr-DA" sourceConnectionVisual="_i_F1kHyoEeyqPtdb1vr-DA" text="Paints the shape on the screen, abstract because each different shape is painted differently&#xD;&#xA;&#x9; * @param g the graphics object on which the shape will be painted" item="_tcXfH3yjEeyqPtdb1vr-DA">
+    <modelElement href="AShape.uml#_i-agI3yoEeyqPtdb1vr-DA"/>
+  </nodes>
+</com.yattasolutions.uml.diagrams.classifier:ClassDiagram>

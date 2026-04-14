@@ -1,0 +1,24 @@
+[
+  {
+    "login": "Sutto",
+    "id": 553,
+    "node_id": "MDQ6VXNlcjU1Mw==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/553?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/Sutto",
+    "html_url": "https://github.com/Sutto",
+    "followers_url": "https://api.github.com/users/Sutto/followers",
+    "following_url": "https://api.github.com/users/Sutto/following{/other_user}",
+    "gists_url": "https://api.github.com/users/Sutto/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/Sutto/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/Sutto/subscriptions",
+    "organizations_url": "https://api.github.com/users/Sutto/orgs",
+    "repos_url": "https://api.github.com/users/Sutto/repos",
+    "events_url": "https://api.github.com/users/Sutto/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/Sutto/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false,
+    "contributions": 50
+  }
+]

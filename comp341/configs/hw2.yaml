@@ -1,0 +1,58 @@
+assignment_number: 2
+assignment_name: "movie_critics"
+display_name: "Movie Critics Analysis"
+language: python
+description: "Finding critics correlated with audience ratings using PCA and imputation"
+
+source_files:
+  - path: "solution.py"
+    functions:
+      - load_critic_data
+      - load_movie_data
+      - remove_unnamed_critics
+      - filter_critics_by_review_count
+      - clean_review_scores
+      - prepare_critic_movie_matrix
+      - impute_missing_zeros
+      - impute_missing_mean
+      - impute_missing_knn
+      - calculate_critic_correlation
+      - get_top_correlated_critics
+      - run_pca
+
+data_files:
+  - source: "data/hw2/rotten_tomatoes_critic_reviews.csv"
+  - source: "data/hw2/rotten_tomatoes_movies.csv"
+
+grading:
+  total_points: 100
+  total_tests: 16
+  # KNN imputation on 1.1M rows takes ~11 minutes
+  # Full test suite with KNN-dependent tests needs ~20 minutes
+  timeout_seconds: 1200
+  max_attempts: 10
+
+# Note: Written responses (15 pts in original assignment) are not auto-graded
+test_points:
+  # Tier 1: Data Loading (10 pts)
+  test_load_critic_data: 5
+  test_load_movie_data: 5
+  # Tier 2: Filtering & Cleaning (25 pts)
+  test_remove_unnamed_critics: 5
+  test_filter_critics: 5
+  test_clean_scores_fractions: 5
+  test_clean_scores_letters: 5
+  test_clean_scores_preserves_nan: 2
+  test_clean_scores_range: 3
+  # Tier 3: Imputation (25 pts)
+  test_impute_zeros: 5
+  test_impute_mean: 8
+  test_impute_knn: 12
+  # Tier 4: Correlation (20 pts)
+  test_correlation_zeros: 10
+  test_correlation_knn: 10
+  # Tier 5: PCA & Top Critics (20 pts)
+  test_pca_dimensions: 10
+  test_top_critics_identified: 10
+  # Integration (0 pts - sanity check)
+  test_full_workflow: 0

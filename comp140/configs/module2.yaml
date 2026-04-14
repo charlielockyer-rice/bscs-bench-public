@@ -1,0 +1,83 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 2
+assignment_name: "spot_it"
+display_name: "Spot It!"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: python
+runtime:
+  version: "3.11"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 25
+  total_points: 22
+  timeout_seconds: 15
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "solution.py"
+    functions:
+      - equivalent
+      - incident
+      - generate_all_points
+      - create_cards
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  discovery: "auto"
+  pattern: "test_module2.py"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # equivalent tests (5 points)
+  equivalent_same_point: 1
+  equivalent_scaled_point: 1
+  equivalent_different_points: 1
+  equivalent_mod2: 1
+  equivalent_mod3: 1
+
+  # incident tests (5 points)
+  incident_on_line: 1
+  incident_not_on_line: 1
+  incident_origin: 1
+  incident_mod2: 1
+  incident_mod3: 1
+
+  # generate_all_points tests (6 points)
+  generate_all_points_mod2_count: 1
+  generate_all_points_mod2_unique: 1
+  generate_all_points_mod3_count: 1
+  generate_all_points_mod3_unique: 1
+  generate_all_points_mod5_count: 1
+  generate_all_points_contains_expected: 1
+
+  # create_cards tests (6 points)
+  create_cards_mod2_count: 1
+  create_cards_mod2_images_per_card: 1
+  create_cards_mod3_one_common: 1
+  create_cards_mod3_exactly_one_common: 1
+  create_cards_mod5_valid_deck: 2
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+docs:
+  writeup_sections:
+    - "Cross product calculations (i, ii)"
+    - "Recipe for generate_all_points"
+    - "Recipe for create_cards"
+    - "Discussion: 40-card deck possibility"

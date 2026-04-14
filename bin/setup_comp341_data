@@ -1,0 +1,244 @@
+#!/usr/bin/env python3
+"""
+Setup COMP 341 data files.
+
+Downloads datasets from GitHub Release assets.
+Uses `gh` CLI if available (works for private repos), falls back to curl (public repos).
+Skips downloads if data already exists.
+
+Usage:
+    bin/setup_comp341_data           # Download all missing data
+    bin/setup_comp341_data --check   # Just check what's missing
+    bin/setup_comp341_data --hw 3    # Download specific homework data
+"""
+
+import argparse
+import shutil
+import subprocess
+import sys
+import tempfile
+import zipfile
+from pathlib import Path
+
+# GitHub repo and release tag — one-time static data, never updated
+GITHUB_REPO = "charlielockyer-rice/bscs-bench"
+RELEASE_TAG = "comp341-data"
+RELEASE_BASE = f"https://github.com/{GITHUB_REPO}/releases/download/{RELEASE_TAG}"
+
+# All homework datasets available as release assets
+RELEASE_ASSETS = {
+    "hw1": "comp341-hw1-data.zip",
+    "hw2": "comp341-hw2-data.zip",
+    "hw3": "comp341-hw3-data.zip",
+    "hw4": "comp341-hw4-data.zip",
+    "hw5": "comp341-hw5-data.zip",
+    "hw6": "comp341-hw6-data.zip",
+    "hw7": "comp341-hw7-data.zip",
+}
+
+
+def get_course_dir() -> Path:
+    """Get the comp341 course directory."""
+    script_dir = Path(__file__).parent.parent
+    return script_dir / "comp341"
+
+
+def check_data_status(course_dir: Path) -> dict:
+    """Check which homework data exists."""
+    data_dir = course_dir / "data"
+    status = {}
+
+    # HW1: Baby names (142+ txt files)
+    hw1_dir = data_dir / "hw1"
+    hw1_files = list(hw1_dir.glob("yob*.txt")) if hw1_dir.exists() else []
+    status["hw1"] = {"exists": len(hw1_files) >= 100, "files": len(hw1_files)}
+
+    # HW2: Rotten tomatoes
+    hw2_dir = data_dir / "hw2"
+    hw2_movies = (hw2_dir / "rotten_tomatoes_movies.csv").exists() if hw2_dir.exists() else False
+    hw2_critics = (hw2_dir / "rotten_tomatoes_critic_reviews.csv").exists() if hw2_dir.exists() else False
+    status["hw2"] = {"exists": hw2_movies and hw2_critics}
+
+    # HW3: CVA data
+    hw3_dir = data_dir / "hw3"
+    status["hw3"] = {"exists": (hw3_dir / "CVA.csv").exists() if hw3_dir.exists() else False}
+
+    # HW4: Houston homes
+    hw4_dir = data_dir / "hw4"
+    hw4_train = (hw4_dir / "houston_homes.csv").exists() if hw4_dir.exists() else False
+    hw4_test = (hw4_dir / "houston_homes_test.csv").exists() if hw4_dir.exists() else False
+    status["hw4"] = {"exists": hw4_train and hw4_test}
+
+    # HW5: Text classification
+    hw5_dir = data_dir / "hw5"
+    hw5_files = ["bag_of_words.csv", "tfidf.csv", "document_labels.csv"]
+    hw5_exists = all((hw5_dir / f).exists() for f in hw5_files) if hw5_dir.exists() else False
+    status["hw5"] = {"exists": hw5_exists}
+
+    # HW6: FashionMNIST (must be pre-downloaded — Docker has no network)
+    hw6_dir = data_dir / "hw6" / "FashionMNIST" / "raw"
+    hw6_exists = any(hw6_dir.iterdir()) if hw6_dir.exists() else False
+    status["hw6"] = {"exists": hw6_exists}
+
+    # HW7: House images
+    hw7_dir = data_dir / "hw7"
+    hw7_train = (hw7_dir / "home_data_train.csv").exists() if hw7_dir.exists() else False
+    hw7_imgs = (hw7_dir / "house_imgs").is_dir() if hw7_dir.exists() else False
+    status["hw7"] = {"exists": hw7_train and hw7_imgs}
+
+    return status
+
+
+def _has_gh_cli() -> bool:
+    """Check if gh CLI is installed and authenticated."""
+    if shutil.which("gh") is None:
+        return False
+    try:
+        result = subprocess.run(
+            ["gh", "auth", "status"],
+            capture_output=True, text=True, timeout=10
+        )
+        return result.returncode == 0
+    except Exception:
+        return False
+
+
+def _download_via_gh(asset: str, output_path: Path) -> bool:
+    """Download a release asset using gh CLI (works for private repos)."""
+    try:
+        result = subprocess.run(
+            [
+                "gh", "release", "download", RELEASE_TAG,
+                "--repo", GITHUB_REPO,
+                "--pattern", asset,
+                "--dir", str(output_path.parent),
+                "--clobber",
+            ],
+            capture_output=True,
+            text=True,
+            timeout=600
+        )
+        downloaded = output_path.parent / asset
+        if result.returncode == 0 and downloaded.exists() and downloaded.stat().st_size > 0:
+            if downloaded != output_path:
+                downloaded.rename(output_path)
+            return True
+        return False
+    except Exception:
+        return False
+
+
+def _download_via_curl(asset: str, output_path: Path) -> bool:
+    """Download a release asset using curl (works for public repos)."""
+    url = f"{RELEASE_BASE}/{asset}"
+    try:
+        result = subprocess.run(
+            ["curl", "-fSL", "-o", str(output_path), url],
+            capture_output=True,
+            text=True,
+            timeout=600
+        )
+        return result.returncode == 0 and output_path.exists() and output_path.stat().st_size > 0
+    except Exception:
+        return False
+
+
+def download_and_extract(hw: str, course_dir: Path) -> bool:
+    """Download a homework zip from GitHub Release and extract to data/{hw}/."""
+    asset = RELEASE_ASSETS.get(hw)
+    if not asset:
+        print(f"  ✗ Unknown homework: {hw}")
+        return False
+
+    data_dir = course_dir / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+
+    with tempfile.NamedTemporaryFile(suffix=".zip", delete=False) as tmp:
+        tmp_path = Path(tmp.name)
+
+    try:
+        print(f"  Downloading {asset}...")
+
+        # Try gh CLI first (works for private repos), fall back to curl (public repos)
+        ok = False
+        if _has_gh_cli():
+            ok = _download_via_gh(asset, tmp_path)
+        if not ok:
+            ok = _download_via_curl(asset, tmp_path)
+        if not ok:
+            print(f"  ✗ Failed to download {asset}")
+            if shutil.which("gh"):
+                print(f"    Check: gh auth login, or verify the release exists")
+            else:
+                print(f"    Install 'gh' CLI for private repos, or verify the release URL is accessible")
+            return False
+
+        size_mb = tmp_path.stat().st_size / (1024 * 1024)
+        print(f"  Extracting ({size_mb:.1f} MB)...")
+        with zipfile.ZipFile(tmp_path) as zf:
+            zf.extractall(data_dir)
+
+        print(f"  ✓ {hw.upper()} data ready")
+        return True
+
+    except zipfile.BadZipFile:
+        print(f"  ✗ Downloaded file is not a valid zip")
+        return False
+    except Exception as e:
+        print(f"  ✗ Error: {e}")
+        return False
+    finally:
+        tmp_path.unlink(missing_ok=True)
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Setup COMP 341 data files")
+    parser.add_argument("--check", action="store_true", help="Just check data status")
+    parser.add_argument("--hw", type=str, help="Download specific homework (e.g., 1, 3, 6)")
+    args = parser.parse_args()
+
+    course_dir = get_course_dir()
+    if not course_dir.exists():
+        print(f"Error: Course directory not found: {course_dir}")
+        sys.exit(1)
+
+    print("COMP 341 Data Setup")
+    print("=" * 40)
+
+    status = check_data_status(course_dir)
+
+    print("\nData Status:")
+    for hw, info in status.items():
+        icon = "✓" if info["exists"] else "✗"
+        print(f"  [{icon}] {hw.upper()}: {'OK' if info['exists'] else 'MISSING'}")
+
+    if args.check:
+        return
+
+    if args.hw:
+        hw_key = f"hw{args.hw}" if not args.hw.startswith("hw") else args.hw
+        print(f"\nDownloading {hw_key.upper()} data...")
+        download_and_extract(hw_key, course_dir)
+    else:
+        # Download all missing data
+        missing = [hw for hw in RELEASE_ASSETS if not status[hw]["exists"]]
+        if not missing:
+            print("\nAll data present — nothing to download.")
+            return
+
+        print(f"\nDownloading {len(missing)} missing dataset(s)...")
+        failed = []
+        for hw in missing:
+            if not download_and_extract(hw, course_dir):
+                failed.append(hw)
+
+        if failed:
+            print(f"\n✗ Failed to download: {', '.join(f.upper() for f in failed)}")
+            print(f"  Re-run: bin/setup_comp341_data")
+            sys.exit(1)
+        else:
+            print(f"\n✓ All COMP 341 data downloaded successfully.")
+
+
+if __name__ == "__main__":
+    main()

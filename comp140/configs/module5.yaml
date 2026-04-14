@@ -1,0 +1,111 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 5
+assignment_name: "qr_code"
+display_name: "QR Code"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: python
+runtime:
+  version: "3.11"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 50
+  total_points: 33
+  timeout_seconds: 20
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "solution.py"
+    functions:
+      - Polynomial.add_term
+      - Polynomial.subtract_term
+      - Polynomial.multiply_by_term
+      - Polynomial.add_polynomial
+      - Polynomial.subtract_polynomial
+      - Polynomial.multiply_by_polynomial
+      - Polynomial.remainder
+      - create_message_polynomial
+      - create_generator_polynomial
+      - reed_solomon_correction
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  discovery: "auto"
+  pattern: "test_module5.py"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # add_term tests (3 points)
+  add_term_to_empty: 1
+  add_term_new_power: 1
+  add_term_existing_power: 1
+
+  # subtract_term tests (3 points)
+  subtract_term_from_empty: 1
+  subtract_term_new_power: 1
+  subtract_term_existing_power: 1
+
+  # multiply_by_term tests (3 points)
+  multiply_by_term_zero_coeff: 1
+  multiply_by_term_single: 1
+  multiply_by_term_multiple: 1
+
+  # add_polynomial tests (3 points)
+  add_polynomial_to_empty: 1
+  add_polynomial_disjoint: 1
+  add_polynomial_overlapping: 1
+
+  # subtract_polynomial tests (3 points)
+  subtract_polynomial_from_empty: 1
+  subtract_polynomial_same: 1
+  subtract_polynomial_different: 1
+
+  # multiply_by_polynomial tests (4 points)
+  multiply_by_polynomial_zero: 1
+  multiply_by_polynomial_single_term: 1
+  multiply_by_polynomial_multiple: 1
+  multiply_by_polynomial_z256: 1
+
+  # remainder tests (5 points)
+  remainder_smaller_degree: 1
+  remainder_same_degree: 1
+  remainder_larger_degree: 1
+  remainder_exact_division: 1
+  remainder_z256_arithmetic: 1
+
+  # create_message_polynomial tests (3 points)
+  create_message_polynomial_single: 1
+  create_message_polynomial_multiple: 1
+  create_message_polynomial_degree: 1
+
+  # create_generator_polynomial tests (3 points)
+  create_generator_polynomial_k1: 1
+  create_generator_polynomial_k2: 1
+  create_generator_polynomial_k4: 1
+
+  # reed_solomon_correction tests (3 points)
+  reed_solomon_simple: 1
+  reed_solomon_degree: 1
+  reed_solomon_integration: 1
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+docs:
+  writeup_sections:
+    - "Polynomial operation recipes"
+    - "Reed-Solomon encoding discussion"

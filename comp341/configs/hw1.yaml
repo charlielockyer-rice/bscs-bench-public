@@ -1,0 +1,136 @@
+assignment_number: 1
+assignment_name: "baby_names"
+display_name: "Exploring Baby Names"
+language: python
+description: |
+  Analyze SSA baby name data (1880-2024) to explore naming trends
+  and predict ages from names. Covers data loading, aggregation,
+  filtering, and simple statistical analysis.
+
+source_files:
+  - path: "solution.py"
+    functions:
+      - load_baby_names        # Load all yearly files into DataFrame
+      - filter_by_count        # Filter to names with >= threshold total
+      - calculate_median_year  # Weighted median birth year for a name
+      - calculate_mean_year    # Weighted mean birth year for a name
+      - get_oldest_names       # Names popular longest ago (lowest median)
+      - get_youngest_names     # Names most recently popular (highest median)
+      - predict_age            # Predict age from median birth year
+
+data_files:
+  - source: "data/hw1/"
+    description: "SSA baby name files (yob1880.txt - yob2024.txt)"
+    format: "CSV without header: name,sex,count"
+    total_files: 145
+
+# Original assignment expectations (data may be updated)
+expected_outputs:
+  total_rows_approx: 2000000  # ~2M rows (varies by data version)
+  filter_threshold: 20000     # Names must have >= 20000 total occurrences
+  year_range: [1880, 2024]
+
+grading:
+  total_points: 100
+  total_tests: 39
+  timeout_seconds: 120
+  max_attempts: 10
+
+test_points:
+  # Tier 1: Data Loading
+  test_load_data_returns_dataframe: 2
+  test_load_data_structure: 3
+  test_load_data_row_count: 3
+  test_load_data_types: 2
+  test_load_data_sex_values: 2
+  test_load_data_year_range: 2
+  test_load_data_positive_counts: 2
+
+  # Tier 1: Filtering
+  test_filter_returns_dataframe: 2
+  test_filter_threshold_applied: 3
+  test_filter_reduces_data: 3
+  test_filter_preserves_columns: 2
+  test_filter_common_names_present: 2
+
+  # Tier 2: Median Year
+  test_median_year_returns_int: 2
+  test_median_year_reasonable_range: 3
+  test_median_year_jennifer: 3
+  test_median_year_old_vs_new_name: 3
+
+  # Tier 2: Mean Year
+  test_mean_year_returns_number: 2
+  test_mean_year_reasonable_range: 2
+  test_mean_year_old_vs_new_name: 3
+  test_mean_vs_median_close: 3
+
+  # Tier 2: Oldest/Youngest Names
+  test_get_oldest_names_returns_dataframe: 2
+  test_get_oldest_names_correct_count: 2
+  test_oldest_female_names_reasonable: 4
+  test_youngest_female_names_reasonable: 3
+  test_oldest_male_names_reasonable: 4
+  test_youngest_male_names_reasonable: 3
+  test_oldest_sorted_correctly: 2
+  test_youngest_sorted_correctly: 2
+
+  # Tier 3: Age Prediction
+  test_predict_age_returns_int: 2
+  test_predict_age_uses_median: 3
+  test_predict_age_gerald: 2
+  test_predict_age_kai: 2
+  test_predict_age_madison: 2
+  test_predict_age_spencer: 2
+  test_predict_age_ordering: 3
+
+  # Tier 4: Visualization Data
+  test_births_per_year_available: 2
+  test_ruth_data_exists: 2
+  test_name_trend_data: 3
+
+  # Integration
+  test_full_workflow: 6
+
+# Written questions (for future LLM evaluation)
+written_questions:
+  - id: q1_historical_patterns
+    prompt: "Do you notice any interesting patterns across years? Do they relate to historical events?"
+    points: 1
+    expected_themes:
+      - "baby boom"
+      - "WWII"
+      - "depression"
+      - "birth rate"
+
+  - id: q2_babe_ruth
+    prompt: "Do you think the famous baseball player, Babe Ruth, had any influence on boys named Ruth?"
+    points: 1
+    expected_themes:
+      - "career timing"
+      - "1914-1935"
+      - "correlation"
+
+  - id: q3_birth_rate_influence
+    prompt: "Do you think that the birth rate can influence the oldest and youngest names we identified?"
+    points: 1
+    expected_themes:
+      - "normalization"
+      - "percentage"
+      - "raw count"
+
+  - id: q4_prediction_accuracy
+    prompt: "Do the predicted ages match what you have experienced? Would you rely on our predictions?"
+    points: 1
+    expected_themes:
+      - "average"
+      - "individual variation"
+      - "generations"
+
+  - id: q5_mean_vs_median
+    prompt: "What difference does choosing names using median year or mean year make?"
+    points: 1
+    expected_themes:
+      - "skew"
+      - "outliers"
+      - "robust"

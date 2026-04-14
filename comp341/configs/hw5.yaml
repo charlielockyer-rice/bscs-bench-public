@@ -1,0 +1,48 @@
+assignment_number: 5
+assignment_name: "text_classification"
+display_name: "Text Classification - Who Said It?"
+language: python
+description: "Author identification using NLP, topic modeling, and classification"
+
+source_files:
+  - path: "solution.py"
+    functions:
+      - load_text_data
+      - run_lda_topics
+      - get_top_topic_words
+      - reduce_dimensions_pca
+      - reduce_dimensions_tsne
+      - cluster_kmeans
+      - calculate_silhouette_scores
+      - train_classifier
+      - calculate_roc_curve
+      - calculate_precision_recall
+      - create_confusion_matrix
+      - prepare_kaggle_submission
+
+data_files:
+  - source: "data/hw5/bag_of_words.csv"
+  - source: "data/hw5/tfidf.csv"
+  - source: "data/hw5/document_labels.csv"
+  - source: "data/hw5/test-bag_of_words.csv"
+  - source: "data/hw5/test-tfidf.csv"
+
+grading:
+  total_points: 100
+  total_tests: 12
+  timeout_seconds: 180
+  max_attempts: 10
+
+test_points:
+  test_load_data: 5
+  test_lda_topics: 10
+  test_top_words_per_topic: 5
+  test_pca_reduction: 5
+  test_tsne_reduction: 5
+  test_kmeans_clustering: 10
+  test_silhouette_analysis: 10
+  test_classifier_accuracy: 15
+  test_roc_curve: 10
+  test_precision_recall: 10
+  test_confusion_matrix: 10
+  test_submission_format: 5

@@ -1,0 +1,20 @@
+#
+# trace18.txt - Process fg builtin command (two jobs)
+#
+/bin/echo tsh> ./myspin 10 \046
+./myspin 10 &
+
+/bin/echo tsh> ./mystop 4
+./mystop 4
+
+SLEEP 2
+TSTP
+
+/bin/echo tsh> jobs
+jobs
+
+/bin/echo tsh> fg %2
+fg %2
+
+/bin/echo tsh> quit
+quit

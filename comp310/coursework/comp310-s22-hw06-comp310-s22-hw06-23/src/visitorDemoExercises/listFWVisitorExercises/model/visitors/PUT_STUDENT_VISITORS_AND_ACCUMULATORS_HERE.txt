@@ -1,0 +1,5 @@
+Student-written visitors and accumulators should be placed in this package.   
+The demo applications are pre-configured to search this package as well as the associated 
+package in the provided code for any desired classes to load.
+
+DO NOT WRITE OR MODIFY ANYTHING IN THE "provided" PACKAGE OR ANY OF ITS SUBPACKAGES!  

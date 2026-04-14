@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UMLLabProfile="http:///schemas/UMLLabProfile/NS/0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/UMLLabProfile/NS/0 pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile-Annotation_2-UMLLabProfile">
+  <uml:Model xmi:id="_-cYpQJxGEey3qLRb8NWHrA" name="comp310_s22_hw07_comp310_s22_hw07_14">
+    <eAnnotations xmi:id="_CkZAcJxHEey3qLRb8NWHrA" source="http://ns.yatta.de/umllab">
+      <contents xmi:type="ecore:EAnnotation" xmi:id="_CkiKYJxHEey3qLRb8NWHrA" source="codegen">
+        <details xmi:id="_CkiKYZxHEey3qLRb8NWHrA" key="codegenDirectory" value="/comp310-s22-hw07-comp310-s22-hw07-14/src"/>
+      </contents>
+    </eAnnotations>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_KEAzsJxHEey3qLRb8NWHrA" name="IRemoteObject">
+      <ownedAttribute xmi:id="_ciPNE5xIEey3qLRb8NWHrA" name="remote" type="_VpS0wJxHEey3qLRb8NWHrA" aggregation="shared" association="_ciOmAJxIEey3qLRb8NWHrA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ciP0IJxIEey3qLRb8NWHrA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ciP0IZxIEey3qLRb8NWHrA" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Interface" xmi:id="_VpS0wJxHEey3qLRb8NWHrA" name="Remote">
+      <ownedAttribute xmi:id="_ciPNEJxIEey3qLRb8NWHrA" name="iRemoteObject" type="_KEAzsJxHEey3qLRb8NWHrA" association="_ciOmAJxIEey3qLRb8NWHrA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_ciPNEZxIEey3qLRb8NWHrA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_ciPNEpxIEey3qLRb8NWHrA" value="1"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_YnuUwJxHEey3qLRb8NWHrA" name="RemoteObject_Stub">
+      <ownedAttribute xmi:id="_Q7WCcpxIEey3qLRb8NWHrA" name="remoteObject_Skeleton" type="_u1cUIJxHEey3qLRb8NWHrA" association="_Q7VbYJxIEey3qLRb8NWHrA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Q7WCc5xIEey3qLRb8NWHrA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Q7WCdJxIEey3qLRb8NWHrA" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_u1cUIJxHEey3qLRb8NWHrA" name="RemoteObject_Skeleton">
+      <ownedAttribute xmi:id="_RGoFYpxIEey3qLRb8NWHrA" name="remoteObject" type="_vlHdkJxHEey3qLRb8NWHrA" association="_RGneUJxIEey3qLRb8NWHrA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RGoFY5xIEey3qLRb8NWHrA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RGoFZJxIEey3qLRb8NWHrA" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_vF3VwJxHEey3qLRb8NWHrA" name="Client">
+      <ownedAttribute xmi:id="_Quhuc5xIEey3qLRb8NWHrA" name="iRemoteObject" type="_KEAzsJxHEey3qLRb8NWHrA" association="_QuhHYJxIEey3qLRb8NWHrA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QuhudJxIEey3qLRb8NWHrA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QuiVgJxIEey3qLRb8NWHrA" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Class" xmi:id="_vTilYJxHEey3qLRb8NWHrA" name="UnicastRemoteObject"/>
+    <packagedElement xmi:type="uml:Class" xmi:id="_vlHdkJxHEey3qLRb8NWHrA" name="RemoteObject">
+      <ownedAttribute xmi:id="_RSfXI5xIEey3qLRb8NWHrA" name="unicastRemoteObject" type="_vTilYJxHEey3qLRb8NWHrA" association="_RSewEJxIEey3qLRb8NWHrA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RSfXJJxIEey3qLRb8NWHrA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RSfXJZxIEey3qLRb8NWHrA" value="*"/>
+      </ownedAttribute>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_QuhHYJxIEey3qLRb8NWHrA" name="" memberEnd="_QuhucJxIEey3qLRb8NWHrA _Quhuc5xIEey3qLRb8NWHrA">
+      <ownedEnd xmi:id="_QuhucJxIEey3qLRb8NWHrA" name="client" type="_vF3VwJxHEey3qLRb8NWHrA" association="_QuhHYJxIEey3qLRb8NWHrA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_QuhucZxIEey3qLRb8NWHrA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_QuhucpxIEey3qLRb8NWHrA" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_Q7VbYJxIEey3qLRb8NWHrA" name="" memberEnd="_Q7VbYZxIEey3qLRb8NWHrA _Q7WCcpxIEey3qLRb8NWHrA">
+      <ownedEnd xmi:id="_Q7VbYZxIEey3qLRb8NWHrA" name="remoteObject_Stub" type="_YnuUwJxHEey3qLRb8NWHrA" association="_Q7VbYJxIEey3qLRb8NWHrA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_Q7WCcJxIEey3qLRb8NWHrA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_Q7WCcZxIEey3qLRb8NWHrA" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_RGneUJxIEey3qLRb8NWHrA" name="" memberEnd="_RGneUZxIEey3qLRb8NWHrA _RGoFYpxIEey3qLRb8NWHrA">
+      <ownedEnd xmi:id="_RGneUZxIEey3qLRb8NWHrA" name="remoteObject_Skeleton" type="_u1cUIJxHEey3qLRb8NWHrA" association="_RGneUJxIEey3qLRb8NWHrA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RGoFYJxIEey3qLRb8NWHrA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RGoFYZxIEey3qLRb8NWHrA" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Association" xmi:id="_RSewEJxIEey3qLRb8NWHrA" name="" memberEnd="_RSfXIJxIEey3qLRb8NWHrA _RSfXI5xIEey3qLRb8NWHrA">
+      <ownedEnd xmi:id="_RSfXIJxIEey3qLRb8NWHrA" name="remoteObject" type="_vlHdkJxHEey3qLRb8NWHrA" association="_RSewEJxIEey3qLRb8NWHrA">
+        <lowerValue xmi:type="uml:LiteralInteger" xmi:id="_RSfXIZxIEey3qLRb8NWHrA"/>
+        <upperValue xmi:type="uml:LiteralUnlimitedNatural" xmi:id="_RSfXIpxIEey3qLRb8NWHrA" value="*"/>
+      </ownedEnd>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_Y8o_YJxIEey3qLRb8NWHrA" client="_YnuUwJxHEey3qLRb8NWHrA" supplier="_KEAzsJxHEey3qLRb8NWHrA"/>
+    <packagedElement xmi:type="uml:Dependency" xmi:id="_ZyUqMJxIEey3qLRb8NWHrA" client="_vlHdkJxHEey3qLRb8NWHrA" supplier="_KEAzsJxHEey3qLRb8NWHrA"/>
+    <packagedElement xmi:type="uml:Association" xmi:id="_ciOmAJxIEey3qLRb8NWHrA" name="" memberEnd="_ciPNEJxIEey3qLRb8NWHrA _ciPNE5xIEey3qLRb8NWHrA"/>
+    <profileApplication xmi:id="_Ckmb0JxHEey3qLRb8NWHrA">
+      <eAnnotations xmi:id="_ClAEcJxHEey3qLRb8NWHrA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile-Annotation_2-UMLLabProfile"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile"/>
+    </profileApplication>
+  </uml:Model>
+  <UMLLabProfile:TargetLanguage xmi:id="_ClRKMJxHEey3qLRb8NWHrA" base_Package="_-cYpQJxGEey3qLRb8NWHrA">
+    <languageName>java</languageName>
+  </UMLLabProfile:TargetLanguage>
+</xmi:XMI>

@@ -1,0 +1,49 @@
+assignment_number: 6
+assignment_name: "homework6"
+display_name: "HW6: Rooted Directed MSTs"
+course: "comp182"
+language: "python"
+assignment_mode: "hybrid"
+
+source_files:
+  - path: "solution.py"
+    functions:
+      - reverse_digraph_representation
+      - modify_edge_weights
+      - compute_rdst_candidate
+      - compute_cycle
+      - contract_cycle
+      - expand_graph
+      - compute_genetic_distance
+      - construct_complete_weighted_digraph
+      - infer_transmap
+
+tests:
+  discovery: "auto"
+  pattern: "test_module6.py"
+
+grading:
+  total_points: 25
+  timeout_seconds: 30
+
+llm_grading:
+  rubric: "solutions/homework6_rubric.md"
+
+problems:
+  - number: 1
+    name: "Proofs of Lemma 1 and Lemma 2"
+    points: 20
+  - number: 2
+    name: "RDMST Algorithm Implementation"
+    points: 55
+  - number: 3
+    name: "Bacterial Infection Transmission"
+    points: 25
+
+topics:
+  - "Directed Graphs"
+  - "Minimum Spanning Trees"
+  - "RDMST Algorithm"
+  - "Cycle Contraction"
+  - "Hamming Distance"
+  - "Disease Transmission"

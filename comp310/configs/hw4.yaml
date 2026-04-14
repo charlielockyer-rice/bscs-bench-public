@@ -1,0 +1,27 @@
+assignment_number: 4
+assignment_name: "hw04"
+display_name: "Paint & Visitor Ballworld"
+language: java
+runtime:
+  version: "17"
+grading:
+  total_points: 100
+  timeout_seconds: 60
+  max_attempts: 10
+source_dir: "hw04"
+depends_on: "comp310_hw3"
+source_files:
+  - path: "src/hw04/model/Ball.java"
+  - path: "src/hw04/model/BallModel.java"
+  - path: "src/hw04/model/strategy/StraightStrategy.java"
+  - path: "src/hw04/model/strategy/GravityStrategy.java"
+  - path: "src/hw04/model/strategy/ColorStrategy.java"
+  - path: "src/hw04/model/strategy/BreathingStrategy.java"
+  - path: "src/hw04/model/strategy/SwitcherStrategy.java"
+  - path: "src/hw04/model/strategy/MultiStrategy.java"
+  - path: "src/hw04/model/paint/strategies/EllipsePaintStrategy.java"
+  - path: "src/hw04/model/paint/strategies/SquarePaintStrategy.java"
+  - path: "src/hw04/model/paint/strategies/MultiPaintStrategy.java"
+tests:
+  classes:
+    - "comp310.tests.hw04.PaintStrategyTest"

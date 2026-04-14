@@ -1,0 +1,44 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 5
+assignment_name: "assignment5"
+display_name: "Statically Typed Jam"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "8"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 27
+  total_points: 100
+  timeout_seconds: 180
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "TypeChecker.java"
+    student_implements: true
+  - path: "Interp.java"
+    student_implements: true
+  - path: "Parser.java"
+    student_implements: true
+  - path: "AST.java"
+    student_implements: true
+  - path: "Lexer.java"
+  - path: "ValuesTokens.java"
+  - path: "Syntax.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  class: "Assign5Test"

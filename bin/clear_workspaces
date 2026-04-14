@@ -1,0 +1,202 @@
+#!/usr/bin/env bash
+#
+# Clear Workspaces
+#
+# Removes workspaces for a course or all workspaces.
+# Use this to reset before regenerating with setup_course.
+#
+# Usage: clear_workspaces <agent_id> [course]
+#        clear_workspaces agent              # Clear ALL workspaces for agent
+#        clear_workspaces agent comp321      # Clear only COMP 321 workspaces
+#        clear_workspaces --all              # Clear ALL workspaces (dangerous!)
+#
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+WORKSPACES_DIR="$PROJECT_ROOT/workspaces"
+
+if [ $# -lt 1 ]; then
+    echo "Usage: clear_workspaces <agent_id|model-dir> [course]"
+    echo "       clear_workspaces --all"
+    echo "       clear_workspaces --model-dir <model-dir> [course]"
+    echo ""
+    echo "Removes workspaces to allow clean regeneration."
+    echo ""
+    echo "Examples:"
+    echo "  clear_workspaces agent                        # Clear all 'agent_*' workspaces"
+    echo "  clear_workspaces agent comp321                # Clear 'agent_*' workspaces for COMP 321 only"
+    echo "  clear_workspaces --model-dir claude-opus-4-6  # Clear all workspaces in model dir"
+    echo "  clear_workspaces --model-dir claude-opus-4-6 comp140  # Clear COMP 140 in model dir"
+    echo "  clear_workspaces --all                        # Clear ALL workspaces (use with caution)"
+    exit 1
+fi
+
+if [ ! -d "$WORKSPACES_DIR" ]; then
+    echo "No workspaces directory found. Nothing to clear."
+    exit 0
+fi
+
+# Handle --all flag
+if [ "$1" = "--all" ]; then
+    echo "This will delete ALL workspaces in $WORKSPACES_DIR"
+    read -p "Are you sure? (y/N) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Aborted."
+        exit 0
+    fi
+
+    count=$(find "$WORKSPACES_DIR" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')
+    rm -rf "$WORKSPACES_DIR"/*
+    echo "Cleared $count workspace(s)."
+    exit 0
+fi
+
+# Handle --model-dir flag
+if [ "$1" = "--model-dir" ]; then
+    if [ -z "$2" ]; then
+        echo "Error: --model-dir requires a value"
+        exit 1
+    fi
+    MODEL_DIR="$2"
+    COURSE_FILTER="${3:-}"
+    MODEL_DIR_PATH="$WORKSPACES_DIR/$MODEL_DIR"
+
+    if [ ! -d "$MODEL_DIR_PATH" ]; then
+        echo "No model directory found: $MODEL_DIR_PATH"
+        exit 0
+    fi
+
+    TO_DELETE=()
+    for ws in "$MODEL_DIR_PATH"/*/; do
+        [ -d "$ws" ] || continue
+        ws_name=$(basename "$ws")
+        # Skip the runs/ directory
+        [ "$ws_name" = "runs" ] && continue
+
+        if [ -n "$COURSE_FILTER" ]; then
+            ws_course=""
+            if [ -f "$ws/workspace.yaml" ]; then
+                ws_course=$(grep "^course:" "$ws/workspace.yaml" 2>/dev/null | awk '{print $2}' | tr -d '"')
+            fi
+            if [ "$ws_course" != "$COURSE_FILTER" ]; then
+                continue
+            fi
+        fi
+
+        TO_DELETE+=("$ws")
+    done
+
+    if [ ${#TO_DELETE[@]} -eq 0 ]; then
+        if [ -n "$COURSE_FILTER" ]; then
+            echo "No workspaces found in '$MODEL_DIR' for course '$COURSE_FILTER'."
+        else
+            echo "No workspaces found in '$MODEL_DIR'."
+        fi
+        exit 0
+    fi
+
+    echo "Workspaces to delete from $MODEL_DIR:"
+    for ws in "${TO_DELETE[@]}"; do
+        echo "  - $(basename "$ws")"
+    done
+    echo ""
+
+    read -p "Delete ${#TO_DELETE[@]} workspace(s)? (y/N) " -n 1 -r
+    echo
+
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        echo "Aborted."
+        exit 0
+    fi
+
+    for ws in "${TO_DELETE[@]}"; do
+        rm -rf "$ws"
+    done
+
+    echo "Cleared ${#TO_DELETE[@]} workspace(s) from $MODEL_DIR."
+    exit 0
+fi
+
+AGENT_ID="$1"
+COURSE_FILTER="${2:-}"
+
+# Build list of workspaces to delete
+TO_DELETE=()
+
+# Check if AGENT_ID is actually a model directory name
+if [ -d "$WORKSPACES_DIR/$AGENT_ID" ] && [ ! -f "$WORKSPACES_DIR/$AGENT_ID/workspace.yaml" ]; then
+    # It's a model directory — clear workspaces inside it
+    for ws in "$WORKSPACES_DIR/$AGENT_ID"/*/; do
+        [ -d "$ws" ] || continue
+        ws_name=$(basename "$ws")
+        [ "$ws_name" = "runs" ] && continue
+
+        if [ -n "$COURSE_FILTER" ]; then
+            ws_course=""
+            if [ -f "$ws/workspace.yaml" ]; then
+                ws_course=$(grep "^course:" "$ws/workspace.yaml" 2>/dev/null | awk '{print $2}' | tr -d '"')
+            fi
+            if [ "$ws_course" != "$COURSE_FILTER" ]; then
+                continue
+            fi
+        fi
+
+        TO_DELETE+=("$ws")
+    done
+else
+    # Legacy: search flat workspaces by prefix
+    for ws in "$WORKSPACES_DIR"/${AGENT_ID}_*; do
+        [ -d "$ws" ] || continue
+
+        ws_name=$(basename "$ws")
+
+        # If course filter specified, check if workspace belongs to that course
+        if [ -n "$COURSE_FILTER" ]; then
+            # Read course from workspace.yaml or workspace.json
+            ws_course=""
+            if [ -f "$ws/workspace.yaml" ]; then
+                ws_course=$(grep "^course:" "$ws/workspace.yaml" 2>/dev/null | awk '{print $2}' | tr -d '"')
+            elif [ -f "$ws/workspace.json" ]; then
+                ws_course=$(grep '"course"' "$ws/workspace.json" 2>/dev/null | sed 's/.*: *"\([^"]*\)".*/\1/')
+            fi
+
+            if [ "$ws_course" != "$COURSE_FILTER" ]; then
+                continue
+            fi
+        fi
+
+        TO_DELETE+=("$ws")
+    done
+fi
+
+if [ ${#TO_DELETE[@]} -eq 0 ]; then
+    if [ -n "$COURSE_FILTER" ]; then
+        echo "No workspaces found for '$AGENT_ID' in course '$COURSE_FILTER'."
+    else
+        echo "No workspaces found for '$AGENT_ID'."
+    fi
+    exit 0
+fi
+
+echo "Workspaces to delete:"
+for ws in "${TO_DELETE[@]}"; do
+    echo "  - $(basename "$ws")"
+done
+echo ""
+
+read -p "Delete ${#TO_DELETE[@]} workspace(s)? (y/N) " -n 1 -r
+echo
+
+if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+    echo "Aborted."
+    exit 0
+fi
+
+for ws in "${TO_DELETE[@]}"; do
+    rm -rf "$ws"
+done
+
+echo "Cleared ${#TO_DELETE[@]} workspace(s)."

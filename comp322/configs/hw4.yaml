@@ -1,0 +1,51 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 4
+assignment_name: "hw4"
+display_name: "Minimum Spanning Tree (Boruvka)"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "11"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 4  # 3 correctness + 1 performance
+  total_points: 100
+  timeout_seconds: 300
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "src/main/java/edu/rice/comp322/boruvka/parallel/ParBoruvka.java"
+  - path: "src/main/java/edu/rice/comp322/boruvka/parallel/ParComponent.java"
+  - path: "src/main/java/edu/rice/comp322/boruvka/parallel/ParEdge.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  classes:
+    - "edu.rice.comp322.BoruvkaCorrectnessTest"
+    - "edu.rice.comp322.BoruvkaPerformanceTest"
+
+# =============================================================================
+# BUILD
+# =============================================================================
+build:
+  tool: "maven"
+  javaagent: "src/main/resources/hjlib-elog-aedancullen-master-d2108184ec-1.jar"
+
+# =============================================================================
+# HJLIB
+# =============================================================================
+source_dir: "hw4-charlielockyer-rice"
+uses_hjlib: true

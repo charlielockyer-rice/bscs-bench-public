@@ -1,0 +1,17 @@
+#
+# trace17.txt - Process fg builtin command (one stopped job)
+#
+/bin/echo tsh> ./mystop 4
+./mystop 4
+
+SLEEP 2
+TSTP
+
+/bin/echo tsh> jobs
+jobs
+
+/bin/echo tsh> fg %1
+fg %1
+
+/bin/echo tsh> quit
+quit

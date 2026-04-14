@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+"""
+reset-workspaces — Reset agent workspaces to their initial git state
+
+Resets workspaces by running git reset --hard to the initial commit,
+cleaning all untracked/ignored files, and removing cache files.
+
+Usage:
+    bin/reset-workspaces                   # All workspaces (with confirmation)
+    bin/reset-workspaces comp140           # Only COMP 140 workspaces
+    bin/reset-workspaces comp140_circles   # Exact workspace name
+    bin/reset-workspaces --force           # Skip confirmation
+"""
+
+import os
+import re
+import subprocess
+import sys
+from pathlib import Path
+
+# Shared utilities
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _lib import PROJECT_ROOT, WORKSPACES_DIR, discover_workspaces as _discover_workspaces, model_slug
+
+# Cache files to remove on workspace reset
+CACHE_FILES = [
+    "attempts.json", "last_grade.json", "last_stream.json",
+    "last_messages.json", "last_perf.json", "submission.json",
+]
+
+
+def reset_workspace(ws_path):
+    """Reset a workspace to its initial git commit state."""
+    if not (ws_path / ".git").exists():
+        raise RuntimeError("Not a git repo")
+
+    initial = subprocess.run(
+        ["git", "rev-list", "--max-parents=0", "HEAD"],
+        cwd=str(ws_path), capture_output=True, text=True,
+    )
+    if initial.returncode != 0:
+        raise RuntimeError(f"git rev-list failed: {initial.stderr.strip()}")
+    commit = initial.stdout.strip()
+
+    if not re.match(r'^[0-9a-f]{40}$', commit, re.IGNORECASE):
+        raise RuntimeError(f"Invalid commit hash: {commit}")
+
+    subprocess.run(
+        ["git", "reset", "--hard", commit],
+        cwd=str(ws_path), capture_output=True, check=True,
+    )
+
+    subprocess.run(
+        ["git", "clean", "-fdx"],
+        cwd=str(ws_path), capture_output=True, check=True,
+    )
+
+    # Most cache files are gitignored (cleaned by -fdx), but submission.json is not
+    for name in CACHE_FILES:
+        f = ws_path / name
+        if f.exists():
+            f.unlink()
+
+
+def discover_workspaces(filter_arg=None, model_dir=None):
+    """Find workspaces matching filter. Returns list of (name, path, course) tuples."""
+    ws_dicts = _discover_workspaces(course_filter=filter_arg, model_dir=model_dir)
+    return [(ws["id"], Path(ws["dir"]), ws["course"]) for ws in ws_dicts]
+
+
+def main():
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Reset agent workspaces to initial git state",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    parser.add_argument("filter", nargs="?", default=None,
+                        help="Course name (e.g., comp140) or exact workspace name")
+    parser.add_argument("--force", action="store_true",
+                        help="Skip confirmation prompt")
+    parser.add_argument("--model-dir", default=None,
+                        help="Model directory name under workspaces/ (e.g., 'claude-opus-4-6')")
+    parser.add_argument("--model", default=None,
+                        help="Model name — auto-derives model directory via model_slug()")
+    args = parser.parse_args()
+
+    active_model_dir = args.model_dir or (model_slug(args.model) if args.model else None)
+
+    workspaces = discover_workspaces(args.filter, model_dir=active_model_dir)
+    if not workspaces:
+        label = f" matching '{args.filter}'" if args.filter else ""
+        print(f"No workspaces found{label}.")
+        return 1
+
+    print(f"Will reset {len(workspaces)} workspace(s) to initial state:")
+    for name, _, course in workspaces:
+        print(f"  {name} ({course})")
+    print()
+
+    if not args.force:
+        try:
+            answer = input("Proceed? [y/N] ").strip().lower()
+        except (EOFError, KeyboardInterrupt):
+            print()
+            return 1
+        if answer != "y":
+            print("Aborted.")
+            return 0
+
+    ok = 0
+    fail = 0
+    for i, (name, ws_path, course) in enumerate(workspaces, 1):
+        print(f"  [{i}/{len(workspaces)}] {name}...", end="  ", flush=True)
+        try:
+            reset_workspace(ws_path)
+            print("OK")
+            ok += 1
+        except Exception as e:
+            print(f"FAIL: {e}")
+            fail += 1
+
+    print()
+    print(f"Done: {ok} reset, {fail} failed")
+    return 1 if fail else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,88 @@
+assignment_number: 7
+assignment_name: "NP-Completeness Reductions"
+display_name: "HW7: NP-Completeness Reductions"
+course: "comp382"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+problems:
+  - number: 1
+    name: "Efficient Recruiting"
+    points: 25
+    parts:
+      - part: "1"
+        points: 25
+        description: "Show Vertex Cover ≤_p Efficient Recruiting"
+        rubric:
+          - "Correct reduction construction: 7pts"
+          - "Forward direction (VC → ER): 5pts"
+          - "Backward direction (ER → VC): 5pts"
+          - "Polynomial time construction: 3pts"
+          - "Clarity and rigor: 5pts"
+
+  - number: 2
+    name: "Plot Fulfillment"
+    points: 25
+    parts:
+      - part: "1"
+        points: 25
+        description: "Show Hitting Set ≤_p Plot Fulfillment"
+        rubric:
+          - "Layered graph construction: 7pts"
+          - "Thematic element set definition: 3pts"
+          - "Forward direction (path → hitting set): 5pts"
+          - "Backward direction (hitting set → path): 5pts"
+          - "Polynomial time construction: 2pts"
+          - "Clarity and rigor: 3pts"
+
+  - number: 3
+    name: "Path Selection"
+    points: 25
+    parts:
+      - part: "1"
+        points: 25
+        description: "Show Independent Set ≤_p Path Selection"
+        rubric:
+          - "Complete directed graph construction: 5pts"
+          - "Path definition from incident edges: 5pts"
+          - "Key observation: shared vertex iff edge exists: 5pts"
+          - "Forward direction (IS → PS): 3pts"
+          - "Backward direction (PS → IS): 3pts"
+          - "Polynomial time: 2pts"
+          - "Clarity and rigor: 2pts"
+
+  - number: 4
+    name: "Half 3-SAT Satisfiability"
+    points: 25
+    parts:
+      - part: "1"
+        points: 25
+        description: "Show 3-SAT ≤_p Half 3-SAT"
+        rubric:
+          - "Construction with auxiliary variable y: 4pts"
+          - "T and F clause definitions: 3pts"
+          - "Correct clause counts (m + m + 2m = 4m): 3pts"
+          - "Forward direction (satisfiable → exactly half): 5pts"
+          - "Backward direction (half → satisfiable, both y cases): 7pts"
+          - "Polynomial time construction: 1pt"
+          - "Clarity and rigor: 2pts"
+
+topics:
+  - "NP-Completeness"
+  - "Polynomial-Time Reductions"
+  - "Vertex Cover"
+  - "Hitting Set"
+  - "Independent Set"
+  - "3-SAT"
+
+grading_notes:
+  critical_errors:
+    - "Reducing in wrong direction (new problem → known hard): automatic 0"
+    - "Missing one direction of the iff proof: max 60%"
+    - "Incorrect construction: max 30% (for partial understanding)"
+  common_mistakes:
+    - "Confusing reduction direction"
+    - "Proving only one direction of the equivalence"
+    - "Not showing the reduction is polynomial time"
+    - "Informal arguments where formal proof is needed"

@@ -1,0 +1,37 @@
+# COMP 321 Docker Compose
+# Usage: WORKSPACE=./factors docker compose run --rm comp321 make
+#
+# Note: Security constraints (mem_limit, cpus) match runner.py for consistency.
+# docker-compose is for interactive use; runner.py enforces these for automated tests.
+
+services:
+  comp321:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Security constraints - must match runner.py
+    mem_limit: 4g
+    cpus: 2
+    volumes:
+      # Mount workspace (WORKSPACE env var is required)
+      - ${WORKSPACE:?WORKSPACE environment variable must be set}:/workspace
+    working_dir: /workspace
+    environment:
+      - CPATH=/opt/csapp
+      - LIBRARY_PATH=/opt/csapp
+
+  # Variant with network access for proxy project
+  comp321-network:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    mem_limit: 4g
+    cpus: 2
+    volumes:
+      - ${WORKSPACE:?WORKSPACE environment variable must be set}:/workspace
+    working_dir: /workspace
+    environment:
+      - CPATH=/opt/csapp
+      - LIBRARY_PATH=/opt/csapp
+    # Network enabled for proxy project
+    network_mode: bridge

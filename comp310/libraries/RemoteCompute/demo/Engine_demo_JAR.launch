@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.ui.externaltools.ProgramLaunchConfigurationType">
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_LOCATION" value="${system_path:java}"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_TOOL_ARGUMENTS" value="-Djava.security.manager=allow -cp provided/remoteCompute/demo/engine_demo.jar${system_property:path.separator}.&#13;&#10;staff.engine.controller.EngineController"/>
+    <stringAttribute key="org.eclipse.ui.externaltools.ATTR_WORKING_DIRECTORY" value="${project_loc}/bin"/>
+</launchConfiguration>

@@ -1,0 +1,187 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 6
+assignment_name: "config_file_parser"
+display_name: "Config File Parser"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "17"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 104
+  total_points: 85
+  timeout_seconds: 30
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  # Parse classes (focus of HW6)
+  - path: "skeleton_code/src/main/rice/parse/ConfigFile.java"
+  - path: "skeleton_code/src/main/rice/parse/ConfigFileParser.java"
+  - path: "skeleton_code/src/main/rice/parse/InvalidConfigException.java"
+  # Main integration class (focus of HW6)
+  - path: "skeleton_code/src/main/rice/Main.java"
+  # PyObj classes (from HW2, included in skeleton)
+  - path: "skeleton_code/src/main/rice/obj/APyObj.java"
+  - path: "skeleton_code/src/main/rice/obj/AIterablePyObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyBoolObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyIntObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyFloatObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyCharObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyListObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PySetObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyTupleObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyDictObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyStringObj.java"
+  # Node classes (from HW3-4, included in skeleton)
+  - path: "skeleton_code/src/main/rice/node/APyNode.java"
+  - path: "skeleton_code/src/main/rice/node/AIterablePyNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyBoolNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyIntNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyFloatNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyListNode.java"
+  - path: "skeleton_code/src/main/rice/node/PySetNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyTupleNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyStringNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyDictNode.java"
+  # Generator classes (from HW3-4, included in skeleton)
+  - path: "skeleton_code/src/main/rice/basegen/BaseSetGenerator.java"
+  - path: "skeleton_code/src/main/rice/concisegen/ConciseSetGenerator.java"
+  # Test framework classes (from HW5, included in skeleton)
+  - path: "skeleton_code/src/main/rice/test/TestCase.java"
+  - path: "skeleton_code/src/main/rice/test/TestResults.java"
+  - path: "skeleton_code/src/main/rice/test/Tester.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  classes:
+    - "test.rice.parse.ConfigFileTest"
+    - "test.rice.parse.ConfigFileTestPrivate"
+    - "test.rice.parse.ConfigFileParserTest"
+    - "test.rice.parse.ConfigFileParserTestPrivate"
+    - "test.rice.MainTest"
+    - "test.rice.MainTestPrivate"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # ConfigFileTest (1.5 pts)
+  testGetFuncName: 0.5
+  testGetNumRand: 0.5
+  testGetNodes: 0.5
+
+  # ConfigFileParserTest (71.5 pts)
+  testConfigNotJSON: 0.5
+  testMissingFname: 0.3
+  testMissingTypes: 0.3
+  testMissingExDomain: 0.3
+  testMissingRanDomain: 0.3
+  testMissingNumRand: 0.3
+  testFnameNotString: 0.2
+  testTypesNotArray: 0.2
+  testTypesNotArrayOfStrings: 0.2
+  testExDomainNotArray: 0.2
+  testExDomainNotArrayOfStrings: 0.2
+  testRanDomainNotArray: 0.2
+  testRanDomainNotArrayOfStrings: 0.2
+  testNumRandNotInt: 0.2
+  testNumRandNegative: 0.4
+  testSpuriousParenTypes: 0.5
+  testSpuriousSpaceTypes: 0.5
+  testSpuriousParenExDomain: 0.3
+  testSpuriousSpaceExDomain: 0.5
+  testSpuriousParenRanDomain: 0.2
+  testSpuriousSpaceRanDomain: 0.5
+  testSpuriousParenEndTypes: 0.5
+  testSpuriousParenEndExDomain: 0.3
+  testSpuriousParenEndRanDomain: 0.2
+  testMissingParenTypes: 0.5
+  testMissingParenExDomain: 0.3
+  testMissingParenRanDomain: 0.2
+  testSpuriousColonTypes: 0.5
+  testSpuriousColonExDomain: 0.3
+  testSpuriousColonRanDomain: 0.2
+  testSpuriousColonEndTypes: 0.5
+  testSpuriousColonEndExDomain: 0.3
+  testSpuriousColonEndRanDomain: 0.2
+  testLowerBoundExceedsUpperBoundExDomain: 0.5
+  testLowerBoundExceedsUpperBoundRanDomain: 0.5
+  testNonIntegerRangeExDomain: 0.5
+  testNonIntegerRangeRanDomain: 0.5
+  testBoolValGreaterThanOne: 0.5
+  testBoolValNegative: 0.5
+  testIntValDecimal: 0.5
+  testExDomainTooShort: 1.0
+  testExDomainMissingInternal: 1.0
+  testExDomainTooLong: 1.0
+  testExDomainExtraInternal: 1.0
+  testRanDomainTooShort: 1.0
+  testRanDomainMissingInternal: 1.0
+  testRanDomainTooLong: 1.0
+  testRanDomainExtraInternal: 1.0
+  testUnexpectedType: 0.5
+  testNegativeDomainDict: 0.5
+  testNegativeDomainList: 0.5
+  testNegativeDomainDictArray: 0.5
+  testNegativeDomainListArray: 0.5
+  testFloatDomainIntArray: 0.5
+  testFloatDomainDictArray: 0.5
+  testFloatDomainListArray: 0.5
+  testParseNumRandom: 0.5
+  testParseFname: 0.5
+  testParseTypesOneBool: 1.0
+  testParseTypesOneInt: 1.0
+  testParseTypesOneFloat: 1.0
+  testParseTypesOneString: 1.5
+  testParseTypesOneList: 1.5
+  testParseTypesOneTup: 1.5
+  testParseTypesOneSet: 1.5
+  testParseTypesOneDict: 2.0
+  testParseTypesMultipleSimple: 1.0
+  testParseTypesMultipleNested: 2.0
+  testParseExDomainOneBool: 1.0
+  testParseExDomainOneInt: 1.0
+  testParseExDomainOneIntExplicitVals: 1.0
+  testParseExDomainOneFloat: 1.0
+  testParseExDomainOneFloatExplicitVals: 1.0
+  testParseExDomainOneString: 1.0
+  testParseExDomainOneList: 1.0
+  testParseExDomainOneTup: 1.0
+  testParseExDomainOneSet: 1.0
+  testParseExDomainOneDict: 2.0
+  testParseExDomainMultipleSimple: 2.0
+  testParseExDomainMultipleNested: 2.0
+  testParseRanDomainOneBool: 0.5
+  testParseRanDomainOneInt: 0.5
+  testParseRanDomainOneFloat: 0.5
+  testParseRanDomainOneString: 1.0
+  testParseRanDomainOneList: 1.0
+  testParseRanDomainOneListExplicitVals: 1.0
+  testParseRanDomainOneTup: 1.0
+  testParseRanDomainOneSet: 1.0
+  testParseRanDomainOneDict: 2.0
+  testParseRanDomainMultipleSimple: 2.0
+  testParseRanDomainMultipleNested: 2.0
+  testParseRemoveDups: 1.0
+  testParseExDomainNestedDicts: 2.0
+
+  # MainTest (12.0 pts)
+  testAllFilesCorrect: 1.0
+  testOnlyOneCase: 1.0
+  testMultipleCasesNonDeterministic: 2.0
+  testMultipleCasesDeterministic: 2.0
+  testMultipleCasesRandomness: 3.0
+  testMultipleCasesComplex: 3.0

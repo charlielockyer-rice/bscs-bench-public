@@ -1,0 +1,126 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 3
+assignment_name: "pynode_iterables"
+display_name: "PyNode Iterables"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "17"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 114
+  total_points: 66
+  timeout_seconds: 10
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  # Node classes (new for HW3 - agent creates these)
+  - path: "skeleton_code/src/main/rice/node/APyNode.java"
+  - path: "skeleton_code/src/main/rice/node/AIterablePyNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyListNode.java"
+  - path: "skeleton_code/src/main/rice/node/PySetNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyTupleNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyStringNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyDictNode.java"
+  # Generator (new for HW3)
+  - path: "skeleton_code/src/main/rice/basegen/BaseSetGenerator.java"
+  # PyObj classes (from HW2, included in skeleton)
+  - path: "skeleton_code/src/main/rice/obj/APyObj.java"
+  - path: "skeleton_code/src/main/rice/obj/AIterablePyObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyBoolObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyIntObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyFloatObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyCharObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyListObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PySetObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyTupleObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyDictObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyStringObj.java"
+  # Test framework stubs (included in skeleton)
+  - path: "skeleton_code/src/main/rice/test/TestCase.java"
+  - path: "skeleton_code/src/main/rice/test/TestResults.java"
+  - path: "skeleton_code/src/main/rice/test/Tester.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  classes:
+    - "test.rice.node.PyListNodeTest"
+    - "test.rice.node.PySetNodeTest"
+    - "test.rice.node.PyTupleNodeTest"
+    - "test.rice.node.PyStringNodeTest"
+    - "test.rice.node.PyDictNodeTest"
+    - "test.rice.node.MixedIterablePyNodeTest"
+    - "test.rice.basegen.BaseSetGeneratorTest"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # PyListNodeTest (8.5 pts)
+  testGetExDomain: 0.1
+  testGetRanDomain: 0.1
+  testGetLeftChild: 0.1
+  testGetRightChild: 0.1
+  testGenExValsEmptyOnly: 0.1
+  testGenExValsOneLenOne: 0.2
+  testGenExValsTwoLenOne: 0.3
+  testGenExValsFourLenTwo: 0.5
+  testGenExValsManyLenTwo: 0.5
+  testGenExValsMultLensContig: 0.5
+  testGenExValsMultLensNonContig: 1.0
+  testGenExValsNested: 1.0
+  testGenRandValEmpty: 0.2
+  testGenRandValOneLenOne: 0.2
+  testGenRandValTwoLenOne: 0.2
+  testGenRandValFourLenTwo: 0.2
+  testGenRandValManyLenTwo: 0.2
+  testGenRandValMultLensContig: 1.0
+  testGenRandValMultLensNonContig: 1.0
+  testGenRandValNested: 1.0
+
+  # PySetNodeTest (11.5 pts)
+  testGenExValsEmpty: 0.1
+  testGenExValsOneLenTwo: 0.5
+  testGenExValsThreeLenTwo: 0.5
+  testGenExValsLenMultLensContig: 1.5
+
+  # PyStringNodeTest (8.0 pts)
+  testGenExValsLenMultLens: 1.5
+  testGenRandValMultLens: 1.0
+
+  # MixedIterablePyNodeTest (3.0 pts)
+  testGenExValsDeeplyNested: 1.5
+  testGenRandValDeeplyNested: 1.5
+
+  # BaseSetGeneratorTest (12.5 pts)
+  testExOneArgOneOption: 0.2
+  testExOneArgSimple: 0.2
+  testExOneArgNested: 0.2
+  testExMultipleArgsOneOptionEach: 0.5
+  testExMultipleArgsSimple: 1.0
+  testExMultipleArgsNested: 1.0
+  testRandZeroTests: 0.2
+  testRandNumTestsNonZero: 0.3
+  testRandOneArgOneOption: 0.2
+  testRandOneArgSimpleAll: 0.2
+  testRandOneArgSimpleSubset: 0.5
+  testRandOneArgNested: 0.5
+  testRandMultipleArgsOneOptionEach: 0.5
+  testRandMultipleArgsSimple: 1.0
+  testRandMultipleArgsNested: 1.0
+  testFullNoOverlapDeterministic: 1.5
+  testFullNoOverlap: 1.5
+  testFullSomeOverlap: 2.0

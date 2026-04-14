@@ -1,0 +1,32 @@
+assignment_number: 3
+assignment_name: "Graph Algorithms"
+display_name: "HW3: Graph Algorithms"
+course: "comp182"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+llm_grading:
+  rubric: "solutions/homework3_rubric.md"
+
+problems:
+  - number: 1
+    name: "BFS and DFS"
+    points: 35
+    description: "Breadth-first and depth-first search analysis"
+
+  - number: 2
+    name: "Shortest Paths"
+    points: 35
+    description: "Shortest path algorithms and proofs"
+
+  - number: 3
+    name: "Graph Connectivity"
+    points: 30
+    description: "Connected components and paths"
+
+topics:
+  - "Breadth-First Search"
+  - "Depth-First Search"
+  - "Shortest Paths"
+  - "Graph Connectivity"

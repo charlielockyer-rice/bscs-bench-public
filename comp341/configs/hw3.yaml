@@ -1,0 +1,44 @@
+assignment_number: 3
+assignment_name: "stroke_prediction"
+display_name: "Stroke Prediction"
+language: python
+description: "Predicting cerebrovascular accidents using classification methods"
+
+source_files:
+  - path: "solution.py"
+    functions:
+      - load_cva_data
+      - prepare_features_labels
+      - impute_missing_values
+      - train_decision_tree
+      - one_hot_encode
+      - scale_features
+      - find_optimal_depth
+      - get_feature_importances
+      - train_logistic_regression
+      - train_lda
+      - compare_regularization
+
+data_files:
+  - source: "data/hw3/CVA.csv"
+
+grading:
+  total_points: 100
+  total_tests: 13
+  timeout_seconds: 60
+  max_attempts: 10
+
+test_points:
+  test_load_data: 5
+  test_feature_label_split: 5
+  test_imputation: 5
+  test_decision_tree_numeric: 10
+  test_one_hot_encoding: 5
+  test_decision_tree_all_features: 10
+  test_scaling_effect: 5
+  test_optimal_depth_range: 10
+  test_feature_importances: 10
+  test_logistic_regression: 10
+  test_logistic_regularization: 10
+  test_lda_accuracy: 10
+  test_lda_coefficients: 5

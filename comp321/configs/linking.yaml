@@ -1,0 +1,71 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 3
+assignment_name: "linking"
+display_name: "Linking (readjcf)"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: c
+runtime:
+  version: "gcc13"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 27
+  total_points: 76
+  timeout_seconds: 30
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "readjcf/readjcf.c"
+    functions:
+      - print_jcf_constant
+      - process_jcf_header
+      - process_jcf_constant_pool
+      - destroy_jcf_constant_pool
+      - process_jcf_body
+      - process_jcf_interfaces
+      - process_jcf_attributes
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  executable: "readjcf/readjcf"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  test_empty_class: 3
+  test_single_field: 3
+  test_single_method: 3
+  test_single_interface_method: 3
+  test_export_single_field: 3
+  test_exporting_single_method: 3
+  test_private_methods: 3
+  test_protected_methods: 3
+  test_depends: 3
+  test_exports: 3
+  test_no_flags: 3
+  test_ints_and_floats: 3
+  test_doubles_and_longs: 3
+  test_empty_strings: 1
+  test_implement_interface: 2
+  test_large_class: 2
+  test_empty_file: 1
+  test_bad_magic: 1
+  test_extra_bytes: 1
+  test_truncated: 1
+  test_pool_error: 1
+  test_bad_tag: 1
+  test_bad_indices: 1
+  test_format_strings: 1

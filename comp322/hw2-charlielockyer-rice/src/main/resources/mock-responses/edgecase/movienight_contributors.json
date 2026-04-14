@@ -1,0 +1,24 @@
+[
+  {
+    "login": "mattyoho",
+    "id": 17549,
+    "node_id": "MDQ6VXNlcjE3NTQ5",
+    "avatar_url": "https://avatars.githubusercontent.com/u/17549?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/mattyoho",
+    "html_url": "https://github.com/mattyoho",
+    "followers_url": "https://api.github.com/users/mattyoho/followers",
+    "following_url": "https://api.github.com/users/mattyoho/following{/other_user}",
+    "gists_url": "https://api.github.com/users/mattyoho/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/mattyoho/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/mattyoho/subscriptions",
+    "organizations_url": "https://api.github.com/users/mattyoho/orgs",
+    "repos_url": "https://api.github.com/users/mattyoho/repos",
+    "events_url": "https://api.github.com/users/mattyoho/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/mattyoho/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false,
+    "contributions": 111
+  }
+]

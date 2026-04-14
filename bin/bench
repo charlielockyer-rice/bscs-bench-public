@@ -1,0 +1,199 @@
+#!/usr/bin/env bun
+/**
+ * Benchmark CLI
+ *
+ * Usage:
+ *   bin/bench <workspace_id> [options]
+ *
+ * Examples:
+ *   bin/bench my_workspace
+ *   bin/bench my_workspace --model "openai/gpt-4o"
+ *   bin/bench my_workspace --verbose
+ */
+
+import * as fs from "fs"
+import * as path from "path"
+import { run, saveResult } from "../agent/runner"
+import { config } from "../agent/config"
+import { detectCourseLanguage, readWorkspaceInfo } from "../agent/index"
+import { resolveWorkspaceDir } from "../agent/workspacePaths"
+
+// Parse arguments
+const args = process.argv.slice(2)
+
+if (args.length < 1 || args.includes("--help") || args.includes("-h")) {
+  console.log(`
+BSCS Bench - Agent Evaluation Framework
+
+Usage:
+  bin/bench <workspace_id> [options]
+
+Arguments:
+  workspace_id    Name of the workspace folder (under workspaces/)
+
+Options:
+  --model, -m         OpenRouter model ID (default: ${config.defaultModel})
+  --max-steps         Maximum agent steps (default: ${config.defaultMaxSteps})
+  --continue-on-fail  Re-prompt agent if it stops without passing all tests
+  --max-continuations Max re-prompts when using --continue-on-fail (default: 3)
+  --verbose, -v       Enable verbose output
+  --save              Save results to workspace/.benchmark/
+  --results-dir DIR   Write agent_output.json, agent_trace.jsonl, etc. to DIR
+  --help, -h          Show this help
+
+Examples:
+  bin/bench my_workspace
+  bin/bench my_workspace --model "openai/gpt-4o"
+  bin/bench my_workspace --verbose --continue-on-fail
+  bin/bench my_workspace --save
+
+Popular OpenRouter models:
+  mistralai/devstral-2512:free    (free, default)
+  qwen/qwen3-coder:free           (free)
+  z-ai/glm-4.5-air:free           (free)
+  openai/gpt-oss-120b:free        (free)
+
+Environment:
+  OPENROUTER_API_KEY    Required. Get one at https://openrouter.ai/keys
+
+Config:
+  Default model can be changed in agent/config.ts
+`)
+  process.exit(args.includes("--help") || args.includes("-h") ? 0 : 1)
+}
+
+// Parse positional arguments
+const workspaceId = args[0]
+
+// Parse options
+let model = config.defaultModel
+let maxSteps = config.defaultMaxSteps
+let verbose = false
+let save = false
+let continueOnFail = false
+let maxContinuations = 3
+let resultsDir: string | undefined
+
+for (let i = 1; i < args.length; i++) {
+  const arg = args[i]
+  if (arg === "--model" || arg === "-m") {
+    model = args[++i]
+  } else if (arg === "--max-steps") {
+    maxSteps = parseInt(args[++i])
+  } else if (arg === "--continue-on-fail") {
+    continueOnFail = true
+  } else if (arg === "--max-continuations") {
+    maxContinuations = parseInt(args[++i])
+  } else if (arg === "--verbose" || arg === "-v") {
+    verbose = true
+  } else if (arg === "--save") {
+    save = true
+  } else if (arg === "--results-dir") {
+    resultsDir = args[++i]
+  } else if (!arg.startsWith("-")) {
+    // Legacy: second positional argument is model
+    model = arg
+  }
+}
+
+// Check for API key
+if (!process.env.OPENROUTER_API_KEY) {
+  console.error("Error: OPENROUTER_API_KEY environment variable is required")
+  console.error("Get an API key at: https://openrouter.ai/keys")
+  process.exit(1)
+}
+
+// Get workspace directory
+const projectRoot = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..")
+const workspacesDir = path.join(projectRoot, "workspaces")
+
+let workspaceDir: string
+try {
+  workspaceDir = resolveWorkspaceDir(workspacesDir, workspaceId)
+} catch {
+  console.error(`Error: Workspace not found: ${workspaceId}`)
+  process.exit(1)
+}
+
+// Read workspace info
+const workspaceInfo = readWorkspaceInfo(workspaceDir)
+
+let language: "python" | "java" = "python"
+let moduleNumber = 1
+let courseName = "unknown"
+
+if (workspaceInfo) {
+  moduleNumber = workspaceInfo.module_number
+  courseName = workspaceInfo.course
+
+  // Derive courseDir from course name
+  const courseDir = path.join(projectRoot, courseName)
+  if (fs.existsSync(courseDir)) {
+    language = detectCourseLanguage(courseDir, moduleNumber)
+  }
+}
+
+const unitName = language === "java" ? "Homework" : "Module"
+
+// Run benchmark
+console.log(`Starting benchmark...`)
+console.log(`  Workspace: ${workspaceId}`)
+if (moduleNumber > 0) {
+  console.log(`  ${unitName}: ${moduleNumber}`)
+  console.log(`  Course: ${courseName} (${language})`)
+}
+console.log(`  Model: ${model}`)
+console.log()
+
+try {
+  const result = await run({
+    workspaceId,
+    model,
+    maxSteps,
+    verbose,
+    continueOnFail,
+    maxContinuations,
+    resultsDir: resultsDir ? path.resolve(resultsDir) : undefined,
+  })
+
+  console.log(`\nBenchmark Complete`)
+  console.log(`================`)
+  console.log(`Steps: ${result.steps}`)
+  console.log(`Duration: ${(result.durationMs / 1000).toFixed(1)}s`)
+  console.log(`Status: ${result.success ? "Success" : "Failed"}`)
+
+  if (result.error) {
+    console.log(`Error: ${result.error}`)
+  }
+
+  if (result.tokens) {
+    const { inputTokens, outputTokens, totalTokens, cost, costIsComplete } = result.tokens
+    console.log(`Tokens: ${totalTokens.toLocaleString()} (${inputTokens.toLocaleString()}↑ ${outputTokens.toLocaleString()}↓)`)
+    if (costIsComplete === false) {
+      if (cost === 0) {
+        console.log(`Cost: unavailable (provider did not report cost)`)
+      } else {
+        console.log(`Cost: $${cost.toFixed(4)} (partial)`)
+      }
+    } else {
+      console.log(`Cost: $${cost.toFixed(4)}`)
+    }
+  }
+
+  if (save) {
+    const filepath = saveResult(result)
+    console.log(`\nResults saved to: ${filepath}`)
+  }
+
+  // Print final response summary
+  if (result.text && verbose) {
+    console.log(`\nAgent Response:`)
+    console.log(`--------------`)
+    console.log(result.text.slice(0, 500) + (result.text.length > 500 ? "..." : ""))
+  }
+
+  process.exit(result.success ? 0 : 1)
+} catch (error) {
+  console.error(`\nBenchmark failed:`, error instanceof Error ? error.message : error)
+  process.exit(1)
+}

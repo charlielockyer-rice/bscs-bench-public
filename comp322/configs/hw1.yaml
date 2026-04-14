@@ -1,0 +1,51 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 1
+assignment_name: "hw1"
+display_name: "Functional Trees & Java Streams"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "11"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 13
+  total_points: 100
+  timeout_seconds: 120
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "src/main/java/edu/rice/comp322/solutions/TreeSolutions.java"
+  - path: "src/main/java/edu/rice/comp322/solutions/StreamSolutions.java"
+  - path: "src/main/java/edu/rice/comp322/provided/trees/Tree.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  classes:
+    - "edu.rice.comp322.trees.TreeSolutionsTest"
+    - "edu.rice.comp322.streams.StreamSolutionsTest"
+
+# =============================================================================
+# BUILD
+# =============================================================================
+build:
+  tool: "maven"
+  javaagent: "src/main/resources/hjlib-elog-aedancullen-master-d2108184ec-1.jar"
+
+# =============================================================================
+# HJLIB
+# =============================================================================
+source_dir: "hw1-charlielockyer-rice"
+uses_hjlib: true

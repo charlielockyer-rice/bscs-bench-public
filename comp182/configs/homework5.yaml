@@ -1,0 +1,33 @@
+assignment_number: 5
+assignment_name: "Asymptotic Analysis"
+display_name: "HW5: Asymptotic Analysis"
+course: "comp182"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+llm_grading:
+  rubric: "solutions/homework5_rubric.md"
+
+problems:
+  - number: 1
+    name: "Big-O Notation"
+    points: 35
+    description: "Prove Big-O relationships"
+
+  - number: 2
+    name: "Omega and Theta"
+    points: 35
+    description: "Big-Omega and Big-Theta notation"
+
+  - number: 3
+    name: "Algorithm Analysis"
+    points: 30
+    description: "Analyze time complexity of algorithms"
+
+topics:
+  - "Big-O Notation"
+  - "Big-Omega Notation"
+  - "Big-Theta Notation"
+  - "Time Complexity"
+  - "Space Complexity"

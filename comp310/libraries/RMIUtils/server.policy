@@ -1,0 +1,42 @@
+/* DO NOT EDIT */
+/*
+Refs:
+https://docs.oracle.com/en/java/javase/19/security/permissions-jdk1.html
+To find additional information on allowed options for a permission, see the Javadocs for the specified class.
+*/
+
+grant {
+/* 
+  permission java.security.AllPermission; 
+
+  */
+/*  */
+  permission java.util.PropertyPermission "*", "read,write";
+  
+  permission java.util.PropertyPermission "user.dir", "read";
+  permission java.util.PropertyPermission "java.rmi.server.hostname", "read,write";
+  permission java.util.PropertyPermission "java.rmi.server.codebase", "read,write";
+  permission java.net.SocketPermission "*:*", "accept,listen,connect,resolve";
+
+  permission java.util.PropertyPermission "java.rmi.server.useCodebaseOnly", "read,write";
+  permission java.util.PropertyPermission "java.rmi.server.logCalls", "write";
+  permission java.net.NetPermission "getNetworkInformation";
+  permission java.lang.RuntimePermission "getClassLoader";
+  permission java.net.URLPermission "http://*:*/-", "*:*";
+  permission java.io.FilePermission "${user.dir}", "read";
+  
+  /* For Owlmaps only: */
+  permission java.lang.RuntimePermission "accessDeclaredMembers";
+  permission java.lang.RuntimePermission "loadLibrary.*";
+  permission java.io.FilePermission "../libs/owlMaps/javacef/lib/-", "read";
+  permission java.lang.reflect.ReflectPermission "suppressAccessChecks";
+  permission java.awt.AWTPermission "replaceKeyboardFocusManager";
+/*  */
+/*
+  permission java.io.FilePermission "C:\Users\swong\Documents\My Classes\Comp310\S23\Code\ChatApp_FinalProject_solution\libs\owlMaps\javacef\lib\win64\-", "read";
+
+permission java.lang.RuntimePermission "loadLibrary.jawt";"loadLibrary.chrome_elf"
+  permission java.net.URLPermission "http://168.5.57.172:2001/staffImpl/messages/chatroom/extra/impl/microMVC/images/Earth.png", "*:*";
+*/
+};
+

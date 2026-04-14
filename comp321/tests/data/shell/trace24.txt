@@ -1,0 +1,8 @@
+#
+# trace24.txt - Tests PATH search with normal path containing current dir
+#
+/bin/echo tsh> myspin 1
+myspin 1
+
+/bin/echo tsh> quit
+quit

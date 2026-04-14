@@ -1,0 +1,36 @@
+# Exclude project directories (mounted at runtime)
+factors/
+count/
+linking/
+shell/
+malloc/
+proxy/
+
+# Reference solutions
+reference_solutions/
+
+# Build artifacts
+*.o
+*.a
+*.so
+
+# Test artifacts
+tests/
+configs/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Documentation
+*.pdf
+*.md
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+*.iml
+.vscode/

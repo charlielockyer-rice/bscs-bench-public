@@ -1,0 +1,2758 @@
+#!/usr/bin/env python3
+"""
+bench-cli v2 — assignment-attempt runner for BSCS Bench.
+
+Active commands:
+    bin/bench-cli run assignment <assignment_id> --model-key <model>
+    bin/bench-cli run course <course> --model-key <model>
+    bin/bench-cli run corpus --model-key <model>
+    bin/bench-cli phase submit-grade <assignment_id> --model-key <model>
+    bin/bench-cli phase llm-grade <assignment_id> --model-key <model>
+    bin/bench-cli phase code-review <assignment_id> --model-key <model>
+    bin/bench-cli summarize model <model_key>
+    bin/bench-cli export model <model_key>
+
+Canonical state:
+    state/models/<model_key>/assignments/<assignment_id>/
+      manifest.json
+      attempts/<attempt_id>/
+        attempt.json
+        agent_output.json
+        agent_trace.jsonl
+        grade_result.json
+        grade_result.txt
+        llm_grade_result_<model>.md
+        code_review_result_<model>.md
+        solution.diff
+        solution/
+        workspace.bundle
+"""
+
+import argparse
+import json
+import os
+import shlex
+import shutil
+import subprocess
+import sys
+import tarfile
+import tempfile
+import time
+from datetime import datetime
+from functools import partial
+from pathlib import Path
+
+# Shared utilities
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from _lib import (
+    PROJECT_ROOT, WORKSPACES_DIR,
+    load_dotenv,
+    extract_metrics, parse_all_llm_grade_summaries as _parse_all_llm,
+    parse_all_code_review_summaries as _parse_all_reviews,
+    extract_grade_data,
+    format_grade_summary,
+    make_agent_env,
+    model_slug,
+)
+from _assignment_registry import get_assignment, list_assignments as _list_registry_assignments
+from _state_store import (
+    append_run_attempt,
+    attempt_root as _attempt_root,
+    create_attempt,
+    create_run,
+    finalize_attempt,
+    finalize_run,
+    load_active_attempt,
+    load_attempt,
+    load_manifest,
+    list_manifests,
+    promote_attempt,
+    save_attempt,
+    update_phase,
+    utc_now_iso,
+)
+from _workspace_snapshot import (
+    copy_snapshot_file,
+    create_workspace_snapshot,
+    current_head_commit,
+)
+from _prompts import (
+    build_solver_prompt as _build_solver_prompt,
+    build_grading_prompt,
+    build_code_review_prompt,
+    format_grade_output,
+    format_code_review_output,
+    parse_grade_score,
+    parse_code_review_score,
+    read_attempt_solution_diff,
+    read_attempt_solution_files,
+    read_attempt_text,
+    validate_writeup_text,
+    find_rubric_file,
+)
+
+# ── Model defaults ────────────────────────────────────────────────────────────
+# Claude Code:  opus, sonnet, haiku
+# Codex CLI:    gpt-5.3-codex, gpt-5.4, gpt-5-codex, gpt-4.1, gpt-4.1-mini
+# Gemini CLI:   flash (default), pro, gemini-2.5-pro, gemini-2.5-flash
+# Opencode CLI: minimax/minimax-m2.5, openrouter/anthropic/claude-sonnet-4-5
+# Cursor CLI:   claude-sonnet-4.5, gpt-5.2, claude-sonnet-4.5-thinking
+DEFAULT_MODEL_CLAUDE = "opus"
+DEFAULT_MODEL_CODEX = "gpt-5.3-codex"
+DEFAULT_MODEL_GEMINI = "flash"
+DEFAULT_MODEL_OPENCODE = "minimax/minimax-m2.5"
+DEFAULT_MODEL_CURSOR = "claude-sonnet-4.5"
+CURSOR_BINARY = "agent"  # Cursor CLI installs as 'agent'; may conflict with other tools
+
+# ── Sandbox configuration ────────────────────────────────────────────────────
+
+SANDBOX_SUPPORTED_AGENTS = {"claude", "codex", "gemini"}
+SANDBOX_TEMPLATE_BASE_IMAGES = {
+    "claude": "docker/sandbox-templates:claude-code",
+    "codex": "docker/sandbox-templates:codex",
+    "gemini": "docker/sandbox-templates:gemini",
+}
+AGENT_ENV_VARS = {
+    "claude": ["ANTHROPIC_API_KEY"],
+    "codex": ["OPENAI_API_KEY"],
+    "gemini": ["GEMINI_API_KEY", "GOOGLE_API_KEY"],
+    "opencode": ["OPENCODE_CONFIG_CONTENT", "OPENROUTER_API_KEY"],
+    "cursor": ["CURSOR_API_KEY"],
+}
+
+# Force unbuffered output so progress is visible when piped through tee
+print = partial(print, flush=True)
+
+GRADE_CMD = str(PROJECT_ROOT / "bin" / "grade")
+RESET_CMD = str(PROJECT_ROOT / "bin" / "reset-workspaces")
+
+# Load .env
+load_dotenv()
+
+
+# ── Dependency resolution ────────────────────────────────────────────────────
+
+def resolve_depends_on(ws, active_model_dir=None):
+    """If a workspace has a depends_on field, copy the dependency's solution files
+    into previous_solution/ and commit them so the agent can reference prior work.
+
+    The depends_on value is a workspace name (e.g., "comp310_hw02"). We look for
+    that workspace in the workspaces/ directory and copy all files that differ
+    from its initial git commit (i.e., the agent's work product).
+
+    When active_model_dir is set, look inside the model directory first.
+
+    Returns True if dependency was resolved, False if skipped (no depends_on),
+    raises RuntimeError on failure.
+    """
+    depends_on = ws.get("depends_on", "")
+    if not depends_on:
+        return False
+
+    ws_dir = Path(ws["dir"])
+    dep_dir = None
+
+    # When running in a model directory, look for dependency there first
+    if active_model_dir:
+        candidate = WORKSPACES_DIR / active_model_dir / depends_on
+        if candidate.is_dir():
+            dep_dir = candidate
+
+    # Fall back to flat workspace directory
+    if dep_dir is None:
+        dep_dir = WORKSPACES_DIR / depends_on
+
+    # If the exact depends_on workspace doesn't exist, try matching the current
+    # workspace's suffix (e.g., comp310_hw2 → comp310_hw2_codex when running
+    # with --suffix codex). This keeps the chain within the same agent's workspaces.
+    if not dep_dir.is_dir():
+        ws_name = ws["id"]  # e.g., comp310_hw3_codex
+        # Extract suffix: everything after the depends_on-style base name
+        # ws_name = comp310_hw3_codex, depends_on base pattern = comp310_hw{N}
+        # We want the suffix from the CURRENT workspace and apply it to depends_on
+        base_name = f"{ws.get('course', '')}_{ws.get('name', '')}"
+        if ws_name.startswith(base_name) and len(ws_name) > len(base_name):
+            suffix = ws_name[len(base_name):]  # e.g., "_codex"
+            suffixed_dep = WORKSPACES_DIR / (depends_on + suffix)
+            if suffixed_dep.is_dir():
+                dep_dir = suffixed_dep
+
+    if not dep_dir.is_dir():
+        raise RuntimeError(
+            f"Dependency workspace not found: {depends_on} "
+            f"(referenced by {ws['id']}). Expected at: {dep_dir}"
+        )
+
+    # Check if previous_solution/ already exists (idempotent — skip if already done)
+    prev_dir = ws_dir / "previous_solution"
+    if prev_dir.is_dir() and any(prev_dir.iterdir()):
+        return True
+
+    # Get the list of files changed by the agent in the dependency workspace.
+    # We diff against the initial commit (first commit with no parents) to find
+    # all files the agent produced or modified.
+    dep_git = dep_dir / ".git"
+    if not dep_git.is_dir():
+        raise RuntimeError(
+            f"Dependency workspace {depends_on} is not a git repository. "
+            f"Cannot determine which files were changed by the agent."
+        )
+
+    # Find the initial commit hash
+    result = subprocess.run(
+        ["git", "rev-list", "--max-parents=0", "HEAD"],
+        cwd=str(dep_dir), capture_output=True, text=True,
+    )
+    if result.returncode != 0 or not result.stdout.strip():
+        raise RuntimeError(
+            f"Failed to find initial commit in {depends_on}: {result.stderr.strip()}"
+        )
+    initial_commit = result.stdout.strip().splitlines()[0]
+
+    # Get list of files changed since initial commit
+    result = subprocess.run(
+        ["git", "diff", "--name-only", initial_commit, "HEAD"],
+        cwd=str(dep_dir), capture_output=True, text=True,
+    )
+    changed_files = [f for f in result.stdout.strip().splitlines() if f.strip()]
+
+    if not changed_files:
+        # No changes in dependency — nothing to copy
+        print(f"  Note: Dependency {depends_on} has no agent changes to copy")
+        return False
+
+    # Copy changed files into previous_solution/
+    prev_dir.mkdir(parents=True, exist_ok=True)
+    copied = 0
+    for fname in changed_files:
+        src = dep_dir / fname
+        if not src.exists() or not src.is_file():
+            continue
+        # Skip workspace metadata and cache files
+        if fname in ("workspace.yaml", "workspace.json", "last_grade.json",
+                     "last_stream.json", "last_perf.json", "attempts.json",
+                     "submission.json", ".gitignore", ".mcp.json",
+                     "opencode.json") \
+                or fname.startswith(".codex/") \
+                or fname.startswith(".cursor/") \
+                or fname.startswith(".gemini/") \
+                or fname.startswith(".opencode/") \
+                or fname.startswith("previous_solution/"):
+            continue
+        dest = prev_dir / fname
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(str(src), str(dest))
+        copied += 1
+
+    if copied == 0:
+        print(f"  Note: No solution files to copy from {depends_on}")
+        return False
+
+    # Commit previous_solution/ into the workspace git repo so the agent sees it
+    ws_git = ws_dir / ".git"
+    if ws_git.is_dir():
+        subprocess.run(
+            ["git", "add", "previous_solution/"],
+            cwd=str(ws_dir), capture_output=True,
+        )
+        subprocess.run(
+            ["git", "commit", "-m", f"Add previous solution from {depends_on}"],
+            cwd=str(ws_dir), capture_output=True,
+        )
+
+    print(f"  Copied {copied} file(s) from {depends_on} into previous_solution/")
+    return True
+
+
+# ── Agent runners ─────────────────────────────────────────────────────────────
+
+AGENT_LABELS = {"claude": "Claude Code CLI", "codex": "Codex CLI", "gemini": "Gemini CLI", "opencode": "Opencode CLI", "cursor": "Cursor CLI"}
+
+
+def _mcp_server_config(ws_dir):
+    """Return the MCP server config dict shared by all agents."""
+    return {
+        "mcpServers": {
+            "bscs-bench": {
+                "command": str(PROJECT_ROOT / "bin" / "bscs-mcp"),
+                "args": ["--workspace", str(ws_dir)],
+            }
+        }
+    }
+
+
+def _write_mcp_config(ws_dir):
+    """Write .mcp.json into workspace so Claude Code uses MCP test/submit tools."""
+    mcp_path = Path(ws_dir) / ".mcp.json"
+    mcp_path.write_text(json.dumps(_mcp_server_config(ws_dir), indent=2))
+    return mcp_path
+
+
+def _remove_mcp_config(ws_dir):
+    """Remove .mcp.json from workspace directory."""
+    mcp_path = Path(ws_dir) / ".mcp.json"
+    mcp_path.unlink(missing_ok=True)
+
+
+def _write_codex_mcp_config(ws_dir, ws_id):
+    """Register MCP server with Codex CLI globally for test/submit tools.
+
+    Uses `codex mcp add` to write to ~/.codex/config.toml (always trusted),
+    avoiding the per-project trust requirement that breaks ephemeral workspaces.
+    A unique server name per workspace (bscs-{ws_id}) prevents parallel runs
+    from overwriting each other's entry in the global config.
+    """
+    bscs_mcp = str(PROJECT_ROOT / "bin" / "bscs-mcp")
+    server_name = f"bscs-{ws_id}"
+    subprocess.run(
+        ["codex", "mcp", "add", server_name, "--", bscs_mcp, "--workspace", str(ws_dir)],
+        capture_output=True, text=True,
+    )
+
+
+def _remove_codex_mcp_config(ws_id):
+    """Remove MCP server from Codex CLI global config."""
+    server_name = f"bscs-{ws_id}"
+    subprocess.run(
+        ["codex", "mcp", "remove", server_name],
+        capture_output=True, text=True,
+    )
+
+
+def _write_gemini_mcp_config(ws_dir):
+    """Write .gemini/settings.json with MCP config for test/submit tools."""
+    gemini_dir = Path(ws_dir) / ".gemini"
+    gemini_dir.mkdir(exist_ok=True)
+    (gemini_dir / "settings.json").write_text(
+        json.dumps(_mcp_server_config(ws_dir), indent=2))
+
+
+def _remove_gemini_mcp_config(ws_dir):
+    """Remove Gemini workspace config and any session artifacts it created."""
+    shutil.rmtree(Path(ws_dir) / ".gemini", ignore_errors=True)
+
+
+def _write_opencode_mcp_config(ws_dir):
+    """Write opencode.json with MCP config and auto-approve permissions.
+
+    Returns the previous file contents, or None if the file did not exist.
+    """
+    oc_path = Path(ws_dir) / "opencode.json"
+    previous_text = None
+    config = {}
+
+    try:
+        previous_text = oc_path.read_text()
+    except FileNotFoundError:
+        previous_text = None
+    if previous_text is not None:
+        try:
+            existing_config = json.loads(previous_text)
+        except json.JSONDecodeError:
+            existing_config = None
+        if isinstance(existing_config, dict):
+            config = dict(existing_config)
+
+    mcp = dict(config.get("mcp") or {})
+    mcp["bscs-bench"] = {
+        "type": "local",
+        "command": [
+            str(PROJECT_ROOT / "bin" / "bscs-mcp"),
+            "--workspace", str(ws_dir),
+        ],
+        "enabled": True,
+    }
+    config["mcp"] = mcp
+    config["permission"] = {"*": "allow"}
+    oc_path.write_text(json.dumps(config, indent=2))
+    return previous_text
+
+
+def _restore_opencode_mcp_config(ws_dir, previous_text):
+    """Restore the prior opencode.json contents after a benchmark run."""
+    oc_path = Path(ws_dir) / "opencode.json"
+    if previous_text is None:
+        oc_path.unlink(missing_ok=True)
+    else:
+        oc_path.write_text(previous_text)
+
+
+def _opencode_auth_file():
+    """Return the expected persistent auth.json location for Opencode."""
+    data_home = os.environ.get("XDG_DATA_HOME")
+    if data_home:
+        return Path(data_home) / "opencode" / "auth.json"
+    return Path.home() / ".local" / "share" / "opencode" / "auth.json"
+
+
+def _opencode_is_configured(env=None):
+    """Return True when Opencode has either inline config or persistent auth."""
+    env = env or os.environ
+    if env.get("OPENCODE_CONFIG_CONTENT"):
+        return True
+    return _opencode_auth_file().exists()
+
+
+def _require_opencode(model=None):
+    """Fail fast with actionable errors before invoking the Opencode CLI."""
+    if shutil.which("opencode") is None:
+        raise FileNotFoundError(
+            "opencode not installed; install it with `npm i -g opencode-ai`"
+        )
+    if model and "/" not in model:
+        raise ValueError(
+            f"invalid Opencode model '{model}'; expected provider/model "
+            "(for example openrouter/anthropic/claude-sonnet-4-5)"
+        )
+    if not _opencode_is_configured():
+        raise FileNotFoundError(
+            "opencode auth not configured; run `opencode auth login` or set "
+            "OPENCODE_CONFIG_CONTENT"
+        )
+
+
+def _write_cursor_mcp_config(ws_dir):
+    """Write .cursor/mcp.json with MCP config for test/submit tools."""
+    cursor_dir = Path(ws_dir) / ".cursor"
+    cursor_dir.mkdir(exist_ok=True)
+    (cursor_dir / "mcp.json").write_text(
+        json.dumps(_mcp_server_config(ws_dir), indent=2))
+
+
+def _remove_cursor_mcp_config(ws_dir):
+    """Remove .cursor/mcp.json from workspace; rmdir .cursor/ only if empty."""
+    mcp_path = Path(ws_dir) / ".cursor" / "mcp.json"
+    mcp_path.unlink(missing_ok=True)
+    try:
+        (Path(ws_dir) / ".cursor").rmdir()
+    except OSError:
+        pass  # directory not empty or already gone
+
+
+def _extract_claude_result(trace_file, output_file):
+    """Extract the final 'result' event from a Claude stream-json trace file."""
+    with open(trace_file, "rb") as f:
+        f.seek(0, 2)
+        size = f.tell()
+        read_size = min(size, 65536)
+        f.seek(size - read_size)
+        tail = f.read().decode("utf-8", errors="replace")
+
+    for line in reversed(tail.splitlines()):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            data = json.loads(line)
+            if data.get("type") == "result":
+                output_file.write_text(json.dumps(data, indent=2))
+                return
+        except json.JSONDecodeError:
+            continue
+
+
+# ── Sandbox mode ─────────────────────────────────────────────────────────────
+
+_checked_sandbox_templates = set()
+_checked_sandboxes = set()
+
+
+def _sandbox_template_name(agent):
+    return f"bscs-sandbox-template-{agent}"
+
+
+def _sandbox_name(agent, results_dir):
+    suffix = "".join(
+        ch if ch.isalnum() or ch in "-_" else "-"
+        for ch in results_dir.name.lower()
+    ).strip("-")
+    return f"bscs-{agent}-{suffix or 'run'}"
+
+
+def _sandbox_env(agent, extra_env=None):
+    env = {"BSCS_TEST_EXECUTION_MODE": "host"}
+
+    for var in AGENT_ENV_VARS.get(agent, []):
+        val = os.environ.get(var, "")
+        if val:
+            env[var] = val
+
+    clear_netid = os.environ.get("CLEAR_NETID", "")
+    if clear_netid:
+        env["CLEAR_NETID"] = clear_netid
+
+    if extra_env:
+        env.update(extra_env)
+
+    return env
+
+
+def _build_sandbox_exec_cmd(sandbox_name, workdir, inner_cmd, env_vars=None):
+    cmd = [
+        "docker", "sandbox", "exec",
+        "-i",
+        "-w", str(workdir),
+    ]
+    for key, value in (env_vars or {}).items():
+        cmd.extend(["-e", f"{key}={value}"])
+    cmd.append(sandbox_name)
+    cmd.extend(inner_cmd)
+    return cmd
+
+
+def _sandbox_exists(name):
+    result = subprocess.run(
+        ["docker", "sandbox", "ls", "--json"],
+        capture_output=True, text=True,
+    )
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "docker sandbox ls failed")
+    try:
+        payload = json.loads(result.stdout or "{}")
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(f"docker sandbox ls returned invalid JSON: {exc}") from exc
+    return any(vm.get("name") == name for vm in payload.get("vms", []))
+
+
+def _ensure_sandbox_template(agent):
+    if agent not in SANDBOX_TEMPLATE_BASE_IMAGES:
+        raise RuntimeError(f"Docker Sandbox is not supported for agent '{agent}'")
+
+    name = _sandbox_template_name(agent)
+    if name in _checked_sandbox_templates:
+        return name
+
+    inspect = subprocess.run(
+        ["docker", "images", "-q", name],
+        capture_output=True, text=True,
+    )
+    if inspect.returncode == 0 and inspect.stdout.strip():
+        _checked_sandbox_templates.add(name)
+        return name
+
+    dockerfile = PROJECT_ROOT / "docker" / "Dockerfile.agent-sandbox"
+    print(f"  Building sandbox template {name}...")
+    build = subprocess.run(
+        [
+            "docker", "build",
+            "-t", name,
+            "--build-arg", f"BASE_IMAGE={SANDBOX_TEMPLATE_BASE_IMAGES[agent]}",
+            "-f", str(dockerfile),
+            str(PROJECT_ROOT),
+        ],
+        capture_output=True, text=True,
+    )
+    if build.returncode != 0:
+        details = build.stderr.strip() or build.stdout.strip() or "docker build failed"
+        raise RuntimeError(f"failed to build sandbox template {name}: {details}")
+
+    _checked_sandbox_templates.add(name)
+    return name
+
+
+def _ensure_sandbox(agent, sandbox_name):
+    if sandbox_name in _checked_sandboxes:
+        return sandbox_name
+    if _sandbox_exists(sandbox_name):
+        _checked_sandboxes.add(sandbox_name)
+        return sandbox_name
+
+    template_name = _ensure_sandbox_template(agent)
+    print(f"  Creating sandbox {sandbox_name}...")
+    create = subprocess.run(
+        [
+            "docker", "sandbox", "create",
+            "--name", sandbox_name,
+            "--load-local-template",
+            "--template", template_name,
+            agent,
+            str(PROJECT_ROOT),
+        ],
+        capture_output=True, text=True,
+    )
+    if create.returncode != 0:
+        details = create.stderr.strip() or create.stdout.strip() or "docker sandbox create failed"
+        raise RuntimeError(f"failed to create sandbox {sandbox_name}: {details}")
+
+    _checked_sandboxes.add(sandbox_name)
+    return sandbox_name
+
+
+def run_agent_in_sandbox(ws, result_dir, agent, model, sandbox_name, timeout=None,
+                         use_system_prompt=False, reasoning=None):
+    """Run any supported agent CLI inside a reusable Docker Sandbox."""
+    if agent not in SANDBOX_SUPPORTED_AGENTS:
+        raise RuntimeError(f"Docker Sandbox is not supported for agent '{agent}'")
+
+    prompt = _build_solver_prompt(ws)
+    trace_file = result_dir / "agent_trace.jsonl"
+    output_file = result_dir / "agent_output.json"
+    stderr_file = result_dir / "agent_stderr.log"
+    extra_env = {}
+
+    if agent == "claude":
+        inner_cmd = [
+            "claude", "-p", "--verbose",
+            "--output-format", "stream-json",
+            "--model", model,
+            "--dangerously-skip-permissions",
+            "--add-dir", str(PROJECT_ROOT),
+            "--allowedTools",
+            "Read", "Write", "Edit", "Glob", "Grep", "Bash(git:*)",
+            "mcp__bscs-bench__test", "mcp__bscs-bench__submit",
+        ]
+        _write_mcp_config(ws["dir"])
+        if use_system_prompt:
+            inner_cmd.extend(["--system-prompt", prompt])
+            prompt = "Begin working on the assignment."
+    elif agent == "codex":
+        bscs_mcp = str(PROJECT_ROOT / "bin" / "bscs-mcp")
+        codex_cmd = _build_codex_exec_cmd(model=model, reasoning=reasoning)
+        shell_cmd = (
+            "trap 'codex mcp remove bscs-bench >/dev/null 2>&1 || true' EXIT; "
+            f"codex mcp add bscs-bench -- {shlex.quote(bscs_mcp)} "
+            f"--workspace {shlex.quote(ws['dir'])} >/dev/null 2>&1 || exit 1; "
+            "exec " + " ".join(shlex.quote(part) for part in codex_cmd)
+        )
+        inner_cmd = ["sh", "-lc", shell_cmd]
+    else:
+        inner_cmd = [
+            "gemini",
+            "--output-format", "stream-json",
+            "--model", model,
+            "--yolo",
+            "--prompt", "",
+            "--include-directories", str(PROJECT_ROOT),
+        ]
+        _write_gemini_mcp_config(ws["dir"])
+        if use_system_prompt:
+            system_md_path = Path(ws["dir"]) / ".bscs-system-prompt.md"
+            system_md_path.write_text(prompt)
+            extra_env["GEMINI_SYSTEM_MD"] = str(system_md_path)
+            prompt = "Begin working on the assignment."
+
+    sandbox_cmd = _build_sandbox_exec_cmd(
+        sandbox_name,
+        ws["dir"],
+        inner_cmd,
+        env_vars=_sandbox_env(agent, extra_env),
+    )
+
+    start_time = time.monotonic()
+
+    try:
+        with open(trace_file, "w") as trace, open(stderr_file, "w") as err:
+            proc = subprocess.Popen(
+                sandbox_cmd,
+                stdin=subprocess.PIPE,
+                stdout=trace,
+                stderr=err,
+                text=True,
+                env=make_agent_env(),
+            )
+            try:
+                proc.communicate(input=prompt, timeout=timeout)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.communicate()
+                timeout_data = {"error": "timeout", "timeout_seconds": timeout}
+                output_file.write_text(json.dumps(timeout_data))
+                raise
+    finally:
+        if agent == "claude":
+            _remove_mcp_config(ws["dir"])
+        elif agent == "gemini":
+            _remove_gemini_mcp_config(ws["dir"])
+            (Path(ws["dir"]) / ".bscs-system-prompt.md").unlink(missing_ok=True)
+
+    elapsed_ms = int((time.monotonic() - start_time) * 1000)
+
+    if agent == "claude":
+        _extract_claude_result(trace_file, output_file)
+    elif agent == "codex":
+        _build_codex_metrics(trace_file, output_file, elapsed_ms, model)
+    else:
+        saw_result = _build_gemini_metrics(trace_file, output_file, elapsed_ms, model)
+        if proc.returncode == 0 and not saw_result:
+            _mark_agent_run_error(
+                output_file,
+                "gemini missing final result event",
+                stderr_file=stderr_file,
+            )
+
+    if proc.returncode != 0:
+        _mark_agent_run_error(
+            output_file,
+            f"{agent} exit code {proc.returncode}",
+            stderr_file=stderr_file,
+            exit_code=proc.returncode,
+        )
+    elif agent == "claude" and not output_file.exists():
+        _mark_agent_run_error(
+            output_file,
+            "claude missing final result event",
+            stderr_file=stderr_file,
+        )
+
+    return proc.returncode
+
+
+def _detect_quota_exhaustion(stderr_file):
+    """Check if an agent run failed due to API quota exhaustion.
+
+    Returns the error message if quota is exhausted, None otherwise.
+    """
+    if not stderr_file or not Path(stderr_file).exists():
+        return None
+    try:
+        text = Path(stderr_file).read_text(errors="replace")[-4096:]  # last 4KB
+        patterns = [
+            "QUOTA_EXHAUSTED",
+            "TerminalQuotaError",
+            "quota will reset",
+            "exhausted your capacity",
+            "rate_limit_exceeded",
+            "billing hard limit",
+            "insufficient_quota",
+        ]
+        for pattern in patterns:
+            if pattern.lower() in text.lower():
+                # Extract a useful message
+                for line in text.splitlines():
+                    if pattern.lower() in line.lower():
+                        return line.strip()[:200]
+                return f"Quota exhausted (matched: {pattern})"
+        return None
+    except OSError:
+        return None
+
+
+def _mark_agent_run_error(output_file, reason, stderr_file=None, exit_code=None):
+    """Write or augment agent_output.json so failed runs are resumable."""
+    data = {}
+    if output_file.exists():
+        try:
+            loaded = json.loads(output_file.read_text())
+            if isinstance(loaded, dict):
+                data = loaded
+        except (json.JSONDecodeError, OSError):
+            pass
+
+    if reason and not data.get("error"):
+        data["error"] = reason
+    data["is_error"] = True
+
+    if exit_code is not None:
+        data["exit_code"] = exit_code
+
+    if stderr_file:
+        try:
+            stderr_path = Path(stderr_file)
+            size = stderr_path.stat().st_size
+            # Read only the tail to avoid loading multi-MB crash logs.
+            with open(stderr_path, "rb") as f:
+                if size > 2000:
+                    f.seek(-2000, 2)
+                raw = f.read().decode("utf-8", errors="replace").strip()
+            if raw:
+                data["stderr_tail"] = raw[-2000:]
+        except (FileNotFoundError, OSError):
+            pass
+
+    output_file.write_text(json.dumps(data, indent=2))
+
+
+def run_claude(ws, result_dir, model, timeout=None, use_system_prompt=False):
+    """Run Claude Code on a workspace.
+
+    Uses stream-json output to capture full conversation trace (agent_trace.jsonl)
+    while extracting the final result event as agent_output.json for metrics.
+    timeout: seconds, or None for no limit.
+
+    If use_system_prompt is True, the solver prompt is passed via --system-prompt,
+    replacing CC's default system prompt with the custom bscs-bench prompt.
+    Otherwise the solver prompt is piped via stdin alongside CC's default system
+    prompt.
+    """
+    prompt = _build_solver_prompt(ws)
+    cmd = [
+        "claude", "-p", "--verbose",
+        "--output-format", "stream-json",
+        "--model", model,
+        "--dangerously-skip-permissions",
+        "--add-dir", str(PROJECT_ROOT),
+        # Allowlist tools: agent must use MCP test/submit instead of shell commands.
+        # Bash(git:*) retained so the agent can check git status/diff if needed.
+        "--allowedTools",
+        "Read", "Write", "Edit", "Glob", "Grep", "Bash(git:*)",
+        "mcp__bscs-bench__test", "mcp__bscs-bench__submit",
+    ]
+
+    if use_system_prompt:
+        cmd.extend(["--system-prompt", prompt])
+        prompt = "Begin working on the assignment."
+
+    trace_file = result_dir / "agent_trace.jsonl"
+    output_file = result_dir / "agent_output.json"
+    stderr_file = result_dir / "agent_stderr.log"
+
+    # Write MCP config so the agent uses test/submit tools instead of shell commands
+    _write_mcp_config(ws["dir"])
+
+    try:
+        with open(trace_file, "w") as trace, open(stderr_file, "w") as err:
+            proc = subprocess.Popen(
+                cmd, stdin=subprocess.PIPE, stdout=trace, stderr=err,
+                text=True, cwd=ws["dir"], env=make_agent_env(),
+            )
+            try:
+                proc.communicate(input=prompt, timeout=timeout)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.communicate()
+                timeout_data = {"error": "timeout", "timeout_seconds": timeout}
+                output_file.write_text(json.dumps(timeout_data))
+                raise
+    finally:
+        _remove_mcp_config(ws["dir"])
+
+    _extract_claude_result(trace_file, output_file)
+
+    if proc.returncode != 0:
+        _mark_agent_run_error(
+            output_file,
+            f"claude exit code {proc.returncode}",
+            stderr_file=stderr_file,
+            exit_code=proc.returncode,
+        )
+    elif not output_file.exists():
+        _mark_agent_run_error(
+            output_file,
+            "claude missing final result event",
+            stderr_file=stderr_file,
+        )
+
+    return proc.returncode
+
+
+def _build_codex_exec_cmd(model=None, reasoning=None):
+    """Build Codex CLI command for strict non-interactive workspace runs."""
+    cmd = [
+        "codex",
+        "-a", "never",
+        "exec",
+        "--json",
+        "--sandbox", "workspace-write",
+    ]
+    if model:
+        cmd.extend(["-m", model])
+    if reasoning:
+        cmd.extend(["-c", f'model_reasoning_effort="{reasoning}"'])
+    cmd.append("-")  # read prompt from stdin
+    return cmd
+
+
+def run_codex(ws, result_dir, model=None, timeout=None, reasoning=None):
+    """Run OpenAI Codex CLI on a workspace. Prompt is piped via stdin.
+
+    Uses --json output to capture full conversation trace (agent_trace.jsonl)
+    then aggregates turn.completed events into agent_output.json for metrics.
+    timeout: seconds, or None for no limit.
+    """
+    prompt = _build_solver_prompt(ws)
+    cmd = _build_codex_exec_cmd(model=model, reasoning=reasoning)
+
+    trace_file = result_dir / "agent_trace.jsonl"
+    output_file = result_dir / "agent_output.json"
+    stderr_file = result_dir / "agent_stderr.log"
+
+    # Register MCP server globally so the agent uses test/submit tools.
+    # Use a per-workspace server name to avoid race conditions when running
+    # multiple Codex processes in parallel (they share ~/.codex/config.toml).
+    ws_id = ws.get("id") or Path(ws["dir"]).name or "workspace"
+    try:
+        _write_codex_mcp_config(ws["dir"], ws_id)
+    except TypeError:
+        # Backward-compatible with tests or older call sites that monkeypatch
+        # the helper with the historical one-argument signature.
+        _write_codex_mcp_config(ws["dir"])
+
+    start_time = time.monotonic()
+
+    try:
+        with open(trace_file, "w") as trace, open(stderr_file, "w") as err:
+            proc = subprocess.Popen(
+                cmd, stdin=subprocess.PIPE, stdout=trace, stderr=err,
+                text=True, cwd=ws["dir"], env=make_agent_env(),
+            )
+            try:
+                proc.communicate(input=prompt, timeout=timeout)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.communicate()
+                timeout_data = {"error": "timeout", "timeout_seconds": timeout}
+                output_file.write_text(json.dumps(timeout_data))
+                raise
+    finally:
+        try:
+            _remove_codex_mcp_config(ws_id)
+        except TypeError:
+            _remove_codex_mcp_config()
+
+    elapsed_ms = int((time.monotonic() - start_time) * 1000)
+
+    # Aggregate Codex JSONL events into a synthetic agent_output.json
+    # compatible with extract_metrics() in _lib.py
+    _build_codex_metrics(trace_file, output_file, elapsed_ms, model)
+
+    if proc.returncode != 0:
+        _mark_agent_run_error(
+            output_file,
+            f"codex exit code {proc.returncode}",
+            stderr_file=stderr_file,
+            exit_code=proc.returncode,
+        )
+
+    return proc.returncode
+
+
+def _build_codex_metrics(trace_file, output_file, elapsed_ms, model=None):
+    """Scan Codex JSONL trace and build agent_output.json.
+
+    Codex wraps the entire session in a single "turn", so turn.completed
+    always reports 1.  To get a metric comparable to Claude Code's num_turns
+    (which counts per tool round-trip), we count item.completed events where
+    item.type == "agent_message" — each one corresponds to a separate
+    Responses API call within the turn.
+
+    Produces a structure compatible with extract_metrics():
+      total_cost_usd, usage{input_tokens, output_tokens}, duration_ms,
+      num_turns, session_id, modelUsage{model: {costUSD}}.
+    """
+    total_input = 0
+    total_output = 0
+    num_turns = 0       # Codex "turns" (always 1)
+    num_api_calls = 0   # agent_message count — comparable to CC turns
+    session_id = ""
+    model_id = model or ""
+
+    with open(trace_file) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+
+            etype = event.get("type", "")
+
+            # Codex emits session.start with session_id
+            if etype == "session.start":
+                session_id = event.get("session_id", session_id)
+
+            # Each agent_message completion = one Responses API call
+            if etype == "item.completed":
+                item = event.get("item") or {}
+                if item.get("type") == "agent_message":
+                    num_api_calls += 1
+
+            # Codex emits turn.completed with aggregate usage for the turn
+            if etype == "turn.completed":
+                num_turns += 1
+                usage = event.get("usage") or {}
+                total_input += int(usage.get("input_tokens", 0))
+                total_output += int(usage.get("output_tokens", 0))
+                # Pick up model from the event if not provided via CLI
+                if not model_id:
+                    model_id = event.get("model", "")
+
+    # Use api_calls as num_turns for apples-to-apples comparison with CC
+    result = {
+        "total_cost_usd": 0,  # Codex doesn't report cost in events
+        "usage": {
+            "input_tokens": total_input,
+            "output_tokens": total_output,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+        },
+        "duration_ms": elapsed_ms,
+        "duration_api_ms": 0,
+        "num_turns": num_api_calls or num_turns,  # prefer api_calls if available
+        "num_codex_turns": num_turns,              # raw Codex turn count (always 1)
+        "session_id": session_id,
+        "modelUsage": {model_id: {"costUSD": 0}} if model_id else {},
+    }
+    if result.get("num_turns", 0) == 0 and not result.get("error"):
+        result["error"] = "codex produced no output"
+        result["is_error"] = True
+    output_file.write_text(json.dumps(result, indent=2))
+
+
+def run_gemini(ws, result_dir, model, timeout=None, use_system_prompt=False):
+    """Run Gemini CLI on a workspace.
+
+    Uses stream-json output to capture full conversation trace (agent_trace.jsonl)
+    while extracting metrics into agent_output.json.
+    timeout: seconds, or None for no limit.
+
+    bench-cli forces headless mode with --prompt "" while still piping the full
+    prompt via stdin, avoiding argv-length issues for large benchmark prompts.
+
+    If use_system_prompt is True, the solver prompt is written to a temp file
+    and passed via the GEMINI_SYSTEM_MD env var, fully replacing Gemini's
+    default system prompt. A minimal user message is piped via stdin instead.
+    """
+    prompt = _build_solver_prompt(ws)
+    cmd = [
+        "gemini",
+        "--output-format", "stream-json",
+        "--model", model,
+        "--yolo",
+        # Force headless mode without putting large prompts on argv.
+        "--prompt", "",
+        "--include-directories", str(PROJECT_ROOT),
+    ]
+
+    trace_file = result_dir / "agent_trace.jsonl"
+    output_file = result_dir / "agent_output.json"
+    stderr_file = result_dir / "agent_stderr.log"
+
+    # Write MCP config so the agent uses test/submit tools
+    _write_gemini_mcp_config(ws["dir"])
+
+    env = make_agent_env()
+    system_md_file = None
+
+    if use_system_prompt:
+        # Write solver prompt to a temp file for GEMINI_SYSTEM_MD
+        system_md_file = tempfile.NamedTemporaryFile(
+            mode="w", suffix=".md", prefix="bscs-bench-system-",
+            dir=ws["dir"], delete=False,
+        )
+        system_md_file.write(prompt)
+        system_md_file.close()
+        env["GEMINI_SYSTEM_MD"] = system_md_file.name
+        prompt = "Begin working on the assignment."
+
+    start_time = time.monotonic()
+
+    try:
+        with open(trace_file, "w") as trace, open(stderr_file, "w") as err:
+            proc = subprocess.Popen(
+                cmd, stdin=subprocess.PIPE, stdout=trace, stderr=err,
+                text=True, cwd=ws["dir"], env=env,
+            )
+            try:
+                proc.communicate(input=prompt, timeout=timeout)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.communicate()
+                timeout_data = {"error": "timeout", "timeout_seconds": timeout}
+                output_file.write_text(json.dumps(timeout_data))
+                raise
+    finally:
+        _remove_gemini_mcp_config(ws["dir"])
+        if system_md_file:
+            try:
+                os.unlink(system_md_file.name)
+            except OSError:
+                pass
+
+    elapsed_ms = int((time.monotonic() - start_time) * 1000)
+
+    # Parse Gemini stream-json trace into agent_output.json
+    saw_result = _build_gemini_metrics(trace_file, output_file, elapsed_ms, model)
+
+    if proc.returncode != 0:
+        _mark_agent_run_error(
+            output_file,
+            f"gemini exit code {proc.returncode}",
+            stderr_file=stderr_file,
+            exit_code=proc.returncode,
+        )
+    elif not saw_result:
+        _mark_agent_run_error(
+            output_file,
+            "gemini missing final result event",
+            stderr_file=stderr_file,
+        )
+
+    return proc.returncode
+
+
+def _build_gemini_metrics(trace_file, output_file, elapsed_ms, model=None):
+    """Parse Gemini stream-json trace and build agent_output.json.
+
+    Gemini's stream-json format emits JSONL events:
+      init     — session metadata (session_id, model)
+      message  — user/assistant message chunks
+      tool_use — tool call requests
+      tool_result — tool outputs
+      error    — non-fatal warnings
+      result   — final outcome with aggregated statistics
+
+    Produces a structure compatible with extract_metrics().
+    """
+    total_input = 0
+    total_output = 0
+    num_turns = 0
+    session_id = ""
+    model_id = model or ""
+    cost_usd = 0.0
+    saw_result = False
+    result_error = None
+
+    with open(trace_file) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+
+            etype = event.get("type", "")
+
+            if etype == "init":
+                session_id = event.get("session_id", session_id)
+                if not model_id:
+                    model_id = event.get("model", model_id)
+
+            # Count tool_use events as turns — each tool call is one agent action.
+            # Gemini doesn't emit assistant message events for tool-use-only turns,
+            # so counting messages would yield 0 turns even after many tool calls.
+            if etype == "tool_use":
+                num_turns += 1
+
+            # The result event contains aggregated stats
+            if etype == "result":
+                saw_result = True
+                stats = event.get("stats") or event.get("usage") or {}
+                total_input = int(stats.get("input_tokens", 0))
+                total_output = int(stats.get("output_tokens", 0))
+                cost_usd = float(
+                    stats.get("cost_usd", 0)
+                    or stats.get("totalCost", 0)
+                    or stats.get("total_cost", 0)
+                    or 0
+                )
+                if not session_id:
+                    session_id = event.get("session_id", session_id)
+                # Capture specific error reason when the result indicates failure
+                if event.get("status") == "error":
+                    result_error = event.get("error") or event.get("message") or "error"
+
+    result = {
+        "total_cost_usd": cost_usd,
+        "usage": {
+            "input_tokens": total_input,
+            "output_tokens": total_output,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+        },
+        "duration_ms": elapsed_ms,
+        "duration_api_ms": 0,
+        "num_turns": num_turns,
+        "session_id": session_id,
+        "modelUsage": {model_id: {"costUSD": cost_usd}} if model_id else {},
+    }
+    if result_error:
+        result["error"] = result_error
+    output_file.write_text(json.dumps(result, indent=2))
+    return saw_result
+
+
+def run_opencode(ws, result_dir, model, timeout=None):
+    """Run Opencode CLI on a workspace. Prompt is piped via stdin.
+
+    Uses --format json to capture JSONL trace (agent_trace.jsonl)
+    while extracting metrics into agent_output.json.
+    timeout: seconds, or None for no limit.
+
+    Opencode CLI appends stdin to the positional message in non-TTY mode.
+    Permissions are auto-approved via opencode.json config.
+    """
+    _require_opencode(model)
+
+    prompt = _build_solver_prompt(ws)
+    cmd = [
+        "opencode", "run",
+        "--format", "json",
+        "--model", model,
+    ]
+
+    trace_file = result_dir / "agent_trace.jsonl"
+    output_file = result_dir / "agent_output.json"
+    stderr_file = result_dir / "agent_stderr.log"
+
+    previous_config = _write_opencode_mcp_config(ws["dir"])
+
+    start_time = time.monotonic()
+
+    env = make_agent_env()
+    # Auto-approve all permissions as backup (config also sets this)
+    env["OPENCODE_PERMISSION"] = '{"*":"allow"}'
+
+    try:
+        with open(trace_file, "w") as trace, open(stderr_file, "w") as err:
+            proc = subprocess.Popen(
+                cmd, stdin=subprocess.PIPE, stdout=trace, stderr=err,
+                text=True, cwd=ws["dir"], env=env,
+            )
+            try:
+                proc.communicate(input=prompt, timeout=timeout)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.communicate()
+                timeout_data = {"error": "timeout", "timeout_seconds": timeout}
+                output_file.write_text(json.dumps(timeout_data))
+                raise
+    finally:
+        _restore_opencode_mcp_config(ws["dir"], previous_config)
+
+    elapsed_ms = int((time.monotonic() - start_time) * 1000)
+
+    _build_opencode_metrics(trace_file, output_file, elapsed_ms, model)
+
+    if proc.returncode != 0:
+        _mark_agent_run_error(
+            output_file,
+            f"opencode exit code {proc.returncode}",
+            stderr_file=stderr_file,
+            exit_code=proc.returncode,
+        )
+
+    return proc.returncode
+
+
+def _build_opencode_metrics(trace_file, output_file, elapsed_ms, model=None):
+    """Parse Opencode --format json trace and build agent_output.json.
+
+    Opencode emits JSONL events:
+      step_start  — agent step begins (counted as turns)
+      step_finish — agent step ends (contains cost and token counts)
+      tool_use    — tool call completions
+      text        — assistant text output
+      error       — session errors
+
+    Each step_finish event has part.cost (USD) and part.tokens with
+    input, output, reasoning, and cache.{read, write} counts.
+    """
+    total_input = 0
+    total_output = 0
+    num_turns = 0
+    session_id = ""
+    model_id = model or ""
+    cost_usd = 0.0
+    error_message = ""
+
+    with open(trace_file) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+
+            etype = event.get("type", "")
+
+            if not session_id:
+                session_id = event.get("sessionID", "")
+
+            # Each step_start = one agent turn
+            if etype == "step_start":
+                num_turns += 1
+
+            # step_finish contains cost and token data
+            if etype == "step_finish":
+                part = event.get("part") or {}
+                cost_usd += float(part.get("cost", 0) or 0)
+                tokens = part.get("tokens") or {}
+                total_input += int(tokens.get("input", 0))
+                total_output += int(tokens.get("output", 0))
+
+            # Treat explicit error events as failed runs, even if the CLI exits 0.
+            if etype == "error":
+                err = event.get("error") or {}
+                data = err.get("data") or {}
+                error_message = (
+                    data.get("message")
+                    or err.get("message")
+                    or err.get("name")
+                    or "opencode error"
+                )
+
+    result = {
+        "total_cost_usd": cost_usd,
+        "usage": {
+            "input_tokens": total_input,
+            "output_tokens": total_output,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+        },
+        "duration_ms": elapsed_ms,
+        "duration_api_ms": 0,
+        "num_turns": num_turns,
+        "session_id": session_id,
+        "modelUsage": {model_id: {"costUSD": cost_usd}} if model_id else {},
+    }
+    if error_message:
+        result["error"] = f"opencode error: {error_message}"
+        result["is_error"] = True
+    if result.get("num_turns", 0) == 0 and not result.get("error"):
+        result["error"] = "opencode produced no output"
+        result["is_error"] = True
+    output_file.write_text(json.dumps(result, indent=2))
+
+
+def run_cursor(ws, result_dir, model, timeout=None):
+    """Run Cursor CLI on a workspace.
+
+    Uses stream-json output to capture full conversation trace (agent_trace.jsonl)
+    while extracting metrics into agent_output.json.
+    timeout: seconds, or None for no limit.
+
+    Prompt is piped via stdin. --force auto-approves file changes,
+    --approve-mcps auto-approves MCP servers, --trust skips workspace
+    confirmation in headless mode.
+    """
+    prompt = _build_solver_prompt(ws)
+    cmd = [
+        CURSOR_BINARY,
+        "-p",
+        "--output-format", "stream-json",
+        "--model", model,
+        "--force",
+        "--approve-mcps",
+        "--trust",
+    ]
+
+    trace_file = result_dir / "agent_trace.jsonl"
+    output_file = result_dir / "agent_output.json"
+    stderr_file = result_dir / "agent_stderr.log"
+
+    _write_cursor_mcp_config(ws["dir"])
+
+    start_time = time.monotonic()
+
+    try:
+        with open(trace_file, "w") as trace, open(stderr_file, "w") as err:
+            proc = subprocess.Popen(
+                cmd, stdin=subprocess.PIPE, stdout=trace, stderr=err,
+                text=True, cwd=ws["dir"], env=make_agent_env(),
+            )
+            try:
+                proc.communicate(input=prompt, timeout=timeout)
+            except subprocess.TimeoutExpired:
+                proc.kill()
+                proc.communicate()
+                timeout_data = {"error": "timeout", "timeout_seconds": timeout}
+                output_file.write_text(json.dumps(timeout_data))
+                raise
+    finally:
+        _remove_cursor_mcp_config(ws["dir"])
+
+    elapsed_ms = int((time.monotonic() - start_time) * 1000)
+
+    saw_result = _build_cursor_metrics(trace_file, output_file, elapsed_ms, model)
+
+    if proc.returncode != 0:
+        _mark_agent_run_error(
+            output_file,
+            f"cursor exit code {proc.returncode}",
+            stderr_file=stderr_file,
+            exit_code=proc.returncode,
+        )
+    elif not saw_result:
+        _mark_agent_run_error(
+            output_file,
+            "cursor missing final result event",
+            stderr_file=stderr_file,
+        )
+
+    return proc.returncode
+
+
+def _build_cursor_metrics(trace_file, output_file, elapsed_ms, model=None):
+    """Parse Cursor stream-json trace and build agent_output.json.
+
+    Cursor's stream-json format emits NDJSON events:
+      system (subtype init) — session metadata (session_id, model)
+      assistant             — assistant messages (counted as turns)
+      tool_call             — tool call events (started/completed)
+      result                — final outcome with duration_ms, duration_api_ms
+
+    Cursor CLI does not report token counts or cost in any output format.
+    Those fields are always 0. Usage is tracked server-side on the Cursor
+    dashboard only.
+
+    Produces a structure compatible with extract_metrics().
+    """
+    num_turns = 0
+    session_id = ""
+    model_id = model or ""
+    saw_result = False
+    duration_api_ms = 0
+
+    with open(trace_file) as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                event = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+
+            etype = event.get("type", "")
+
+            # Init event: type "system" with subtype "init"
+            if etype == "system":
+                session_id = event.get("session_id", session_id)
+                if not model_id:
+                    model_id = event.get("model", model_id)
+
+            # Count assistant messages as turns
+            if etype == "assistant":
+                num_turns += 1
+
+            if etype == "result":
+                saw_result = True
+                duration_api_ms = int(event.get("duration_api_ms", 0))
+                if not session_id:
+                    session_id = event.get("session_id", session_id)
+
+    result = {
+        "total_cost_usd": 0,
+        "usage": {
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "cache_creation_input_tokens": 0,
+            "cache_read_input_tokens": 0,
+        },
+        "duration_ms": elapsed_ms,
+        "duration_api_ms": duration_api_ms,
+        "num_turns": num_turns,
+        "session_id": session_id,
+        "modelUsage": {model_id: {"costUSD": 0}} if model_id else {},
+    }
+    output_file.write_text(json.dumps(result, indent=2))
+    return saw_result
+
+
+# ── LLM Grading ──────────────────────────────────────────────────────────────
+
+
+def _run_cli_llm_task(prompt, output_path, formatter, score_parser, timeout_label,
+                      agent="claude", model=None, reasoning=None):
+    """Run an LLM task by piping a prompt to a CLI agent.
+
+    Shared engine for both LLM grading and code review. Handles command
+    construction, subprocess execution, output reading, and error handling.
+
+    Returns (score_str, elapsed_seconds) tuple.
+    """
+    output_msg_file = None
+    start = time.time()
+    try:
+        output_msg_file = tempfile.NamedTemporaryFile(
+            suffix=".txt", prefix="cli_llm_", delete=False)
+        output_msg_file.close()
+
+        if agent == "codex":
+            cmd = [
+                "codex",
+                "-a", "never",
+                "exec",
+                "--sandbox", "read-only",
+                "-o", output_msg_file.name,
+            ]
+            if model:
+                cmd.extend(["-m", model])
+            if reasoning:
+                cmd.extend(["-c", f'model_reasoning_effort="{reasoning}"'])
+            cmd.append("-")  # read prompt from stdin
+        elif agent == "gemini":
+            cmd = [
+                "gemini",
+                "--output-format", "text",
+                "--yolo",
+                "--prompt", "",
+            ]
+            if model:
+                cmd.extend(["--model", model])
+        elif agent == "opencode":
+            _require_opencode(model)
+            cmd = [
+                "opencode", "run",
+                "--format", "default",
+            ]
+            if model:
+                cmd.extend(["--model", model])
+        elif agent == "cursor":
+            cmd = [
+                CURSOR_BINARY,
+                "-p",
+                "--output-format", "text",
+                "--force",
+                "--trust",
+            ]
+            if model:
+                cmd.extend(["--model", model])
+        else:
+            cmd = [
+                "claude", "-p",
+                "--output-format", "text",
+                "--no-session-persistence",
+            ]
+            if model:
+                cli_model = model.split("/")[-1] if "/" in model else model
+                cli_model = cli_model.replace(".", "-")
+                cmd.extend(["--model", cli_model])
+
+        env = make_agent_env()
+        if agent == "opencode":
+            env["OPENCODE_PERMISSION"] = '{"*":"allow"}'
+
+        result = subprocess.run(
+            cmd,
+            input=prompt,
+            cwd=str(PROJECT_ROOT),
+            capture_output=True,
+            text=True,
+            timeout=1800,  # 30 min
+            env=env,
+        )
+        elapsed = time.time() - start
+
+        raw_output = ""
+        if agent == "codex" and os.path.exists(output_msg_file.name):
+            raw_output = Path(output_msg_file.name).read_text()
+        if not raw_output.strip():
+            raw_output = result.stdout
+
+        if not raw_output.strip():
+            stderr_lines = result.stderr.strip().splitlines()
+            error_lines = [l for l in stderr_lines if l.startswith("ERROR:") or l.startswith("Warning:")]
+            error_msg = "\n".join(error_lines) if error_lines else result.stderr[-500:]
+            output_path.write_text(f"{agent} exit code {result.returncode}\n{error_msg}\n")
+            return f"exit code {result.returncode}", elapsed
+
+        formatted = formatter(raw_output)
+        output_path.write_text(formatted)
+
+        score = score_parser(raw_output)
+        return score, elapsed
+
+    except subprocess.TimeoutExpired:
+        elapsed = time.time() - start
+        output_path.write_text(f"{timeout_label} TIMEOUT (30 min)\n")
+        return "TIMEOUT", elapsed
+    finally:
+        if output_msg_file and os.path.exists(output_msg_file.name):
+            os.unlink(output_msg_file.name)
+
+
+def _format_score_summary(score, info):
+    """Format a (score, info) tuple into a display string. Shared by grade/review wrappers."""
+    if score is None:
+        return None
+    if score == "TIMEOUT":
+        return f"TIMEOUT ({info:.0f}s)" if isinstance(info, (int, float)) else "TIMEOUT"
+    if score:
+        return f"{score}  ({info:.0f}s)" if isinstance(info, (int, float)) else str(score)
+    return f"no score parsed  ({info:.0f}s)" if isinstance(info, (int, float)) else str(info)
+
+
+def run_cli_grade(ws, result_dir, agent="claude", model=None, reasoning=None,
+                  force=False):
+    """Run LLM grading by piping the grading prompt to a CLI agent.
+
+    Returns (score_str, info) tuple. score_str is None if skipped, "TIMEOUT" on
+    timeout, or a score like "8/10". info is a reason string or elapsed seconds.
+    """
+    ws_dir = Path(ws["dir"])
+
+    raw_writeup = read_attempt_text(result_dir, "writeup_snapshot.md", ws_dir / "writeup.md")
+    writeup_text = validate_writeup_text(raw_writeup)
+    if not writeup_text:
+        return None, "no writeup"
+
+    rubric_path = find_rubric_file(ws["course"], ws["assignment_number"], ws.get("name", ""))
+    if not rubric_path:
+        return None, "no rubric"
+
+    model_tag = model.split("/")[-1] if model else agent
+    llm_file = result_dir / f"llm_grade_result_{model_tag}.md"
+
+    if llm_file.exists() and llm_file.stat().st_size > 500 and not force:
+        return None, "already graded"
+
+    instructions_text = read_attempt_text(result_dir, "instructions_snapshot.md", ws_dir / "instructions.md")
+    try:
+        prompt = build_grading_prompt(ws, instructions_text=instructions_text, submission_text=writeup_text)
+    except (FileNotFoundError, OSError) as e:
+        return None, f"SKIP: {e}"
+
+    return _run_cli_llm_task(
+        prompt, llm_file,
+        formatter=lambda raw: format_grade_output(raw, ws),
+        score_parser=parse_grade_score,
+        timeout_label="LLM GRADE",
+        agent=agent, model=model, reasoning=reasoning,
+    )
+
+
+# ── Grading ───────────────────────────────────────────────────────────────────
+
+def run_grade(ws, result_dir):
+    """Run bin/grade --json for code courses. Returns (summary_text, grade_data) tuple.
+
+    Single invocation with --json. Text summary is derived from structured data.
+    """
+    if ws["language"] == "proof":
+        return None, None
+
+    grade_json = result_dir / "grade_result.json"
+    grade_txt = result_dir / "grade_result.txt"
+
+    cmd = [GRADE_CMD, ws["dir"], "--run-type", "submit", "--json"]
+    try:
+        result = subprocess.run(
+            cmd, cwd=str(PROJECT_ROOT),
+            capture_output=True, text=True,
+            timeout=1800,  # 30 min — generous; runners have their own per-test timeouts
+        )
+    except subprocess.TimeoutExpired:
+        grade_txt.write_text("GRADE TIMEOUT (30 min)\n")
+        return "GRADE TIMEOUT", None
+
+    # Parse JSON (grade returns non-zero when tests fail, but JSON is still valid)
+    grade_data = None
+    if result.stdout.strip():
+        try:
+            raw = json.loads(result.stdout)
+            grade_json.write_text(json.dumps(raw, indent=2))
+            grade_data = extract_grade_data(raw)
+        except (json.JSONDecodeError, KeyError):
+            pass
+
+    # Also save stderr as human-readable text (some runners print verbose there)
+    if result.stderr.strip():
+        grade_txt.write_text(result.stderr)
+
+    # Build text summary from structured data
+    summary = format_grade_summary(grade_data) if grade_data else None
+    if not summary and result.returncode != 0:
+        summary = f"GRADE FAILED (exit {result.returncode})"
+
+    # Run malloc performance benchmark if this is a comp321 malloc workspace
+    if ws.get("course") == "comp321" and "malloc" in ws.get("name", ""):
+        perf_data = _run_malloc_perf(ws, result_dir)
+        if perf_data and grade_data:
+            grade_data["performance_index"] = perf_data["performance_index"]
+            grade_data["utilization_score"] = perf_data["utilization_score"]
+            grade_data["throughput_score"] = perf_data["throughput_score"]
+            # Re-save grade_result.json with perf data merged in
+            grade_json = result_dir / "grade_result.json"
+            if grade_json.exists():
+                try:
+                    raw = json.loads(grade_json.read_text())
+                    raw["performance_index"] = perf_data["performance_index"]
+                    raw["utilization_score"] = perf_data["utilization_score"]
+                    raw["throughput_score"] = perf_data["throughput_score"]
+                    grade_json.write_text(json.dumps(raw, indent=2))
+                except (json.JSONDecodeError, OSError):
+                    pass
+            # Update summary to show perf index
+            pi = perf_data["performance_index"]
+            summary = f"{summary} | Perf: {pi}/100" if summary else f"Perf: {pi}/100"
+
+    return summary, grade_data
+
+
+def _run_malloc_perf(ws, result_dir):
+    """Run malloc performance benchmark. Returns dict with perf scores or None."""
+    perf_cmd = [
+        "python3", str(PROJECT_ROOT / "comp321" / "runner.py"),
+        "malloc", ws["dir"], "--perf", "--json",
+    ]
+    perf_txt = result_dir / "perf_result.txt"
+    try:
+        perf_result = subprocess.run(
+            perf_cmd, cwd=str(PROJECT_ROOT),
+            capture_output=True, text=True,
+            timeout=600,  # 10 min for perf benchmark
+        )
+    except subprocess.TimeoutExpired:
+        perf_txt.write_text("PERF TIMEOUT (10 min)\n")
+        return None
+
+    if perf_result.returncode != 0:
+        perf_txt.write_text(f"PERF FAILED (exit {perf_result.returncode})\n{perf_result.stderr}\n")
+        return None
+
+    if not perf_result.stdout.strip():
+        return None
+
+    try:
+        perf_data = json.loads(perf_result.stdout)
+    except json.JSONDecodeError:
+        perf_txt.write_text(f"PERF JSON PARSE ERROR\n{perf_result.stdout}\n")
+        return None
+
+    pi = perf_data.get("performanceIndex")
+    if pi is None:
+        return None
+
+    # Save raw perf output for debugging
+    if perf_data.get("raw"):
+        perf_txt.write_text(perf_data["raw"])
+
+    return {
+        "performance_index": float(pi),
+        "utilization_score": float(perf_data.get("utilizationScore", 0) or 0),
+        "throughput_score": float(perf_data.get("throughputScore", 0) or 0),
+    }
+
+
+def run_llm_grade(ws, result_dir, grading_model=None, agent="claude", reasoning=None,
+                   force=False):
+    """Run LLM grading via CLI agent. Returns a summary string for display, or None if skipped."""
+    score, info = run_cli_grade(
+        ws, result_dir, agent=agent, model=grading_model,
+        reasoning=reasoning, force=force,
+    )
+    return _format_score_summary(score, info)
+
+
+# ── Code review ──────────────────────────────────────────────────────────────
+
+def run_cli_code_review(ws, result_dir, agent="claude", model=None, reasoning=None,
+                        force=False):
+    """Run LLM code review by piping the code review prompt to a CLI agent.
+
+    Returns (score_str, info) tuple, same contract as run_cli_grade.
+    """
+    ws_dir = Path(ws["dir"])
+
+    # Check for solution files (also passed to prompt builder to avoid double-read)
+    solution_files = read_attempt_solution_files(result_dir, ws_dir)
+    if not solution_files:
+        return None, "no code changes"
+
+    model_tag = model.split("/")[-1] if model else agent
+    review_file = result_dir / f"code_review_result_{model_tag}.md"
+
+    if review_file.exists() and review_file.stat().st_size > 500 and not force:
+        return None, "already reviewed"
+
+    instructions_text = read_attempt_text(result_dir, "instructions_snapshot.md", ws_dir / "instructions.md")
+    diff_text = read_attempt_solution_diff(result_dir, ws_dir)
+    try:
+        prompt = build_code_review_prompt(
+            ws,
+            solution_files=solution_files,
+            diff=diff_text,
+            instructions_text=instructions_text,
+        )
+    except (FileNotFoundError, OSError) as e:
+        return None, f"SKIP: {e}"
+
+    return _run_cli_llm_task(
+        prompt, review_file,
+        formatter=lambda raw: format_code_review_output(raw, ws),
+        score_parser=parse_code_review_score,
+        timeout_label="CODE REVIEW",
+        agent=agent, model=model, reasoning=reasoning,
+    )
+
+
+def run_code_review(ws, result_dir, review_model=None, agent="claude", reasoning=None,
+                    force=False):
+    """Run code review via CLI agent. Returns a summary string for display."""
+    score, info = run_cli_code_review(
+        ws, result_dir, agent=agent, model=review_model,
+        reasoning=reasoning, force=force,
+    )
+    return _format_score_summary(score, info)
+
+
+def _default_model_for_agent(agent):
+    defaults = {
+        "codex": DEFAULT_MODEL_CODEX,
+        "gemini": DEFAULT_MODEL_GEMINI,
+        "opencode": DEFAULT_MODEL_OPENCODE,
+        "cursor": DEFAULT_MODEL_CURSOR,
+    }
+    return defaults.get(agent, DEFAULT_MODEL_CLAUDE)
+
+
+def _workspace_completed(results_dir, ws_id):
+    """Return True only when agent_output.json exists without an error marker."""
+    output_file = Path(results_dir) / ws_id / "agent_output.json"
+    if not output_file.exists():
+        return False
+    try:
+        data = json.loads(output_file.read_text())
+    except (json.JSONDecodeError, OSError):
+        return False
+    return "error" not in data and not data.get("is_error")
+
+
+def _resolve_v2_model_key(model_key=None, model_dir=None, model=None):
+    if model_key:
+        return model_key
+    if model_dir:
+        return model_dir
+    if model:
+        return model_slug(model)
+    return None
+
+
+def _resolve_assignment_workspace(assignment_id, model_key):
+    assignment = get_assignment(assignment_id, model_key)
+    return assignment, _ws_from_assignment(assignment)
+
+
+def _build_attempt_context(assignment, attempt):
+    return {
+        "assignment": assignment,
+        "ws": _ws_from_assignment(assignment),
+        "attempt": attempt,
+        "attempt_dir": _attempt_root(
+            assignment["model_key"],
+            assignment["assignment_id"],
+            attempt["attempt_id"],
+        ),
+    }
+
+
+def _reload_attempt_context(ctx):
+    assignment = ctx["assignment"]
+    attempt = load_attempt(
+        assignment["model_key"],
+        assignment["assignment_id"],
+        ctx["attempt"]["attempt_id"],
+    )
+    return _build_attempt_context(assignment, attempt)
+
+
+def _finalize_attempt_context(ctx, final_summary=None):
+    assignment = ctx["assignment"]
+    attempt = ctx["attempt"]
+    if final_summary is None:
+        final_summary = attempt.get("final_summary", {
+            "code_pct": None,
+            "written_pct": None,
+            "review_pct": None,
+        })
+    attempt = finalize_attempt(attempt, final_summary)
+    promote_attempt(assignment, attempt)
+    return _build_attempt_context(assignment, attempt)
+
+
+def _set_phase_status(ctx, phase_name, payload):
+    update_phase(ctx["attempt"], phase_name, payload)
+    return _reload_attempt_context(ctx)
+
+
+def _refresh_attempt_summary_and_manifest(ctx):
+    attempt_dir = ctx["attempt_dir"]
+    attempt = ctx["attempt"]
+    final_summary = _compute_attempt_summary(
+        attempt["phases"].get("submit_grade", {}).get("summary"),
+        _parse_all_llm(attempt_dir),
+        _parse_all_reviews(attempt_dir),
+    )
+    ctx = _finalize_attempt_context(ctx, final_summary)
+    return ctx, final_summary
+
+
+def _run_v2_assignment_attempt(assignment, ws, args, run_record, trigger_kind="manual_run"):
+    if args.reset_workspace:
+        result = subprocess.run(
+            [RESET_CMD, ws["id"], "--force"],
+            capture_output=True,
+            text=True,
+        )
+        if result.returncode != 0:
+            err = result.stderr.strip() or result.stdout.strip()
+            raise RuntimeError(f"Reset failed: {err}")
+
+    # Always clear submission lock so re-runs aren't blocked by prior attempts.
+    sub_path = Path(ws["dir"]) / "submission.json"
+    sub_path.unlink(missing_ok=True)
+
+    attempt = create_attempt(
+        {**assignment, "model_key": assignment["model_key"]},
+        agent=args.agent,
+        run_id=run_record["run_id"],
+        trigger_kind=trigger_kind,
+    )
+    append_run_attempt(
+        assignment["model_key"],
+        run_record["run_id"],
+        assignment["assignment_id"],
+        attempt["attempt_id"],
+    )
+    ctx = _build_attempt_context(assignment, attempt)
+    attempt_dir = ctx["attempt_dir"]
+    attempt["base_commit"] = current_head_commit(ws["dir"])
+    save_attempt(attempt)
+    ctx = _reload_attempt_context(ctx)
+
+    try:
+        if ws.get("depends_on"):
+            resolve_depends_on(ws, active_model_dir=assignment["model_key"])
+
+        agent_started = utc_now_iso()
+        try:
+            rc = _run_agent_phase_v2(args, ws, attempt_dir)
+            quota_msg = _detect_quota_exhaustion(attempt_dir / "agent_stderr.log")
+            agent_metrics = extract_metrics(attempt_dir)
+            raw_agent = {}
+            try:
+                raw_agent = json.loads((attempt_dir / "agent_output.json").read_text())
+            except (FileNotFoundError, json.JSONDecodeError, OSError):
+                pass
+            cost_usd = raw_agent.get("total_cost_usd")
+            if args.agent in {"codex", "cursor"}:
+                cost_usd = None
+            ctx = _set_phase_status(ctx, "agent", {
+                "status": "completed" if rc == 0 and not quota_msg else "failed",
+                "started_at": agent_started,
+                "completed_at": utc_now_iso(),
+                "artifacts": {
+                    "agent_output": "agent_output.json" if (attempt_dir / "agent_output.json").exists() else None,
+                    "agent_trace": "agent_trace.jsonl" if (attempt_dir / "agent_trace.jsonl").exists() else None,
+                    "agent_stderr": "agent_stderr.log" if (attempt_dir / "agent_stderr.log").exists() else None,
+                },
+                "metrics": {
+                    "duration_ms": agent_metrics.get("duration_ms", 0),
+                    "input_tokens": agent_metrics.get("input_tokens", 0),
+                    "output_tokens": agent_metrics.get("output_tokens", 0),
+                    "cost_usd": cost_usd,
+                    "num_turns": agent_metrics.get("num_turns", 0),
+                    "model_id": agent_metrics.get("model_id") or None,
+                },
+                **({"error": quota_msg} if quota_msg else {}),
+            })
+        except subprocess.TimeoutExpired:
+            ctx = _set_phase_status(ctx, "agent", {
+                "status": "failed",
+                "started_at": agent_started,
+                "completed_at": utc_now_iso(),
+                "error": f"timeout ({args.timeout} min)",
+            })
+            raise
+
+        snapshot_artifacts = create_workspace_snapshot(
+            ws["dir"],
+            attempt_dir,
+            base_commit=ctx["attempt"].get("base_commit"),
+        )
+        ctx["attempt"]["phases"]["agent"].setdefault("artifacts", {}).update(snapshot_artifacts)
+        save_attempt(ctx["attempt"])
+        ctx = _reload_attempt_context(ctx)
+
+        ctx, _grade_summary = _run_submit_grade_phase_v2(ctx)
+
+        if args.with_llm_grade:
+            ctx, _llm_summary = _run_llm_grade_phase_v2(ctx, args)
+        else:
+            ctx = _set_phase_status(ctx, "llm_grade", {"status": "not_started"})
+
+        if args.with_code_review:
+            ctx, _review_summary = _run_code_review_phase_v2(ctx, args)
+        else:
+            ctx = _set_phase_status(ctx, "code_review", {"status": "not_started"})
+
+        ctx, final_summary = _refresh_attempt_summary_and_manifest(ctx)
+        return {
+            "ok": True,
+            "attempt": ctx["attempt"],
+            "attempt_dir": ctx["attempt_dir"],
+            "final_summary": final_summary,
+        }
+    except subprocess.TimeoutExpired:
+        ctx = _reload_attempt_context(ctx)
+        ctx = _finalize_attempt_context(ctx)
+        return {
+            "ok": False,
+            "attempt": ctx["attempt"],
+            "attempt_dir": ctx["attempt_dir"],
+            "error": "agent timed out",
+        }
+    except FileNotFoundError as exc:
+        ctx = _reload_attempt_context(ctx)
+        ctx = _finalize_attempt_context(ctx)
+        return {
+            "ok": False,
+            "attempt": ctx["attempt"],
+            "attempt_dir": ctx["attempt_dir"],
+            "error": str(exc),
+        }
+
+
+def _run_submit_grade_phase_v2(ctx):
+    ws = ctx["ws"]
+    attempt_dir = ctx["attempt_dir"]
+    grade_started = utc_now_iso()
+    if ws.get("assignment_mode") == "written" or ws.get("language") == "proof":
+        ctx = _set_phase_status(ctx, "submit_grade", {
+            "status": "skipped",
+            "started_at": grade_started,
+            "completed_at": utc_now_iso(),
+            "artifacts": {},
+            "summary": None,
+            "reason": "written-only assignment",
+        })
+        return ctx, None
+    grade_summary, grade_data = run_grade(ws, attempt_dir)
+    test_meta_name = copy_snapshot_file(Path(ws["dir"]), attempt_dir, "last_test_meta.json", "test_meta.json")
+    ctx = _set_phase_status(ctx, "submit_grade", {
+        "status": "completed" if grade_data or grade_summary else "failed",
+        "started_at": grade_started,
+        "completed_at": utc_now_iso(),
+        "artifacts": {
+            "grade_result_json": "grade_result.json" if (attempt_dir / "grade_result.json").exists() else None,
+            "grade_result_text": "grade_result.txt" if (attempt_dir / "grade_result.txt").exists() else None,
+            "test_meta": test_meta_name,
+        },
+        "summary": grade_data or None,
+    })
+    return ctx, grade_summary
+
+
+def _run_llm_grade_phase_v2(ctx, args):
+    ws = ctx["ws"]
+    attempt_dir = ctx["attempt_dir"]
+    llm_started = utc_now_iso()
+    llm_summary = run_llm_grade(
+        ws, attempt_dir,
+        grading_model=args.grading_model,
+        agent=args.agent,
+        reasoning=args.reasoning,
+        force=args.force,
+    )
+    llm_grades = _parse_all_llm(attempt_dir)
+    ctx = _set_phase_status(ctx, "llm_grade", {
+        "status": "completed" if llm_grades else "failed",
+        "started_at": llm_started,
+        "completed_at": utc_now_iso(),
+        "artifacts": {"reviews": sorted([p.name for p in attempt_dir.glob("llm_grade_result*.md")])},
+        "summary": {"result": llm_summary},
+    })
+    return ctx, llm_summary
+
+
+def _run_code_review_phase_v2(ctx, args):
+    ws = ctx["ws"]
+    attempt_dir = ctx["attempt_dir"]
+    review_started = utc_now_iso()
+    review_summary = run_code_review(
+        ws, attempt_dir,
+        review_model=args.review_model or args.grading_model,
+        agent=args.agent,
+        reasoning=args.reasoning,
+        force=args.force,
+    )
+    review_data = _parse_all_reviews(attempt_dir)
+    ctx = _set_phase_status(ctx, "code_review", {
+        "status": "completed" if review_data else "failed",
+        "started_at": review_started,
+        "completed_at": utc_now_iso(),
+        "artifacts": {"reviews": sorted([p.name for p in attempt_dir.glob("code_review_result*.md")])},
+        "summary": {"result": review_summary},
+    })
+    return ctx, review_summary
+
+
+def _run_phase_for_context(ctx, phase_name, args):
+    if phase_name == "submit-grade":
+        return _run_submit_grade_phase_v2(ctx)
+    if phase_name == "llm-grade":
+        return _run_llm_grade_phase_v2(ctx, args)
+    if phase_name == "code-review":
+        return _run_code_review_phase_v2(ctx, args)
+    raise ValueError(f"unsupported phase {phase_name}")
+
+
+def _compute_attempt_summary(grade_data, llm_grades, code_reviews):
+    code_pct = None
+    if grade_data:
+        if "performance_index" in grade_data:
+            code_pct = float(grade_data["performance_index"])
+        elif grade_data.get("points_possible", 0) > 0:
+            code_pct = (grade_data["points_earned"] / grade_data["points_possible"]) * 100
+
+    written_pct = None
+    llm_pcts = []
+    for llm in llm_grades.values():
+        if isinstance(llm, dict) and llm.get("points_possible", 0) > 0:
+            llm_pcts.append((llm["points_earned"] / llm["points_possible"]) * 100)
+    if llm_pcts:
+        written_pct = sum(llm_pcts) / len(llm_pcts)
+
+    review_pct = None
+    review_pcts = []
+    for review in code_reviews.values():
+        if isinstance(review, dict):
+            if review.get("score_percentage") is not None:
+                review_pcts.append(float(review["score_percentage"]))
+            elif review.get("points_possible", 0) > 0:
+                review_pcts.append((review["points_earned"] / review["points_possible"]) * 100)
+    if review_pcts:
+        review_pct = sum(review_pcts) / len(review_pcts)
+
+    return {
+        "code_pct": round(code_pct, 2) if code_pct is not None else None,
+        "written_pct": round(written_pct, 2) if written_pct is not None else None,
+        "review_pct": round(review_pct, 2) if review_pct is not None else None,
+    }
+
+
+def _run_agent_phase_v2(args, ws, attempt_dir):
+    timeout_secs = args.timeout * 60 if args.timeout else None
+    if args.sandbox:
+        sandbox_name = _sandbox_name(args.agent, attempt_dir)
+        _ensure_sandbox(args.agent, sandbox_name)
+        return run_agent_in_sandbox(
+            ws, attempt_dir, args.agent, args.model, sandbox_name,
+            timeout=timeout_secs,
+            use_system_prompt=args.system_prompt,
+            reasoning=args.reasoning,
+        )
+    if args.agent == "claude":
+        return run_claude(ws, attempt_dir, args.model, timeout=timeout_secs,
+                          use_system_prompt=args.system_prompt)
+    if args.agent == "gemini":
+        return run_gemini(ws, attempt_dir, args.model, timeout=timeout_secs,
+                          use_system_prompt=args.system_prompt)
+    if args.agent == "opencode":
+        return run_opencode(ws, attempt_dir, args.model, timeout=timeout_secs)
+    if args.agent == "cursor":
+        return run_cursor(ws, attempt_dir, args.model, timeout=timeout_secs)
+    return run_codex(
+        ws,
+        attempt_dir,
+        model=args.model,
+        timeout=timeout_secs,
+        reasoning=args.reasoning,
+    )
+
+
+def _add_v2_run_args(parser):
+    """Add the shared flags for all v2 run/phase commands."""
+    parser.add_argument("--agent", default="claude",
+                        choices=["claude", "codex", "gemini", "opencode", "cursor"])
+    parser.add_argument("--model", default=None)
+    parser.add_argument("--model-key", default=None)
+    parser.add_argument("--model-dir", default=None)
+    parser.add_argument("--timeout", type=int, default=None)
+    parser.add_argument("--grading-model", default=None)
+    parser.add_argument("--review-model", default=None)
+    parser.add_argument("--reasoning", default=None,
+                        choices=["minimal", "low", "medium", "high", "xhigh"])
+    parser.add_argument("--with-llm-grade", action="store_true")
+    parser.add_argument("--with-code-review", action="store_true")
+    parser.add_argument("--reset-workspace", action="store_true")
+    parser.add_argument("--force", action="store_true")
+    parser.add_argument("--system-prompt", action="store_true")
+    parser.add_argument("--sandbox", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
+
+
+def _validate_v2_run_args(parser, args):
+    """Resolve model defaults, model_key, and validate agent-specific constraints.
+
+    Returns the resolved model_key.
+    """
+    if args.model is None:
+        args.model = _default_model_for_agent(args.agent)
+    model_key = _resolve_v2_model_key(
+        model_key=args.model_key,
+        model_dir=args.model_dir,
+        model=args.model,
+    )
+    if not model_key:
+        parser.error("--model-key, --model-dir, or --model is required")
+    if args.reasoning and args.agent != "codex":
+        parser.error("--reasoning is only supported with --agent codex")
+    if args.sandbox and args.agent not in SANDBOX_SUPPORTED_AGENTS:
+        parser.error(
+            f"--sandbox is not supported with --agent {args.agent}. "
+            f"Supported agents: {', '.join(sorted(SANDBOX_SUPPORTED_AGENTS))}"
+        )
+    if args.agent == "opencode":
+        for flag, value in [("--model", args.model),
+                            ("--grading-model", args.grading_model),
+                            ("--review-model", args.review_model)]:
+            if value and "/" not in value:
+                parser.error(
+                    f"{flag} for --agent opencode must use provider/model format "
+                    "(for example openrouter/anthropic/claude-sonnet-4-5)"
+                )
+    return model_key
+
+
+def _requested_phases(args):
+    """Build the list of phases to execute from args flags."""
+    phases = ["agent", "submit_grade"]
+    if args.with_llm_grade:
+        phases.append("llm_grade")
+    if args.with_code_review:
+        phases.append("code_review")
+    return phases
+
+
+def _ws_from_assignment(assignment):
+    """Build the workspace dict expected by agent runners from assignment metadata."""
+    return {
+        "id": assignment["workspace_id"],
+        "dir": assignment["workspace_dir"],
+        "course": assignment["course"],
+        "language": assignment["language"],
+        "assignment_mode": assignment["assignment_mode"],
+        "name": assignment["assignment_name"],
+        "display_name": assignment["display_name"],
+        "assignment_number": assignment["assignment_number"],
+        "depends_on": assignment["depends_on"] or "",
+    }
+
+
+def main_v2_run_assignment(argv):
+    parser = argparse.ArgumentParser(
+        prog="bench-cli run assignment",
+        description="Run one assignment using the v2 assignment-attempt state model",
+    )
+    parser.add_argument("assignment_id")
+    _add_v2_run_args(parser)
+    args = parser.parse_args(argv)
+    model_key = _validate_v2_run_args(parser, args)
+
+    assignment, ws = _resolve_assignment_workspace(args.assignment_id, model_key)
+    phases = _requested_phases(args)
+
+    if args.dry_run:
+        run_info = {
+            "model_key": model_key,
+            "assignment_id": assignment["assignment_id"],
+            "workspace_id": assignment["workspace_id"],
+            "requested_phases": phases,
+        }
+        print(json.dumps(run_info, indent=2))
+        return 0
+
+    run_record = create_run(
+        model_key=model_key,
+        agent=args.agent,
+        selection={"kind": "assignment", "value": assignment["assignment_id"]},
+        requested_phases=phases,
+    )
+
+    print("BSCS Bench V2 — Run Assignment")
+    print("==============================")
+    print(f"  Assignment: {assignment['assignment_id']}")
+    print(f"  Workspace:  {assignment['workspace_id']}")
+    print(f"  Model Key:  {model_key}")
+    print(f"  Agent:      {args.agent}")
+    print(f"  Model:      {args.model}")
+    print()
+
+    result = _run_v2_assignment_attempt(
+        {**assignment, "model_key": model_key}, ws, args, run_record)
+    finalize_run(model_key, run_record["run_id"])
+
+    if result["ok"]:
+        final_summary = result["final_summary"]
+        print("Attempt complete.")
+        print(f"  Code:    {final_summary['code_pct']}")
+        print(f"  Written: {final_summary['written_pct']}")
+        print(f"  Review:  {final_summary['review_pct']}")
+        print(f"  State:   {result['attempt_dir']}")
+        return 0
+
+    print(f"Error: {result['error']}")
+    return 1
+
+
+def main_v2_run_course(argv):
+    parser = argparse.ArgumentParser(
+        prog="bench-cli run course",
+        description="Run one course using the v2 assignment-attempt state model",
+    )
+    parser.add_argument("course")
+    _add_v2_run_args(parser)
+    args = parser.parse_args(argv)
+    model_key = _validate_v2_run_args(parser, args)
+
+    assignments = [a for a in _list_registry_assignments(model_key) if a.get("course") == args.course]
+    assignments.sort(key=lambda a: (a.get("assignment_number", 0), a["assignment_id"]))
+    if not assignments:
+        print(f"Error: no assignments found for course {args.course} in model {model_key}")
+        return 1
+
+    phases = _requested_phases(args)
+
+    if args.dry_run:
+        print(json.dumps({
+            "model_key": model_key,
+            "course": args.course,
+            "assignments": [a["assignment_id"] for a in assignments],
+            "requested_phases": phases,
+        }, indent=2))
+        return 0
+
+    run_record = create_run(
+        model_key=model_key,
+        agent=args.agent,
+        selection={"kind": "course", "value": args.course},
+        requested_phases=phases,
+    )
+
+    print("BSCS Bench V2 — Run Course")
+    print("==========================")
+    print(f"  Course:     {args.course}")
+    print(f"  Model Key:  {model_key}")
+    print(f"  Agent:      {args.agent}")
+    print(f"  Model:      {args.model}")
+    print(f"  Assignments:{len(assignments)}")
+    print()
+
+    failures = 0
+    for index, assignment in enumerate(assignments, 1):
+        ws = _ws_from_assignment(assignment)
+        print(f"[{index}/{len(assignments)}] {assignment['assignment_id']}")
+        result = _run_v2_assignment_attempt({**assignment, "model_key": model_key}, ws, args, run_record)
+        if result["ok"]:
+            summary = result["final_summary"]
+            print(f"  Code:   {summary['code_pct']}")
+            print(f"  Written:{summary['written_pct']}")
+            print(f"  Review: {summary['review_pct']}")
+        else:
+            failures += 1
+            print(f"  Error:  {result['error']}")
+        print(f"  State:  {result['attempt_dir']}")
+        print()
+
+    finalize_run(model_key, run_record["run_id"])
+    print(f"Course run complete. Failures: {failures}/{len(assignments)}")
+    return 1 if failures else 0
+
+
+def main_v2_run_corpus(argv):
+    parser = argparse.ArgumentParser(
+        prog="bench-cli run corpus",
+        description="Run the full assignment corpus using the v2 assignment-attempt state model",
+    )
+    _add_v2_run_args(parser)
+    args = parser.parse_args(argv)
+    model_key = _validate_v2_run_args(parser, args)
+
+    assignments = sorted(
+        _list_registry_assignments(model_key),
+        key=lambda a: (a.get("course", ""), a.get("assignment_number", 0), a["assignment_id"]),
+    )
+    if not assignments:
+        print(f"Error: no assignments found for model {model_key}")
+        return 1
+
+    phases = _requested_phases(args)
+
+    if args.dry_run:
+        print(json.dumps({
+            "model_key": model_key,
+            "assignments": [a["assignment_id"] for a in assignments],
+            "requested_phases": phases,
+        }, indent=2))
+        return 0
+
+    run_record = create_run(
+        model_key=model_key,
+        agent=args.agent,
+        selection={"kind": "corpus", "value": "all"},
+        requested_phases=phases,
+    )
+
+    print("BSCS Bench V2 — Run Corpus")
+    print("==========================")
+    print(f"  Model Key:  {model_key}")
+    print(f"  Agent:      {args.agent}")
+    print(f"  Model:      {args.model}")
+    print(f"  Assignments:{len(assignments)}")
+    print()
+
+    failures = 0
+    for index, assignment in enumerate(assignments, 1):
+        ws = _ws_from_assignment(assignment)
+        print(f"[{index}/{len(assignments)}] {assignment['assignment_id']}")
+        result = _run_v2_assignment_attempt({**assignment, "model_key": model_key}, ws, args, run_record)
+        if result["ok"]:
+            summary = result["final_summary"]
+            print(f"  Code:   {summary['code_pct']}")
+            print(f"  Written:{summary['written_pct']}")
+            print(f"  Review: {summary['review_pct']}")
+        else:
+            failures += 1
+            print(f"  Error:  {result['error']}")
+        print(f"  State:  {result['attempt_dir']}")
+        print()
+
+    finalize_run(model_key, run_record["run_id"])
+    print(f"Corpus run complete. Failures: {failures}/{len(assignments)}")
+    return 1 if failures else 0
+
+
+def main_v2_phase(argv, phase_name):
+    parser = argparse.ArgumentParser(
+        prog=f"bench-cli phase {phase_name}",
+        description=f"Run the {phase_name} phase on active attempts",
+    )
+    parser.add_argument("target", nargs="?", default=None,
+                        help="Assignment ID, or one of: assignment, course, corpus")
+    parser.add_argument("target_value", nargs="?", default=None,
+                        help="Assignment ID for 'assignment', course name for 'course'")
+    parser.add_argument("--model-key", default=None)
+    parser.add_argument("--model-dir", default=None)
+    parser.add_argument("--model", default=None)
+    parser.add_argument("--agent", default=None,
+                        choices=["claude", "codex", "gemini", "opencode", "cursor"])
+    parser.add_argument("--grading-model", default=None)
+    parser.add_argument("--review-model", default=None)
+    parser.add_argument("--reasoning", default=None,
+                        choices=["minimal", "low", "medium", "high", "xhigh"])
+    parser.add_argument("--force", action="store_true")
+    parser.add_argument("--dry-run", action="store_true")
+    args = parser.parse_args(argv)
+
+    model_key = _resolve_v2_model_key(
+        model_key=args.model_key,
+        model_dir=args.model_dir,
+        model=args.model,
+    )
+    if not model_key:
+        parser.error(f"bench-cli phase {phase_name} requires --model-key, --model-dir, or --model")
+
+    target = args.target
+    target_value = args.target_value
+    mode = "assignment"
+    if target in {"assignment", "course", "corpus"}:
+        mode = target
+        if mode == "corpus" and target_value is not None:
+            parser.error("bench-cli phase <phase> corpus does not take a target value")
+        if mode in {"assignment", "course"} and not target_value:
+            parser.error(f"bench-cli phase {phase_name} {mode} requires a value")
+    else:
+        if not target:
+            parser.error(f"bench-cli phase {phase_name} requires an assignment_id, or assignment/course/corpus target")
+        if target_value is not None:
+            parser.error("Unexpected extra positional argument")
+        target_value = target
+
+    if args.reasoning and args.agent not in {None, "codex"}:
+        parser.error("--reasoning is only supported with --agent codex")
+
+    if mode == "assignment":
+        assignment, _ws = _resolve_assignment_workspace(target_value, model_key)
+        manifest = load_manifest(model_key, assignment["assignment_id"])
+        if not manifest or not manifest.get("active_attempt_id"):
+            print(f"Error: no active attempt for {assignment['assignment_id']}")
+            return 1
+        attempt = load_active_attempt(model_key, assignment["assignment_id"])
+        ctx = _build_attempt_context({**assignment, "model_key": model_key}, attempt)
+        if args.agent is None:
+            args.agent = manifest.get("agent", "claude")
+        if args.reasoning and args.agent != "codex":
+            parser.error("--reasoning is only supported with --agent codex")
+
+        if args.dry_run:
+            print(json.dumps({
+                "model_key": model_key,
+                "assignment_id": assignment["assignment_id"],
+                "phase": phase_name,
+                "attempt_id": attempt["attempt_id"],
+            }, indent=2))
+            return 0
+
+        ctx, _summary = _run_phase_for_context(ctx, phase_name, args)
+        ctx, final_summary = _refresh_attempt_summary_and_manifest(ctx)
+        print(f"Phase complete: {phase_name}")
+        print(f"  Assignment: {assignment['assignment_id']}")
+        print(f"  Attempt:    {ctx['attempt']['attempt_id']}")
+        print(f"  Code:       {final_summary['code_pct']}")
+        print(f"  Written:    {final_summary['written_pct']}")
+        print(f"  Review:     {final_summary['review_pct']}")
+        return 0
+
+    if mode == "course":
+        assignments = [a for a in _list_registry_assignments(model_key) if a.get("course") == target_value]
+        assignments.sort(key=lambda a: (a.get("assignment_number", 0), a["assignment_id"]))
+        if not assignments:
+            print(f"Error: no assignments found for course {target_value} in model {model_key}")
+            return 1
+    elif mode == "corpus":
+        assignments = sorted(
+            _list_registry_assignments(model_key),
+            key=lambda a: (a.get("course", ""), a.get("assignment_number", 0), a["assignment_id"]),
+        )
+        if not assignments:
+            print(f"Error: no assignments found for model {model_key}")
+            return 1
+    else:
+        parser.error(f"Unsupported phase target mode: {mode}")
+
+    contexts = []
+    missing = []
+    for assignment in assignments:
+        manifest = load_manifest(model_key, assignment["assignment_id"])
+        if not manifest or not manifest.get("active_attempt_id"):
+            missing.append(assignment["assignment_id"])
+            continue
+        attempt = load_active_attempt(model_key, assignment["assignment_id"])
+        ctx = _build_attempt_context({**assignment, "model_key": model_key}, attempt)
+        contexts.append((assignment, manifest, ctx))
+
+    if args.dry_run:
+        print(json.dumps({
+            "model_key": model_key,
+            "phase": phase_name,
+            "mode": mode,
+            "target_value": target_value,
+            "assignments": [assignment["assignment_id"] for assignment, _manifest, _ctx in contexts],
+            "missing_active_attempts": missing,
+        }, indent=2))
+        return 0
+
+    if not contexts:
+        print(f"Error: no active attempts found for phase {phase_name} in {mode} {target_value or model_key}")
+        return 1
+
+    if args.agent is None:
+        manifest_agents = {manifest.get("agent", "claude") for _assignment, manifest, _ctx in contexts}
+        args.agent = manifest_agents.pop() if len(manifest_agents) == 1 else "claude"
+    if args.reasoning and args.agent != "codex":
+        parser.error("--reasoning is only supported with --agent codex")
+
+    print(f"BSCS Bench V2 — Phase {phase_name}")
+    print("================================")
+    print(f"  Model Key:  {model_key}")
+    print(f"  Scope:      {mode}")
+    if target_value:
+        print(f"  Target:     {target_value}")
+    print(f"  Assignments:{len(contexts)}")
+    if missing:
+        print(f"  Skipped:    {len(missing)} without active attempts")
+    print()
+
+    failures = 0
+    for index, (assignment, _manifest, ctx) in enumerate(contexts, 1):
+        print(f"[{index}/{len(contexts)}] {assignment['assignment_id']}")
+        try:
+            ctx, _summary = _run_phase_for_context(ctx, phase_name, args)
+            ctx, final_summary = _refresh_attempt_summary_and_manifest(ctx)
+            print(f"  Attempt: {ctx['attempt']['attempt_id']}")
+            print(f"  Code:    {final_summary['code_pct']}")
+            print(f"  Written: {final_summary['written_pct']}")
+            print(f"  Review:  {final_summary['review_pct']}")
+        except FileNotFoundError as exc:
+            failures += 1
+            print(f"  Error:   {exc}")
+        print()
+
+    print(f"Phase {phase_name} complete. Failures: {failures}/{len(contexts)}")
+    if missing:
+        print(f"Skipped assignments without active attempts: {', '.join(missing)}")
+    return 1 if failures else 0
+
+
+def main_v2_summarize_model(argv):
+    parser = argparse.ArgumentParser(
+        prog="bench-cli summarize model",
+        description="Summarize a model namespace from manifests only",
+    )
+    parser.add_argument("model_key")
+    args = parser.parse_args(argv)
+
+    manifests = list_manifests(args.model_key)
+    manifests_by_id = {m["assignment_id"]: m for m in manifests}
+    expected = _list_registry_assignments(args.model_key)
+    expected_by_id = {item["assignment_id"]: item for item in expected}
+
+    total_cost = 0.0
+    cost_known = 0
+    completed_submit = 0
+
+    print("BSCS Bench V2 — Model Summary")
+    print("=============================")
+    print(f"  Model Key: {args.model_key}")
+    print(f"  Coverage:  {len(manifests)}/{len(expected)} assignments")
+    print()
+    print(f"  {'Assignment':30s}  {'Code':>8s}  {'Written':>8s}  {'Review':>8s}  {'Submit':>10s}")
+    print(f"  {'-' * 30}  {'-' * 8}  {'-' * 8}  {'-' * 8}  {'-' * 10}")
+
+    for assignment_id in sorted(expected_by_id):
+        manifest = manifests_by_id.get(assignment_id)
+        if manifest:
+            summary = manifest.get("latest_summary", {})
+            phases = manifest.get("latest_phase_status", {})
+            code = summary.get("code_pct")
+            written = summary.get("written_pct")
+            review = summary.get("review_pct")
+            submit_status = phases.get("submit_grade", "-")
+            if submit_status == "completed":
+                completed_submit += 1
+            cost_val = summary.get("cost_usd")
+            if isinstance(cost_val, (int, float)):
+                total_cost += float(cost_val)
+                cost_known += 1
+            print(
+                f"  {assignment_id:30s}  "
+                f"{('-' if code is None else f'{code:.1f}%'):>8s}  "
+                f"{('-' if written is None else f'{written:.1f}%'):>8s}  "
+                f"{('-' if review is None else f'{review:.1f}%'):>8s}  "
+                f"{submit_status:>10s}"
+            )
+        else:
+            print(f"  {assignment_id:30s}  {'-':>8s}  {'-':>8s}  {'-':>8s}  {'missing':>10s}")
+
+    print()
+    print(f"  Submit Coverage: {completed_submit}/{len(expected)}")
+    print(f"  Known Agent Cost: ${total_cost:.4f} across {cost_known} attempts")
+    return 0
+
+
+def main_v2_export_model(argv):
+    parser = argparse.ArgumentParser(
+        prog="bench-cli export model",
+        description="Export a model namespace from manifests and active attempts only",
+    )
+    parser.add_argument("model_key")
+    args = parser.parse_args(argv)
+
+    manifests = list_manifests(args.model_key)
+    manifests_by_id = {m["assignment_id"]: m for m in manifests}
+    expected = _list_registry_assignments(args.model_key)
+    expected_by_id = {item["assignment_id"]: item for item in expected}
+
+    export_root = PROJECT_ROOT / "exports" / "models" / args.model_key
+    export_root.mkdir(parents=True, exist_ok=True)
+    export_json = export_root / "latest.json"
+    export_tar = export_root / "latest.tar.gz"
+
+    assignments = []
+    completed_assignments = 0
+
+    for assignment_id in sorted(expected_by_id):
+        manifest = manifests_by_id.get(assignment_id)
+        registry_meta = expected_by_id[assignment_id]
+        if not manifest:
+            assignments.append({
+                "assignment_id": assignment_id,
+                "course": registry_meta.get("course"),
+                "display_name": registry_meta.get("display_name"),
+                "active_attempt_id": None,
+                "phase_status": {},
+                "summary": {},
+                "artifact_paths": {},
+            })
+            continue
+
+        attempt_id = manifest.get("active_attempt_id")
+        artifact_paths = {}
+        if attempt_id:
+            attempt_dir = _attempt_root(args.model_key, assignment_id, attempt_id)
+            artifact_paths["attempt_dir"] = str(attempt_dir.relative_to(PROJECT_ROOT))
+            completed_assignments += 1
+        assignments.append({
+            "assignment_id": assignment_id,
+            "course": manifest.get("course"),
+            "display_name": manifest.get("display_name"),
+            "active_attempt_id": attempt_id,
+            "phase_status": manifest.get("latest_phase_status", {}),
+            "summary": manifest.get("latest_summary", {}),
+            "artifact_paths": artifact_paths,
+        })
+
+    export_data = {
+        "model_key": args.model_key,
+        "generated_at": utc_now_iso(),
+        "scope": "model",
+        "assignments": assignments,
+        "coverage": {
+            "completed_assignments": completed_assignments,
+            "expected_assignments": len(expected),
+        },
+    }
+    export_json.write_text(json.dumps(export_data, indent=2))
+
+    with tarfile.open(export_tar, "w:gz") as tar:
+        tar.add(export_json, arcname=f"{args.model_key}/latest.json")
+        for manifest in manifests:
+            assignment_id = manifest["assignment_id"]
+            attempt_id = manifest.get("active_attempt_id")
+            if not attempt_id:
+                continue
+            attempt_dir = _attempt_root(args.model_key, assignment_id, attempt_id)
+            if attempt_dir.is_dir():
+                tar.add(
+                    attempt_dir,
+                    arcname=f"{args.model_key}/assignments/{assignment_id}/attempts/{attempt_id}",
+                )
+            manifest_file = _attempt_root(args.model_key, assignment_id, attempt_id).parent.parent / "manifest.json"
+            if manifest_file.exists():
+                tar.add(
+                    manifest_file,
+                    arcname=f"{args.model_key}/assignments/{assignment_id}/manifest.json",
+                )
+
+    print("BSCS Bench V2 — Export Model")
+    print("============================")
+    print(f"  Model Key: {args.model_key}")
+    print(f"  JSON:      {export_json}")
+    print(f"  Archive:   {export_tar}")
+    print(f"  Coverage:  {completed_assignments}/{len(expected)} assignments")
+    return 0
+
+
+# ── Main ──────────────────────────────────────────────────────────────────────
+
+def main():
+    if len(sys.argv) >= 3 and sys.argv[1] == "run" and sys.argv[2] == "assignment":
+        return main_v2_run_assignment(sys.argv[3:])
+    if len(sys.argv) >= 3 and sys.argv[1] == "run" and sys.argv[2] == "course":
+        return main_v2_run_course(sys.argv[3:])
+    if len(sys.argv) >= 3 and sys.argv[1] == "run" and sys.argv[2] == "corpus":
+        return main_v2_run_corpus(sys.argv[3:])
+    if len(sys.argv) >= 3 and sys.argv[1] == "phase" and sys.argv[2] in {"submit-grade", "llm-grade", "code-review"}:
+        return main_v2_phase(sys.argv[3:], sys.argv[2])
+    if len(sys.argv) >= 3 and sys.argv[1] == "summarize" and sys.argv[2] == "model":
+        return main_v2_summarize_model(sys.argv[3:])
+    if len(sys.argv) >= 3 and sys.argv[1] == "export" and sys.argv[2] == "model":
+        return main_v2_export_model(sys.argv[3:])
+
+    print("bench-cli v2 migration: the legacy run-summary interface has been retired.")
+    print("Supported commands:")
+    print("  bench-cli run assignment <assignment_id> --model-key <model>")
+    print("  bench-cli run course <course> --model-key <model>")
+    print("  bench-cli run corpus --model-key <model>")
+    print("  bench-cli phase submit-grade <assignment_id> --model-key <model>")
+    print("  bench-cli phase llm-grade <assignment_id> --model-key <model>")
+    print("  bench-cli phase code-review <assignment_id> --model-key <model>")
+    print("  bench-cli phase llm-grade course <course> --model-key <model>")
+    print("  bench-cli phase llm-grade corpus --model-key <model>")
+    print("  bench-cli phase code-review course <course> --model-key <model>")
+    print("  bench-cli phase code-review corpus --model-key <model>")
+    print("  bench-cli summarize model <model_key>")
+    print("  bench-cli export model <model_key>")
+    return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())

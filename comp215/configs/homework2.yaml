@@ -1,0 +1,148 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 2
+assignment_name: "python_object_system"
+display_name: "Python Object System"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "17"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 88
+  total_points: 59
+  timeout_seconds: 10
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "skeleton_code/src/main/rice/obj/APyObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyBoolObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyIntObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyFloatObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyCharObj.java"
+  - path: "skeleton_code/src/main/rice/obj/AIterablePyObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyListObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PySetObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyTupleObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyDictObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyStringObj.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  classes:
+    - "test.rice.obj.PyBoolObjTest"
+    - "test.rice.obj.PyIntObjTest"
+    - "test.rice.obj.PyFloatObjTest"
+    - "test.rice.obj.PyCharObjTest"
+    - "test.rice.obj.PyListObjTest"
+    - "test.rice.obj.PySetObjTest"
+    - "test.rice.obj.PyTupleObjTest"
+    - "test.rice.obj.PyDictObjTest"
+    - "test.rice.obj.PyStringObjTest"
+    - "test.rice.obj.MixedIterablePyObjTest"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # PyBoolObjTest (5.0 pts)
+  testGetValueTrue: 0.2
+  testGetValueFalse: 0.3
+  testToStringTrue: 0.5
+  testToStringFalse: 0.5
+  testEqualsTrue: 1.0
+  testEqualsFalse: 0.5
+  testNotEqualNonAPyObj: 0.5
+  testNotEqual: 0.5
+  testHashCodeTrue: 0.2
+  testHashCodeFalse: 0.3
+  testHashCodeNotEqual: 0.5
+
+  # PyIntObjTest (4.5 pts)
+  testGetValuePositive: 0.2
+  testGetValueNegative: 0.2
+  testGetValueRandom: 0.2
+  testToStringPositive: 0.2
+  testToStringNegative: 0.2
+  testToStringLarge: 0.2
+  testEqualsSimple: 1.0
+  testHashCodeSimple: 0.3
+
+  # PyFloatObjTest (5.0 pts)
+  testGetValueLong: 0.2
+  testToStringLong: 0.2
+  testToStringRandom: 0.2
+
+  # PyCharObjTest (5.0 pts)
+  testGetValueLower: 0.2
+  testGetValueUpper: 0.2
+  testGetValueNumber: 0.2
+  testToStringLower: 0.2
+  testToStringUpper: 0.2
+  testToStringNumber: 0.2
+  testHashCodeTrue1: 0.3
+  testHashCodeTrue2: 0.3
+
+  # PyListObjTest (6.0 pts)
+  testGetValueNested: 0.3
+  testToStringEmpty: 0.3
+  testToStringSimpleSingle: 0.3
+  testToStringSimpleMultiple: 0.3
+  testToStringNestedEmpty: 0.3
+  testToStringNestedMultiple: 0.5
+  testEqualsEmptyDifferent: 0.5
+  testNotEqualSubset1: 0.5
+  testNotEqualSubset2: 0.5
+  testEqualsNested: 1.0
+  testHashCodeEqual: 0.3
+
+  # PySetObjTest (5.5 pts)
+  testGetValue: 0.3
+  testToStringSingle: 0.5
+  testToStringMultiple: 0.5
+  testEqualsEmpty: 0.3
+  testEqualsMultiple: 0.5
+
+  # PyTupleObjTest (6.0 pts)
+  testToStringNested: 0.3
+
+  # PyDictObjTest (7.0 pts)
+  testEqualsNonEmpty: 0.5
+
+  # PyStringObjTest (5.5 pts)
+  testToStringSpecialChars: 0.5
+  testEqualsSingle: 0.5
+
+  # MixedIterablePyObjTest (9.5 pts)
+  testGetValueDeeplyNested: 0.2
+  testToStringList: 0.5
+  testToStringTup: 0.5
+  testToStringSet: 0.5
+  testToStringSquareBracketsSet: 1.0
+  testToStringDict: 1.0
+  testToStringSquareBrackets: 1.0
+  testToStringDeeplyNested: 1.0
+  testEqualsList: 0.2
+  testEqualsTup: 0.2
+  testEqualsSet: 0.2
+  testEqualsDict: 0.2
+  testEqualsDeeplyNested: 0.5
+  testNotEqualListTup: 0.6
+  testNotEqualTupList: 0.6
+  testNotEqualListSet: 0.2
+  testNotEqualSetList: 0.2
+  testNotEqualTupSet: 0.2
+  testNotEqualSetTup: 0.2
+  testHashCodeDeeplyNested: 0.5

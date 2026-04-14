@@ -1,0 +1,9 @@
+
+[submodule "src/provided/utils"]
+	path = src/provided/utils
+	url = https://github.com/Rice-COMP-310/General-Utils.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/logger"]
+	path = src/provided/logger
+	url = https://github.com/Rice-COMP-310/Logger.git
+	fetchRecurseSubmodules = true

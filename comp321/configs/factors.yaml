@@ -1,0 +1,91 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 1
+assignment_name: "factors"
+display_name: "Prime Factors"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: c
+runtime:
+  version: "gcc13"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 48
+  total_points: 60
+  timeout_seconds: 60
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "factors.c"
+    functions:
+      - count_factors
+      - count_factors_recursive
+      - count_distinct
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  executable: "factors"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  test_factors_2: 1
+  test_factors_3: 1
+  test_factors_4: 1
+  test_factors_5: 1
+  test_factors_6: 1
+  test_factors_7: 1
+  test_factors_8: 1
+  test_factors_9: 1
+  test_factors_10: 1
+  test_factors_11: 1
+  test_factors_12: 1
+  test_factors_13: 1
+  test_factors_14: 1
+  test_factors_16: 1
+  test_factors_17: 1
+  test_factors_1068: 1
+  test_factors_4261: 1
+  test_factors_7919: 1
+  test_factors_510510: 2
+  test_factors_524287: 2
+  test_factors_104469862: 2
+  test_factors_223092870: 2
+  test_factors_1234567890: 2
+  test_factors_2147483647: 2
+  test_factors_2147483648: 2
+  test_factors_3234846615: 2
+  test_factors_4294967291: 2
+  test_factors_4294967295: 2
+  test_factors_2_r: 1
+  test_factors_3_r: 1
+  test_factors_4_r: 1
+  test_factors_5_r: 1
+  test_factors_6_r: 1
+  test_factors_7_r: 1
+  test_factors_8_r: 1
+  test_factors_9_r: 1
+  test_factors_10_r: 1
+  test_factors_11_r: 1
+  test_factors_12_r: 1
+  test_factors_13_r: 1
+  test_factors_14_r: 1
+  test_factors_16_r: 1
+  test_factors_17_r: 1
+  test_factors_1068_r: 1
+  test_factors_4261_r: 1
+  test_factors_7919_r: 1
+  test_factors_510510_r: 2
+  test_factors_524287_r: 2

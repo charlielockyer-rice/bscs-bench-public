@@ -1,0 +1,97 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 4
+assignment_name: "concise_set_generator"
+display_name: "ConciseSetGenerator and Primitive PyNodes"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "17"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 39
+  total_points: 27
+  timeout_seconds: 10
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  # ConciseSetGenerator (new for HW4)
+  - path: "skeleton_code/src/main/rice/concisegen/ConciseSetGenerator.java"
+  # Primitive PyNode classes (new for HW4)
+  - path: "skeleton_code/src/main/rice/node/APyNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyBoolNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyIntNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyFloatNode.java"
+  # PyObj classes (from HW2, included in skeleton)
+  - path: "skeleton_code/src/main/rice/obj/APyObj.java"
+  - path: "skeleton_code/src/main/rice/obj/AIterablePyObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyBoolObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyIntObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyFloatObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyCharObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyListObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PySetObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyTupleObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyDictObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyStringObj.java"
+  # Test framework stubs (included in skeleton)
+  - path: "skeleton_code/src/main/rice/test/TestCase.java"
+  - path: "skeleton_code/src/main/rice/test/TestResults.java"
+  - path: "skeleton_code/src/main/rice/test/Tester.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  classes:
+    - "test.rice.concisegen.ConciseSetGeneratorTest"
+    - "test.rice.node.PyBoolNodeTest"
+    - "test.rice.node.PyIntNodeTest"
+    - "test.rice.node.PyFloatNodeTest"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # ConciseSetGeneratorTest (15.0 pts)
+  testDoesNotMutateAllCases: 1.0
+  testDoesNotMutateCaseToFiles: 1.0
+  testDoesNotMutateWrongSet: 2.0
+  testNeedAll: 1.0
+  testNotIntegersNeedAll: 2.0
+  testNeedOneAllWrong: 1.0
+  testNeedOneSomeWrong: 1.0
+  testEachFileFailsOneTest: 1.0
+  testOverlap: 1.0
+  testNotIntegersOverlap: 2.0
+  testGreedyNotOptimal: 2.0
+
+  # PyBoolNodeTest (4.0 pts)
+  testGetExDomain: 0.2
+  testGetRanDomain: 0.2
+  testGetLeftChild: 0.3
+  testGetRightChild: 0.3
+  testGenExValsBoth: 1.0
+  testGenExValsOpposite: 0.5
+  testGenRandValBoth: 1.0
+  testGenRandValOpposite: 0.5
+
+  # PyIntNodeTest (4.0 pts)
+  testGenExValsPos: 0.2
+  testGenExValsNeg: 0.2
+  testGenExValsMultiple: 1.0
+  testGenRandValPos: 0.2
+  testGenRandValNeg: 0.2
+  testGenRandValMultiple: 1.0
+
+  # PyFloatNodeTest (4.0 pts) - Same structure as PyIntNodeTest

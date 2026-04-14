@@ -1,0 +1,56 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 1
+assignment_name: "prime_factorization"
+display_name: "Prime Factorization"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "17"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 14
+  total_points: 28
+  timeout_seconds: 10
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "skeleton_code/src/main/rice/PrimeFactorizer.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  classes:
+    - "test.rice.PrimeFactorizerTest"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # Small max factorizer tests (max = 100)
+  testSmallMaxFactorizeNegative: 2.0
+  testSmallMaxFactorize0: 2.0
+  testSmallMaxFactorize101: 2.0
+  testSmallMaxFactorize102: 1.0
+  testSmallMaxFactorize1: 2.0
+  testSmallMaxFactorize7: 2.0
+  testSmallMaxFactorize71: 2.0
+  testSmallMaxFactorize30: 2.0
+  testSmallMaxFactorize81: 2.0
+  testSmallMaxFactorize100: 3.0
+  # Large max factorizer tests
+  testLargeMaxFactorize11777: 1.0
+  testLargeMaxFactorize34534: 2.0
+  testLargeMaxFactorize65536: 2.0
+  testLargeMaxFactorize42398432: 3.0

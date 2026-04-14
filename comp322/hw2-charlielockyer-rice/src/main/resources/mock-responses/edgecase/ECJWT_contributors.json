@@ -1,0 +1,24 @@
+[
+  {
+    "login": "enriquez",
+    "id": 61213,
+    "node_id": "MDQ6VXNlcjYxMjEz",
+    "avatar_url": "https://avatars.githubusercontent.com/u/61213?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/enriquez",
+    "html_url": "https://github.com/enriquez",
+    "followers_url": "https://api.github.com/users/enriquez/followers",
+    "following_url": "https://api.github.com/users/enriquez/following{/other_user}",
+    "gists_url": "https://api.github.com/users/enriquez/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/enriquez/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/enriquez/subscriptions",
+    "organizations_url": "https://api.github.com/users/enriquez/orgs",
+    "repos_url": "https://api.github.com/users/enriquez/repos",
+    "events_url": "https://api.github.com/users/enriquez/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/enriquez/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false,
+    "contributions": 1
+  }
+]

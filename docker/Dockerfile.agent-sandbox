@@ -1,0 +1,13 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+USER root
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -fsSL https://bun.sh/install | bash \
+    && install -m 0755 /root/.bun/bin/bun /usr/local/bin/bun
+
+USER agent

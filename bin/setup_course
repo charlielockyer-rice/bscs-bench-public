@@ -1,0 +1,236 @@
+#!/usr/bin/env bash
+#
+# Course Workspace Setup
+#
+# Creates all workspaces for a course in one command.
+# Skips workspaces that already exist.
+#
+# Usage: setup_course <course_dir> [suffix]
+#        setup_course ./comp321           # Creates comp321_hw1_factors, comp321_hw2_count, etc.
+#        setup_course ./comp140 agent1    # Creates comp140_module1_circles_agent1, etc.
+#
+# Options:
+#   --force    Overwrite existing workspaces
+#
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(dirname "$SCRIPT_DIR")"
+
+# Parse arguments
+FORCE=false
+POSITIONAL_ARGS=()
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        --force)
+            FORCE=true
+            shift
+            ;;
+        *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+    esac
+done
+
+set -- "${POSITIONAL_ARGS[@]}"
+
+if [ $# -lt 1 ]; then
+    echo "Usage: setup_course <course_dir> [model-dir|suffix] [--force]"
+    echo ""
+    echo "Creates all workspaces for a course in one command."
+    echo "Skips workspaces that already exist (use --force to overwrite)."
+    echo ""
+    echo "Arguments:"
+    echo "  course_dir    Path to the course directory (e.g., ./comp140)"
+    echo "  model-dir     Model directory name (e.g., claude-opus-4-6) — workspaces created"
+    echo "                inside workspaces/<model-dir>/<workspace-name>/"
+    echo "  suffix        Legacy: suffix appended to workspace names (e.g., agent1)"
+    echo ""
+    echo "Examples:"
+    echo "  setup_course ./comp140                      # Creates comp140_module1_circles, etc."
+    echo "  setup_course ./comp140 claude-opus-4-6      # Creates workspaces/claude-opus-4-6/comp140_..."
+    echo "  setup_course ./comp140 agent1               # Creates comp140_module1_circles_agent1 (legacy suffix)"
+    echo "  setup_course ./comp321 --force              # Recreate all comp321 workspaces"
+    exit 1
+fi
+
+COURSE_DIR="$(cd "$1" && pwd)"
+THIRD_ARG="${2:-}"
+
+if [ ! -d "$COURSE_DIR" ]; then
+    echo "Error: Course directory not found: $1"
+    exit 1
+fi
+
+COURSE_NAME=$(basename "$COURSE_DIR")
+CONFIGS_DIR="$COURSE_DIR/configs"
+
+if [ ! -d "$CONFIGS_DIR" ]; then
+    echo "Error: No configs directory found in $COURSE_DIR"
+    exit 1
+fi
+
+# Determine whether the 2nd arg is a model-dir or a legacy suffix.
+# Same logic as setup_workspace: if workspaces/<arg>/ exists and isn't a workspace, it's a model dir.
+MODEL_DIR=""
+SUFFIX=""
+if [ -n "$THIRD_ARG" ]; then
+    if [[ "$THIRD_ARG" == --model-dir=* ]]; then
+        MODEL_DIR="${THIRD_ARG#--model-dir=}"
+    else
+        # Always treat as model-dir (new default).
+        MODEL_DIR="$THIRD_ARG"
+    fi
+fi
+
+if [ -n "$MODEL_DIR" ]; then
+    echo "Setting up workspaces for $COURSE_NAME (model-dir: $MODEL_DIR)"
+elif [ -n "$SUFFIX" ]; then
+    echo "Setting up workspaces for $COURSE_NAME (suffix: $SUFFIX)"
+else
+    echo "Setting up workspaces for $COURSE_NAME"
+fi
+echo ""
+
+# COMP 341: auto-trigger data download on first setup (data/ dir missing entirely).
+# For partial downloads, users should run bin/setup_comp341_data manually.
+if [ "$COURSE_NAME" = "comp341" ] && [ ! -d "$COURSE_DIR/data" ]; then
+    echo "Note: COMP 341 data not found. Running setup_comp341_data..."
+    if python3 "$SCRIPT_DIR/setup_comp341_data"; then
+        echo ""
+    else
+        echo "Warning: Some COMP 341 data could not be downloaded."
+        echo "  Run 'bin/setup_comp341_data --check' to see what's missing."
+        echo "  Workspaces will be created but tests may fail without data."
+        echo ""
+    fi
+fi
+
+# Count modules/homeworks/projects from config files
+count_items() {
+    local count=0
+    for config in "$CONFIGS_DIR"/*.yaml; do
+        [ -f "$config" ] && ((count++)) || true
+    done
+    echo $count
+}
+
+TOTAL=$(count_items)
+CREATED=0
+SKIPPED=0
+
+# Iterate through all config files to find module/homework/project numbers
+for config in "$CONFIGS_DIR"/*.yaml; do
+    [ -f "$config" ] || continue
+
+    # Try to extract the number from different config formats
+    NUM=""
+    NAME=""
+
+    # Check for assignment_number (unified schema - COMP411, etc.)
+    if grep -q "^assignment_number:" "$config" 2>/dev/null; then
+        NUM=$(grep "^assignment_number:" "$config" | awk '{print $2}')
+        # Determine name based on config filename pattern to match setup_workspace naming
+        config_basename=$(basename "$config")
+        if [[ "$config_basename" == hw*.yaml ]]; then
+            # python-hw / java-hw: workspace naming uses hw{N}
+            NAME="hw${NUM}"
+        elif [[ "$config_basename" == homework*.yaml ]]; then
+            # homework (COMP 215): workspace naming uses homework{N}
+            NAME="homework${NUM}"
+        elif [[ "$config_basename" == assign*.yaml ]] || [[ "$config_basename" == assignment*.yaml ]]; then
+            # java-assignment: workspace naming uses assignment{N}
+            NAME="assignment${NUM}"
+        elif [[ "$config_basename" == module*.yaml ]]; then
+            # COMP 140: include module number prefix for sorting
+            raw_name=$(grep "^assignment_name:" "$config" | awk '{print $2}' | tr -d '"')
+            NAME="module${NUM}_${raw_name}"
+        else
+            raw_name=$(grep "^assignment_name:" "$config" | awk '{print $2}' | tr -d '"')
+            if [ "$COURSE_NAME" = "comp321" ]; then
+                # COMP 321: include hw number prefix for sorting
+                NAME="hw${NUM}_${raw_name}"
+            else
+                NAME="$raw_name"
+            fi
+        fi
+    # Check for module_number (COMP140)
+    elif grep -q "^module_number:" "$config" 2>/dev/null; then
+        NUM=$(grep "^module_number:" "$config" | awk '{print $2}')
+        raw_name=$(grep "^module_name:" "$config" | sed 's/module_name: *"\{0,1\}\([^"]*\)"\{0,1\}/\1/' | tr '[:upper:]' '[:lower:]' | tr ' ' '_')
+        NAME="module${NUM}_${raw_name}"
+    # Check for homework_number (COMP215, COMP182, COMP382)
+    elif grep -q "^homework_number:" "$config" 2>/dev/null; then
+        NUM=$(grep "^homework_number:" "$config" | awk '{print $2}')
+        NAME="homework${NUM}"
+    # Check for project_number (COMP321)
+    elif grep -q "^project_number:" "$config" 2>/dev/null; then
+        NUM=$(grep "^project_number:" "$config" | awk '{print $2}')
+        raw_name=$(grep "^project_name:" "$config" | awk '{print $2}' | tr -d '"')
+        NAME="hw${NUM}_${raw_name}"
+    fi
+
+    if [ -z "$NUM" ]; then
+        echo "Warning: Could not determine number from $config, skipping"
+        continue
+    fi
+
+    # Determine workspace name and path based on model-dir vs suffix
+    if [ -n "$MODEL_DIR" ]; then
+        WORKSPACE_NAME="${COURSE_NAME}_${NAME}"
+        WORKSPACE_PATH="$PROJECT_ROOT/workspaces/$MODEL_DIR/$WORKSPACE_NAME"
+    elif [ -n "$SUFFIX" ]; then
+        WORKSPACE_NAME="${COURSE_NAME}_${NAME}_${SUFFIX}"
+        WORKSPACE_PATH="$PROJECT_ROOT/workspaces/$WORKSPACE_NAME"
+    else
+        WORKSPACE_NAME="${COURSE_NAME}_${NAME}"
+        WORKSPACE_PATH="$PROJECT_ROOT/workspaces/$WORKSPACE_NAME"
+    fi
+
+    # Check if workspace exists
+    if [ -d "$WORKSPACE_PATH" ]; then
+        if [ "$FORCE" = true ]; then
+            echo "  [$NUM] $NAME - recreating (--force)"
+            rm -rf "$WORKSPACE_PATH"
+        else
+            echo "  [$NUM] $NAME - skipped (exists)"
+            ((SKIPPED++))
+            continue
+        fi
+    else
+        echo "  [$NUM] $NAME - creating"
+    fi
+
+    # Run setup_workspace: course_dir module_number [model-dir|suffix]
+    SETUP_ARG=""
+    if [ -n "$MODEL_DIR" ]; then
+        SETUP_ARG="--model-dir=$MODEL_DIR"
+    elif [ -n "$SUFFIX" ]; then
+        SETUP_ARG="$SUFFIX"
+    fi
+
+    if [ -n "$SETUP_ARG" ]; then
+        if "$SCRIPT_DIR/setup_workspace" "$COURSE_DIR" "$NUM" "$SETUP_ARG" > /dev/null 2>&1; then
+            ((CREATED++))
+        else
+            echo "      Error setting up workspace for $NAME"
+        fi
+    else
+        if "$SCRIPT_DIR/setup_workspace" "$COURSE_DIR" "$NUM" > /dev/null 2>&1; then
+            ((CREATED++))
+        else
+            echo "      Error setting up workspace for $NAME"
+        fi
+    fi
+done
+
+echo ""
+echo "Done! Created: $CREATED, Skipped: $SKIPPED, Total: $TOTAL"
+if [ -n "$MODEL_DIR" ]; then
+    echo "Workspaces location: $PROJECT_ROOT/workspaces/$MODEL_DIR/"
+else
+    echo "Workspaces location: $PROJECT_ROOT/workspaces/"
+fi

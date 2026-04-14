@@ -1,0 +1,43 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 4
+assignment_name: "assignment4"
+display_name: "Imperative Jam (Mutable References)"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "8"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 28
+  total_points: 100
+  timeout_seconds: 120
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "Interp.java"
+    student_implements: true
+  - path: "Parser.java"
+    student_implements: true
+  - path: "AST.java"
+    student_implements: true
+  - path: "ValuesTokens.java"
+    student_implements: true
+  - path: "Lexer.java"
+  - path: "Syntax.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  class: "Assign4Test"

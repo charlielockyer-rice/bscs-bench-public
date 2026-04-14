@@ -1,0 +1,31 @@
+assignment_number: 2
+assignment_name: "Mathematical Induction and Graphs"
+display_name: "HW2: Mathematical Induction and Graphs"
+course: "comp182"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+llm_grading:
+  rubric: "solutions/homework2_rubric.md"
+
+problems:
+  - number: 1
+    name: "Mathematical Induction"
+    points: 40
+    description: "Prove various statements using mathematical induction"
+
+  - number: 2
+    name: "Graph Theory Basics"
+    points: 30
+    description: "Graph theory definitions and basic proofs"
+
+  - number: 3
+    name: "Graph Properties"
+    points: 30
+    description: "Prove properties of graphs"
+
+topics:
+  - "Mathematical Induction"
+  - "Graph Theory"
+  - "Degree Sequences"

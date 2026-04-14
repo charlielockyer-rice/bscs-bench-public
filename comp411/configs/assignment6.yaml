@@ -1,0 +1,43 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 6
+assignment_name: "assignment6"
+display_name: "Jam with Continuations (CPS)"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "8"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 39
+  total_points: 100
+  timeout_seconds: 180
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# Note: Assignment 6 has a fresh codebase - NOT based on Assignment 5
+# The starter code uses Syntax.java (combined AST/Lexer/Parser) + Semantics.java
+# =============================================================================
+source_files:
+  - path: "Syntax.java"
+    student_implements: true
+    description: "Combined AST definitions, Lexer, Parser (includes SyntaxException, SD types)"
+  - path: "Semantics.java"
+    student_implements: true
+    description: "Interpreter with CPS conversion and SD evaluation"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  class: "Assign6Test"
+  additional_classes:
+    - "SyntaxTest"

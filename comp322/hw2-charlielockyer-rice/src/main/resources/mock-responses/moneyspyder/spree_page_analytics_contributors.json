@@ -1,0 +1,24 @@
+[
+  {
+    "login": "kvanwagenen",
+    "id": 4634315,
+    "node_id": "MDQ6VXNlcjQ2MzQzMTU=",
+    "avatar_url": "https://avatars.githubusercontent.com/u/4634315?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/kvanwagenen",
+    "html_url": "https://github.com/kvanwagenen",
+    "followers_url": "https://api.github.com/users/kvanwagenen/followers",
+    "following_url": "https://api.github.com/users/kvanwagenen/following{/other_user}",
+    "gists_url": "https://api.github.com/users/kvanwagenen/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/kvanwagenen/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/kvanwagenen/subscriptions",
+    "organizations_url": "https://api.github.com/users/kvanwagenen/orgs",
+    "repos_url": "https://api.github.com/users/kvanwagenen/repos",
+    "events_url": "https://api.github.com/users/kvanwagenen/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/kvanwagenen/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false,
+    "contributions": 11
+  }
+]

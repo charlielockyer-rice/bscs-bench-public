@@ -1,0 +1,26 @@
+
+[submodule "src/provided/utils"]
+	path = src/provided/utils
+	url = https://github.com/Rice-COMP-310/General-Utils.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/logger"]
+	path = src/provided/logger
+	url = https://github.com/Rice-COMP-310/Logger.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/basicVisitorFW"]
+	path = src/provided/basicVisitorFW
+	url = https://github.com/Rice-COMP-310/Basic_Visitor_Framework.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/listFW"]
+	path = src/provided/listFW
+	url = https://github.com/Rice-COMP-310/List_Visitor_Framework.git
+	fetchRecurseSubmodules = true
+
+[submodule "src/provided/ballworld/extVisitors"]
+	path = src/provided/ballworld/extVisitors
+	url = https://github.com/Rice-COMP-310/Ballworld_ext_visitors.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/extvisitor"]
+	path = src/provided/extvisitor
+	url = https://github.com/Rice-COMP-310/ExtVisitor.git
+	fetchRecurseSubmodules = true

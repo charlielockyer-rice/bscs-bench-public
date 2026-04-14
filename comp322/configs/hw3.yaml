@@ -1,0 +1,53 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 3
+assignment_name: "hw3"
+display_name: "Pairwise Sequence Alignment"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "11"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 16
+  total_points: 100
+  timeout_seconds: 300
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "src/main/java/edu/rice/comp322/IdealParScoring.java"
+  - path: "src/main/java/edu/rice/comp322/UsefulParScoring.java"
+  - path: "src/main/java/edu/rice/comp322/SparseParScoring.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  classes:
+    - "edu.rice.comp322.Homework3Checkpoint1CorrectnessTest"
+    - "edu.rice.comp322.Homework3Checkpoint2CorrectnessTest"
+    - "edu.rice.comp322.Homework3Checkpoint3CorrectnessTest"
+    - "edu.rice.comp322.Homework3PerformanceTest"
+
+# =============================================================================
+# BUILD
+# =============================================================================
+build:
+  tool: "maven"
+  javaagent: "src/main/resources/hjlib-elog-aedancullen-master-d2108184ec-1.jar"
+
+# =============================================================================
+# HJLIB
+# =============================================================================
+source_dir: "hw3-charlielockyer-rice"
+uses_hjlib: true

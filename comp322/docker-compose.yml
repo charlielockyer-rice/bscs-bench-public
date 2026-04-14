@@ -1,0 +1,29 @@
+# COMP 322 Docker Compose
+# Usage: WORKSPACE=./hw1-dir docker compose run --rm comp322 mvn test
+#
+# Note: Security constraints (mem_limit, cpus) match runner.py for consistency.
+# docker-compose is for interactive use; runner.py enforces these for automated tests.
+
+services:
+  comp322:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Security constraints - must match runner.py
+    # HW3 PerformanceTest requires high memory (-Xmx8192m in pom.xml)
+    mem_limit: 10g
+    cpus: 2
+    volumes:
+      # Mount workspace (WORKSPACE env var is required)
+      - ${WORKSPACE:?WORKSPACE environment variable must be set}:/workspace
+      # Cache Maven dependencies between runs
+      - comp322-maven-cache:/root/.m2/repository
+    working_dir: /workspace
+    environment:
+      - MAVEN_OPTS=-Xmx4096m
+      # Pass through GitHub credentials for HW2
+      - GITHUB_USERNAME
+      - GITHUB_TOKEN
+
+volumes:
+  comp322-maven-cache:

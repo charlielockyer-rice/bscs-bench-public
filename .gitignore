@@ -1,0 +1,96 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+ENV/
+env/
+.venv/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Claude Code local config
+.claude/
+
+# Obsidian
+.obsidian/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Eval results (will be generated)
+results/
+agent_runs/
+workspaces/
+state/
+
+# Local scratch notes and experiments
+.scratch/
+No Calculators Allowed Notes.md
+no_calculators_allowed_full_draft.md
+dashboard/
+
+.venv/
+
+# Node/Bun
+node_modules/
+.next/
+*.tsbuildinfo
+bun.lock
+
+# Environment
+.env
+
+# Reference code (not part of this project)
+agent-core-reference/
+archives/
+
+# Course source exports (Beeline HTML)
+comp140/sources/
+
+# Generated Javadoc
+comp310/coursework/**/doc/
+
+# COMP 310 final project, OwlMaps binaries, RMI lab (not needed for benchmark)
+comp310/coursework/*finalproject*/
+comp310/coursework/*rmi-lab*/
+comp310/libraries/OwlMaps/
+comp310/libraries/OwlMaps_MacOS/
+comp310/libraries/OwlMaps_support/
+
+# COMP 341 ML data (large datasets - download via setup script)
+comp341/data/
+comp341/sources/
+
+# COMP 421 reference solution (not part of this project)
+comp421/yalnix_FS-master/
+
+# COMP 318 reference solution
+
+comp318/owldb_reference_solution/owldb
+comp318/owldb_reference_solution/owldb_ref
+comp318/owldb_reference_solution/owldb-ref

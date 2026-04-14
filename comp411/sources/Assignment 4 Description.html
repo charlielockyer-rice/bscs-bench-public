@@ -1,0 +1,522 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<title>COMP 411 Principles of Programming Languages</title>
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:"Calibri Light";
+	panose-1:2 15 3 2 2 2 4 3 2 4;}
+@font-face
+	{font-family:Consolas;
+	panose-1:2 11 6 9 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin:0in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+h2
+	{mso-style-link:"Heading 2 Char";
+	margin-right:0in;
+	margin-left:0in;
+	font-size:18.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;
+	font-weight:bold;}
+h3
+	{mso-style-link:"Heading 3 Char";
+	margin-right:0in;
+	margin-left:0in;
+	font-size:13.5pt;
+	font-family:"Arial",sans-serif;
+	color:windowtext;
+	font-weight:bold;}
+p.MsoBodyTextIndent, li.MsoBodyTextIndent, div.MsoBodyTextIndent
+	{mso-style-link:"Body Text Indent Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+a:link, span.MsoHyperlink
+	{color:#0000EE;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#551A8B;
+	text-decoration:underline;}
+p
+	{margin-right:0in;
+	margin-left:.5in;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+pre
+	{mso-style-link:"HTML Preformatted Char";
+	margin-top:0in;
+	margin-right:0in;
+	margin-bottom:0in;
+	margin-left:.5in;
+	margin-bottom:.0001pt;
+	font-size:12.0pt;
+	font-family:"Courier New";
+	color:windowtext;}
+tt
+	{font-family:"Courier New";}
+span.Heading2Char
+	{mso-style-name:"Heading 2 Char";
+	mso-style-link:"Heading 2";
+	font-family:"Calibri Light",sans-serif;
+	color:#2E74B5;}
+span.Heading3Char
+	{mso-style-name:"Heading 3 Char";
+	mso-style-link:"Heading 3";
+	font-family:"Calibri Light",sans-serif;
+	color:#1F4D78;}
+span.HTMLPreformattedChar
+	{mso-style-name:"HTML Preformatted Char";
+	mso-style-link:"HTML Preformatted";
+	font-family:Consolas;
+	color:black;}
+span.BodyTextIndentChar
+	{mso-style-name:"Body Text Indent Char";
+	mso-style-link:"Body Text Indent";
+	font-family:"Arial",sans-serif;
+	color:black;}
+p.class1, li.class1, div.class1
+	{mso-style-name:class1;
+	margin-right:0in;
+	margin-left:.5in;
+	font-size:12.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+p.msochpdefault, li.msochpdefault, div.msochpdefault
+	{mso-style-name:msochpdefault;
+	margin-right:0in;
+	margin-left:.5in;
+	font-size:10.0pt;
+	font-family:"Arial",sans-serif;
+	color:black;}
+span.m
+	{mso-style-name:m;}
+.MsoChpDefault
+	{font-size:10.0pt;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.25in 1.0in 1.25in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body bgcolor=white lang=EN-US link="#0000EE" vlink="#551A8B" alink="#ff0000">
+
+<div class=WordSection1>
+
+<p class=MsoNormal>&nbsp; <u1:p></u1:p></p>
+
+<table class=MsoNormalTable border=0 cellspacing=3 cellpadding=0 width="100%"
+ style='width:100.0%' nosave="">
+ <tr>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=class1><b><span style='font-size:48.0pt;color:#3366FF'>Programming
+  Assignment 4:<br>
+  Imperative Jam</span></b><span style='font-size:14.0pt'> </span></p>
+  </td>
+  <td style='padding:.75pt .75pt .75pt .75pt'>
+  <p class=MsoNormal>&nbsp;</p>
+  </td>
+ </tr>
+</table>
+
+<h2><span style='font-size:20.0pt'>Points: 100</span></h2>
+
+<h2 style='background:white'>Provided Code</h2>
+
+<u1:p></u1:p>
+
+<p style='background:white;font-variant-ligatures: normal;font-variant-caps: normal;
+orphans: 2;text-align:start;widows: 2;-webkit-text-stroke-width: 0px;
+text-decoration-thickness: initial;text-decoration-style: initial;text-decoration-color: initial;
+word-spacing:0px'><span style='font-size:14.0pt'>The Starter Repository
+consists a single folder </span><b><span style='font-size:14.0pt;font-family:
+Consolas'>src</span></b><span style='font-size:14.0pt'> containing skeleton
+Junit test files </span><b><span style='font-size:14.0pt;font-family:Consolas'>Assign1Test.java</span></b><span
+style='font-size:14.0pt'>, </span><b><span style='font-size:14.0pt;font-family:
+Consolas'>Assign2Test.java</span></b><span style='font-size:14.0pt'>, </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>Assign3Test.java</span></b><span
+style='font-size:14.0pt'>, and </span><b><span style='font-size:14.0pt;
+font-family:Consolas'>Assign4Test.java</span></b><span style='font-size:14.0pt'>.
+In this assignment, you</span><span style='font-size:13.5pt'> must extend the
+Jam language from Project 3 (either the class solution or your own) by
+implementing a few new Jam constructs that support mutable cells.&nbsp; The
+tests in provided test file </span><b><span style='font-size:14.0pt;font-family:
+Consolas'>Assign4Test.java</span></b><span style='font-size:13.5pt'> exercise
+these extensions, but are not comprehensive. A class solution to Project 3 will
+be posted on Canvas after the window (including slip days) for submitting Project
+3 closes.&nbsp; </span></p>
+
+<h3><span style='font-size:18.0pt'>Overview</span></h3>
+
+<p><b><span style='font-size:14.0pt'>Task</span></b><span style='font-size:
+14.0pt'> &nbsp; Your task is to extend and modify the nine interpreters from
+Project 3 (using either your solution or the posted class solution for Project
+3) to support imperative programming by adding ML-style reference cells and
+blocks. In particular, you will add the unary operators </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>ref</span></b></tt><span
+style='font-size:14.0pt'> and </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>!</span></b></tt><span style='font-size:14.0pt'>, the
+binary assignment operator </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>&lt;-</span></b></tt><span style='font-size:14.0pt'>, and
+<i>blocks</i> consisting of non-empty sequences of expressions enclosed in
+braces (</span><tt><b><span style='font-size:14.0pt;font-family:Consolas'>{</span></b></tt><span
+style='font-size:14.0pt'> and </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>}</span></b></tt><span style='font-size:14.0pt'>) and
+separated by semicolons (the final expression in the sequence does NOT have a
+semicolon following it). In other words</span></p>
+
+<pre><b><span style='font-size:14.0pt;font-family:Consolas'>Exp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ::= ...</span></b></pre><pre><b><span
+style='font-size:14.0pt;font-family:Consolas'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; | Block</span></b></pre><pre><b><span
+style='font-size:14.0pt;font-family:Consolas'>Block&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ::= '{' PropStmtList '}'</span></b></pre><pre><b><span
+style='font-size:14.0pt;font-family:Consolas'>PropStmtList &nbsp;::= Exp { ; Exp}*</span></b></pre><pre><b><span
+style='font-size:14.0pt;font-family:Consolas'>Unop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ::= ... | ref | !</span></b></pre><pre><b><span
+style='font-size:14.0pt;font-family:Consolas'>Binop&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ::= ... | &lt;-</span></b></pre><pre><b><span
+style='font-size:14.0pt;font-family:Consolas'>Prim&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ::= ... | ref?</span></b></pre>
+
+<p><span style='font-size:14.0pt'>Note that a </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>PropStatList</span></b></tt><span
+style='font-size:14.0pt'> is identical to a </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>PropExpList</span></b></tt><span
+style='font-size:14.0pt'> except for the separator symbol </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>;</span></b></tt><span
+style='font-size:14.0pt'> instead of </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>,</span></b></tt><span style='font-size:14.0pt'>. You may
+want to exploit the commonality in your parser. We will often use the term &quot;Stmt&quot;
+instead of &quot;Exp&quot; because with the addition of mutable cells,
+evaluating an expression can modify program state (the contents of mutable
+cells). From a strictly syntactic viewpoint, there is no difference between
+statements and expressions. But we still try to use the term <i>statement</i>
+to refer to expressions where mutation is common and the term expression (more
+accurately <i>pure</i> <i>expression</i>) where no mutation is necessary in
+well-written code. </span></p>
+
+<p><span style='font-size:14.0pt'>You must modify your lexer and parser to
+accept </span><tt><b><span style='font-size:14.0pt;font-family:Consolas'>Block</span></b></tt><span
+style='font-size:14.0pt'>s as well as the new unary operators </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>ref</span></b></tt><span
+style='font-size:14.0pt'> and </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>!, </span></b></tt><span style='font-size:14.0pt'>the new
+binary operator </span><tt><b><span style='font-size:14.0pt;font-family:Consolas'>&lt;-</span></b></tt><span
+style='font-size:14.0pt'>, and the new primitive function </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>ref?</span></b></tt><span
+style='font-size:14.0pt'>. The parser and lexer for Assignment 3 already
+include commented-out code that supports parsing Assignment 4 Jam with the
+exception that the lexer must recognize </span><tt><b><span style='font-size:
+14.0pt;font-family:Consolas'>!</span></b></tt><span style='font-size:14.0pt'> followed
+by any character other than </span><b><span style='font-size:14.0pt;font-family:
+Consolas'>=</span></b><span style='font-size:14.0pt'> is the unary prefix
+operator </span><tt><b><span style='font-size:14.0pt;font-family:Consolas'>!</span></b></tt><span
+style='font-size:14.0pt'> rather than a </span><b><span style='font-size:14.0pt;
+font-family:Consolas'>ParseException</span></b><span style='font-size:14.0pt'>
+.</span></p>
+
+<p><strong><span style='font-size:14.0pt;font-family:"Arial",sans-serif'>Adding
+ref cells and assignment</span></strong><span style='font-size:14.0pt'> &nbsp;
+The unary operation </span><tt><b><span style='font-size:14.0pt;font-family:
+Consolas'>ref E</span></b></tt><span style='font-size:14.0pt'> &nbsp;evaluates
+the expression </span><tt><b><span style='font-size:14.0pt;font-family:Consolas'>E</span></b></tt><span
+style='font-size:14.0pt'> to produce an arbitrary value </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>V</span></b></tt><span
+style='font-size:14.0pt'>, creates a new box </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>b</span></b></tt><span
+style='font-size:14.0pt'> holding </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>V</span></b></tt><span style='font-size:14.0pt'> and
+returns the box </span><tt><b><span style='font-size:14.0pt;font-family:Consolas'>b</span></b></tt><span
+style='font-size:14.0pt'>.</span></p>
+
+<p><span style='font-size:14.0pt'>The unary operation </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>! E</span></b></tt><span
+style='font-size:14.0pt'> &nbsp;evaluates the expression </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>E</span></b></tt><span
+style='font-size:14.0pt'> to produce a value which must be a box and returns
+the contents of the box. If the value of </span><tt><b><span style='font-size:
+14.0pt;font-family:Consolas'>E</span></b></tt><span style='font-size:14.0pt'>
+is not a box, the interpreter generates a run-time error (an </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>EvalException</span></b></tt><span
+style='font-size:14.0pt'>).</span></p>
+
+<p><span style='font-size:14.0pt'>The binary operation </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>E1 &lt;- E2</span></b></tt><span
+style='font-size:14.0pt'> evaluates the expression </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>E1</span></b></tt><span
+style='font-size:14.0pt'> to produce a value </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>V1</span></b></tt><span
+style='font-size:14.0pt'> that must be a box, evaluates </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>E2</span></b></tt><span
+style='font-size:14.0pt'> to produce an arbitrary value </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>V2</span></b></tt><span
+style='font-size:14.0pt'>, stores </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>V2</span></b></tt><span style='font-size:14.0pt'> in box </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>V1</span></b></tt><span
+style='font-size:14.0pt'>, and returns the special value </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>JamUnit</span></b></tt><span
+style='font-size:14.0pt'> (which is a <em><span style='font-family:"Arial",sans-serif'>legal
+Jam value</span></em> that is rejected by most primitive operations as an
+invalid input). If </span><tt><b><span style='font-size:14.0pt;font-family:
+Consolas'>V1</span></b></tt><span style='font-size:14.0pt'> is not a box, then
+the interpreter must generate a run-time error.&nbsp; </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>JamUnit</span></b></tt><span
+style='font-size:14.0pt'> can conveniently be represented as singleton subclass
+of </span><b><span style='font-size:14.0pt;font-family:Consolas'>JamVal</span></b><span
+style='font-size:14.0pt'>. If you follow this recommendation, you may need to
+modify the </span><b><span style='font-size:14.0pt;font-family:Consolas'>JamValVisitor</span></b><span
+style='font-size:14.0pt'> interface to include a </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>forXXXX</span></b><span
+style='font-size:14.0pt'> method for </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>JamUnit</span></b></tt><span style='font-size:14.0pt'>.&nbsp;
+(The class solution avoid this compiication since it never uses the </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>JamValVisitor</span></b><span
+style='font-size:14.0pt'> interface.&nbsp; In your solution, you can delete
+this interface if it not used.&nbsp; We recommend that you use a different
+representation (from </span><tt><b><span style='font-size:14.0pt;font-family:
+Consolas'>JamUnit</span></b></tt><span style='font-size:14.0pt'>) for the dummy
+binding value in a recursive </span><b><span style='font-size:14.0pt;
+font-family:Consolas'>let</span></b><span style='font-size:14.0pt'>, and
+classify any attempt to access this value in the environment as a run-time
+error.&nbsp; Since attempting to access this dummy value is a run-time error,
+the representation of this dummy value does not need to be a </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>JamVal</span></b><span
+style='font-size:14.0pt'>. The </span><b><span style='font-size:14.0pt;
+font-family:Consolas'>null</span></b><span style='font-size:14.0pt'> pointer in
+Java can be used to represent the dummy bound value in the implementation of
+recursive </span><span style='font-size:14.0pt;font-family:Consolas'>let</span><span
+style='font-size:14.0pt'>; you can also introduce a special object (as long as
+it is not a </span><b><span style='font-size:14.0pt;font-family:Consolas'>JamVal</span></b><span
+style='font-size:14.0pt'>) for this purpose.&nbsp;&nbsp; </span></p>
+
+<p><span style='font-size:14.0pt'>The special value </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>JamUnit</span></b></tt><span
+style='font-size:14.0pt'> can bound to a variable, returned by a </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>map</span></b><span
+style='font-size:14.0pt'>, and appear as an expression in a block.&nbsp; We
+recommend throwing an </span><b><span style='font-size:14.0pt;font-family:Consolas'>EvalException</span></b><span
+style='font-size:14.0pt'> if </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>JamUnit</span></b></tt><span style='font-size:14.0pt'> is
+passed as the input to any operation other than the block construct, </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>=</span></b><span
+style='font-size:14.0pt'>, and type recognizers like </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>number?</span></b><span
+style='font-size:14.0pt'>.&nbsp; Scheme is more liberal in its treatment of the
+</span><b><span style='font-size:14.0pt;font-family:Consolas'>(void)</span></b><span
+style='font-size:14.0pt'> value (which is the Scheme analog of </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>JamUnit</span></b></tt><span
+style='font-size:14.0pt'>).&nbsp; Scheme supports embedding </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>(void)</span></b><span
+style='font-size:14.0pt'> inside any data structure.&nbsp; You can follow this
+option in implementing Jam if you choose.&nbsp; (You can use </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>DrRacket</span></b><span
+style='font-size:14.0pt'> as a guide.)&nbsp; The behavior of </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>JamUnit</span></b><span
+style='font-size:14.0pt'> will be tested in our grading suites other than its
+return as the value of a block.</span></p>
+
+<p><span style='font-size:14.0pt'>A box (reference cell) is a Jam value and can
+be returned as the result of an expression. When converted to a string, the
+output of a box should appear as </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>(ref&nbsp;&lt;value&gt;)</span></b></tt><span
+style='font-size:14.0pt'>. This expression</span></p>
+
+<p style='margin-left:45.8pt'><tt><b><span style='font-size:14.0pt;font-family:
+Consolas'>let x := ref 10; in {x &lt;- ref 17; x}</span></b></tt></p>
+
+<p><span style='font-size:14.0pt'>should evaluate to the </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>JamVal</span></b><span
+style='font-size:14.0pt'> that is displayed as the string</span></p>
+
+<p style='margin-left:45.8pt'><tt><b><span style='font-size:14.0pt;font-family:
+Consolas'>(ref (ref 17))</span></b></tt></p>
+
+<p><span style='font-size:14.0pt'>in call-by-value and call-by-need. In
+call-by-name evaluation, your interpreter should display the string</span></p>
+
+<p style='margin-left:45.8pt'><tt><b><span style='font-size:14.0pt;font-family:
+Consolas'>(ref 10)</span></b></tt></p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-size:14.0pt;
+color:windowtext'>since the binding of </span><b><span style='font-size:14.0pt;
+font-family:Consolas;color:windowtext'>x</span></b><span style='font-size:14.0pt;
+color:windowtext'> is re-evaluated for every occurrence</span><span
+style='font-size:14.0pt;font-family:"Times New Roman",serif;color:windowtext'>.
+</span></p>
+
+<p><span style='font-size:14.0pt'>You will have to modify your </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>toString</span></b><span
+style='font-size:14.0pt'> method to support the correct display of boxes.
+Equality for boxes is based on the address of the box, not the contents, i.e.
+the expression</span></p>
+
+<p style='margin-left:45.8pt'><tt><b><span style='font-size:14.0pt;font-family:
+Consolas'>let x := ref 10; y := ref 10; in x = y</span></b></tt></p>
+
+<p><span style='font-size:14.0pt'>evaluates to </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>false</span></b></tt><span
+style='font-size:14.0pt'> regardless of the semantics for let (call-by-value,
+call-by-name, call-by-need).</span></p>
+
+<p><span style='font-size:14.0pt'>The primitive function </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>ref?</span></b></tt><span
+style='font-size:14.0pt'> acts like all other type recognizers, e.g., </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>number?</span></b><span
+style='font-size:14.0pt'>, in that it accepts one argument, which can be of any
+type, but only returns </span><tt><b><span style='font-size:14.0pt;font-family:
+Consolas'>true</span></b></tt><span style='font-size:14.0pt'> if that argument
+is a box, and </span><tt><b><span style='font-size:14.0pt;font-family:Consolas'>false</span></b></tt><span
+style='font-size:14.0pt'> in all other cases.</span></p>
+
+<p><strong><span style='font-size:14.0pt;font-family:"Arial",sans-serif'>Adding
+blocks</span></strong><span style='font-size:14.0pt'> &nbsp; The block </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>{ <i>e</i></span></b></tt><tt><b><i><sub><span
+style='font-size:14.0pt;font-family:"Arial",sans-serif'>1</span></sub></i></b></tt><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>; ...; <i>e</i></span></b></tt><tt><i><sub><span
+style='font-size:14.0pt;font-family:"Arial",sans-serif'>n</span></sub></i></tt><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'> }</span></b></tt><span
+style='font-size:14.0pt'>, </span><tt><i><span style='font-size:10.0pt;
+font-family:"Arial",sans-serif'>n &gt; 0</span></i></tt><span style='font-size:
+14.0pt'>, evaluates </span><tt><b><i><span style='font-size:14.0pt;font-family:
+Consolas'>e</span></i></b></tt><tt><b><i><sub><span style='font-size:14.0pt;
+font-family:"Arial",sans-serif'>1</span></sub></i></b></tt><span
+style='font-size:14.0pt'>, </span><span style='font-size:14.0pt;font-family:
+Consolas'>...</span><span style='font-size:14.0pt'>, </span><tt><b><i><span
+style='font-size:14.0pt;font-family:Consolas'>e</span></i></b></tt><tt><i><sub><span
+style='font-size:14.0pt;font-family:"Arial",sans-serif'>n</span></sub></i></tt><span
+style='font-size:14.0pt'> in left-to-right order and returns the value of </span><tt><b><i><span
+style='font-size:14.0pt;font-family:Consolas'>e</span></i></b></tt><tt><i><sub><span
+style='font-size:14.0pt;font-family:"Arial",sans-serif'>n</span></sub></i></tt><span
+style='font-size:14.0pt'>. The expressions </span><tt><b><i><span
+style='font-size:14.0pt;font-family:Consolas'>e</span></i></b></tt><tt><b><i><sub><span
+style='font-size:14.0pt;font-family:"Arial",sans-serif'>1</span></sub></i></b></tt><span
+style='font-size:14.0pt'>, </span><span style='font-size:14.0pt;font-family:
+Consolas'>...</span><span style='font-size:14.0pt'>, </span><tt><b><i><span
+style='font-size:14.0pt;font-family:Consolas'>e</span></i></b></tt><tt><i><sub><span
+style='font-size:14.0pt;font-family:"Arial",sans-serif'>n</span></sub></i></tt><span
+style='font-size:14.0pt'> may evaluate to </span><tt><b><span style='font-size:
+14.0pt;font-family:Consolas'>JamUnit</span></b></tt><span style='font-size:
+14.0pt'> (returned by the assignment operator) without aborting the
+computation. In the Jam grammar, a </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>Block</span></b></tt><span style='font-size:14.0pt'> is
+an additional form for an expression analogous to </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>map</span></b></tt><span
+style='font-size:14.0pt'>, </span><tt><b><span style='font-size:14.0pt;
+font-family:Consolas'>if</span></b></tt><span style='font-size:14.0pt'>, and </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>let</span></b></tt><span
+style='font-size:14.0pt'>. Hence, it cannot appear as the first argument in a
+binary expression unless it is enclosed in parentheses. The “empty block” is a
+parser error (a </span><tt><b><span style='font-size:14.0pt;font-family:Consolas'>ParseException</span></b></tt><span
+style='font-size:14.0pt'>).</span></p>
+
+<p><strong><span style='font-size:14.0pt;font-family:"Arial",sans-serif'>Optional
+extra credit (10 points)</span></strong><span style='font-size:14.0pt'> &nbsp;
+Devise a small set of programs that exhibits different behavior for eight of
+the nine modes of interpretation and run them (unless they diverge) from a unit
+test suite. For any test that diverges result include a commented out test case
+with an explanation.&nbsp; Your programs should not generate any run-time
+errors. </span></p>
+
+<p><b><span style='font-size:14.0pt'>Testing</span></b><span style='font-size:
+14.0pt'> &nbsp; You are expected to write unit tests for all of your
+non-trivial methods or functions <em><span style='font-family:"Arial",sans-serif'>and
+submit your test code as part of your program</span></em>. For more
+information, refer back to Project 1.</span></p>
+
+<h3><span style='font-size:18.0pt'>Testing and Submitting Your Program</span></h3>
+
+<p><span style='font-size:14.0pt'>The </span><b><span style='font-size:14.0pt;
+font-family:Consolas'>src</span></b><span style='font-size:14.0pt'> folder in
+the Starter Repository only includes the Junit test file </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>Assign4Test.java</span></b><span
+style='font-size:14.0pt'>.&nbsp; Make sure that your program passes the sample
+unit tests in </span><b><span style='font-size:14.0pt;font-family:Consolas'>Assign1Test.java</span></b><span
+style='font-size:14.0pt'>, </span><b><span style='font-size:14.0pt;font-family:
+Consolas'>Assign2Test.java</span></b><span style='font-size:14.0pt'>, and </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>Assign3Test.java</span></b><span
+style='font-size:14.0pt'>, which all appear in the sample solution to Project
+3.&nbsp; You obviously need to add more test cases to </span><b><span
+style='font-size:14.0pt;font-family:Consolas'>Assign4Test.java</span></b><span
+style='font-size:14.0pt'> or create your own Junit test file for Project
+4.&nbsp; You need to thoroughly test the interpretation of each new construct,
+notably boxes and mutation.</span></p>
+
+<p><span style='font-size:14.0pt'>As always, each class and method in your
+program should be preceded by a short&nbsp;</span><b><span style='font-size:
+14.0pt;font-family:Consolas'>javadoc</span></b><span style='font-size:14.0pt'>&nbsp;comment
+stating precisely what it does.</span></p>
+
+<p><span style='font-size:14.0pt'>Edit the </span><tt><b><span
+style='font-size:14.0pt;font-family:Consolas'>README</span></b></tt><span
+style='font-size:14.0pt'> file for your repository so that it</span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol'>·</span><span style='font-size:
+7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:14.0pt'>outlines the organization of your
+program, </span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol'>·</span><span style='font-size:
+7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:14.0pt'>specifies any compatible additions that
+you made the provided API (not generally necessary), and</span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in'><span
+style='font-size:10.0pt;font-family:Symbol'>·</span><span style='font-size:
+7.0pt;font-family:"Times New Roman",serif'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</span><span style='font-size:14.0pt'>specifes what testing process you used to
+confirm the correctness of your program.</span></p>
+
+<p class=MsoNormal style='margin-left:.75in;text-indent:-.25in'>&nbsp;</p>
+
+<p class=MsoNormal style='margin-left:.5in'><span style='font-size:14.0pt'>Note
+that the </span><b><span style='font-size:14.0pt;font-family:Consolas'>README</span></b><span
+style='font-size:14.0pt'> file is a GitHub “MarkDown” file, text augmented by a
+few simple formatting annotations.&nbsp; MarkDown (MD) is much less powerful
+than HTML but much easier to use.&nbsp; The webpage <b><a
+href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet">markdown-cheat-sheet</a></b>
+is a good summary for learning MarkDown and a useful reference.</span></p>
+
+<p class=MsoNormal style='margin-left:.5in;background:white'><span
+style='font-size:14.0pt'>Since your program resides in a repository owned by
+our classroom, you do not need to do anything to submit except push you the
+latest version of your local repository back to the origin on GitHub.</span></p>
+
+<p><span style='font-size:14.0pt'>Please make sure to remove or disable all
+debugging output generated by program. Excessive use of print statements considerably
+slows down your interpreter and thus the testing of your project. If your
+interpreter generates a timeout error because debug output drastically slows it
+down, you may not get credit for the test cases that took too long.</span></p>
+
+<h3><span style='font-size:14.0pt'>&nbsp;</span></h3>
+
+<div>
+
+<p class=MsoNormal><span style='font-size:14.0pt'><a href="../../">Back to
+course website</a></span></p>
+
+</div>
+
+</div>
+
+</body>
+
+</html>

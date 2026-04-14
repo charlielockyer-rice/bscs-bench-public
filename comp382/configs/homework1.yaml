@@ -1,0 +1,73 @@
+assignment_number: 1
+assignment_name: "Data Structures: Radix Trees, Multisets, AVL Trees"
+display_name: "HW1: Data Structures: Radix Trees, Multisets, AVL Trees"
+course: "comp382"
+total_points: 50
+type: "theoretical"
+language: "proof"
+
+problems:
+  - number: 1
+    name: "Radix Trees"
+    points: 20
+    parts:
+      - part: "1"
+        points: 3
+        description: "Define formally the radix tree data structure"
+        rubric:
+          - "Node types (grey/black) identified: 1pt"
+          - "Edge labeling (0/1) defined: 1pt"
+          - "Path-to-key correspondence specified: 1pt"
+      - part: "2"
+        points: 10
+        description: "RADIX-TREE-SEARCH and RADIX-TREE-INSERT pseudocode"
+        rubric:
+          - "Correct SEARCH algorithm: 3pts"
+          - "Correct INSERT algorithm: 4pts"
+          - "Theta(|w|) time justification: 3pts"
+      - part: "3"
+        points: 7
+        description: "Lexicographic sorting using radix tree in Theta(n) time"
+        rubric:
+          - "Insert all strings into radix tree: 2pts"
+          - "Pre-order traversal (left before right): 3pts"
+          - "Theta(n) time justification: 2pts"
+
+  - number: 2
+    name: "Multisets"
+    points: 20
+    parts:
+      - part: "1"
+        points: 10
+        description: "Data structure supporting CREATE, INSERT, GETCOUNT, DELETE, GETCOUNTS≥"
+        rubric:
+          - "Appropriate data structure choice (augmented BST/RBT): 3pts"
+          - "Correct augmentation for GETCOUNTS≥: 3pts"
+          - "All operations achieve specified time complexity: 4pts"
+      - part: "2"
+        points: 10
+        description: "Extend to support WITHCOUNT and FREQUENT"
+        rubric:
+          - "Second tree or augmented structure for counts: 4pts"
+          - "WITHCOUNT in O(log n): 3pts"
+          - "FREQUENT in O(log n): 3pts"
+
+  - number: 3
+    name: "AVL Trees: Height & Size"
+    points: 10
+    parts:
+      - part: "1"
+        points: 10
+        description: "Upper bound on AVL tree height of form c·log₂(n+k)+b"
+        rubric:
+          - "Fibonacci connection (N_h = F_{h+2} - 1): 3pts"
+          - "Closed-form Fibonacci and bounding: 3pts"
+          - "Final bound with explicit constants: 2pts"
+          - "Rigorous justification of every step: 2pts"
+
+topics:
+  - "Radix Trees (Tries)"
+  - "Augmented BSTs"
+  - "Red-Black Trees"
+  - "AVL Trees"
+  - "Fibonacci Numbers"

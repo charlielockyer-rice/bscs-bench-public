@@ -1,0 +1,112 @@
+# COMP 421 Final Exam
+
+**Spring 2024**
+
+---
+
+## Question 1: Short Definitions
+
+*10 Points*
+
+Give a *one-sentence* definition of each of the following five terms as they apply to the material in this course. For each, please give a general definition that covers the use of the term in the course, rather than only describing the specific example or examples where we have used that term.
+
+**(a)** **capability** *(2 points)*
+
+**(b)** **cylinder group** *(2 points)*
+
+**(c)** **symbolic link** *(2 points)*
+
+**(d)** **message digest** *(2 points)*
+
+**(e)** **extent** *(2 points)*
+
+---
+
+## Question 2: LoadProgram and Yalnix Demand Paging
+
+*25 Points*
+
+In the Yalnix kernel in Lab 2, the `LoadProgram` function read into memory from disk (from the program file that is being loaded) the *entire* text and data for that program. However, as noted in the demand paging lectures, in an operating system that supports demand paging, it is common, after loading a new program in some process, to instead begin execution of that process with having read *none* of its text or data into memory yet.
+
+Then, as the process executes, if it attempts to access a page of its text or data that has not yet been read into memory, then this causes a page fault, and the operating system only then reads that *single* new page into memory for the process. As the process executes and accesses other pages of its text and/or data, further page faults cause these other pages of the program's text or data to be read into memory, one at a time, only as needed; and ultimately, any text or data page that is never accessed by the process during its execution is never read into memory.
+
+Show, using pseudo-code similar to that used in the book or in the lectures, an implementation for how this demand paging behavior could be added ***as a part of a Yalnix kernel running on the RCS 421 hardware of Lab 2***. You do not need to describe any parts of the Yalnix kernel implementation other than where you need to modify the Lab 2 Yalnix kernel behavior (as defined for Lab 2) to support this new behavior. Be sure to clearly show how you modify any existing data structures as well as the definition of any new data structures that you introduce. Be sure to clearly show how you initialize things to cause these page faults to occur, how the kernel recognizes them when they do occur, and how the kernel handles them when they do occur.
+
+In your answer, also be sure to clearly show all addresses used in your implementation, **clearly indicating which addresses are treated as virtual addresses and which addresses are treated as physical addresses**. Likewise, be sure to clearly show all page numbers used in your implementation, **clearly indicating which page numbers are virtual page numbers and which page numbers are physical page numbers**.
+
+---
+
+## Question 3: Page Replacement Algorithms
+
+*15 Points*
+
+Assume that a program with the following **page reference string** executes on a computer with **4 pages of physical memory**:
+
+```
+3,  5,  0,  1,  0,  2,  1,  0,  3,  2,  4,  2,  0,  5
+```
+
+Assume, when using each of the page replacement algorithms below, that **physical** memory is initially empty when this program begins execution.
+
+**For each of the three page replacement algorithms below** (individually), clearly state the **(1) total number of page faults** that will occur during the execution of this program, **and (2) for each page fault**, *state which virtual page caused **that** page fault*. In other words, in considering each algorithm below, the four-page physical memory starts initially as empty; consider the execution of this program using that algorithm starting from that initial state:
+
+### 3.1 Optimal replacement *(5 points)*
+
+Using the above page reference string, with physical memory starting out empty.
+
+### 3.2 FIFO replacement *(5 points)*
+
+Using the above page reference string, with physical memory starting out empty.
+
+### 3.3 LRU replacement *(5 points)*
+
+Using the above page reference string, with physical memory starting out empty.
+
+---
+
+## Question 4: Unix File System Extension
+
+*25 Points*
+
+In the *"classical" Unix file system format*, each file can have a variable number of data bytes stored "in" the file by storing those data bytes in one or more data blocks "hanging off of" the file's inode (either in direct blocks listed in the file's inode or in blocks pointed to through the single indirect, double indirect, or triple indirect block number in the file's inode).
+
+A program can open this collection of data bytes and perform operations such as reading from and writing to those data bytes of the file. There may be any number of bytes in this collection of data bytes, up to some maximum file size supported by the file system's format.
+
+Suppose you wanted to extend this file system design to also support a ***second independent*** collection of data bytes associated with a file, for any files in the file system. Such a second collection of data bytes associated with a file could be used, for example, to store a backup copy of the file's contents from some earlier time (do not be concerned here with the exact purpose for supporting this second independent collection of data bytes associated with a file).
+
+Suppose further that in some way (not important for this question), a program that opens a file can specify not only the file's pathname *but also can indicate whether it wants to open the "main" collection of data of data bytes associated with that file* (the data that is represented by the unmodified classical Unix file system format) *or instead open this "alternate" collection of data bytes associated with the file* (the new, independent collection of data bytes associated with that file that will be supported by this extension to the file system).
+
+Once open, the program can access that collection of data bytes (whichever one was opened) ***exactly*** in the same way as programs can do with the classical Unix file system. But these two collections of data bytes associated with the file are ***entirely independent of each other***, other than that they are both associated with the same file. For example, bytes written to one collection of data bytes cannot be read from the other collection of data bytes; the data stored in one collection of data bytes are stored in ***entirely independent*** data blocks separate from the data stored in the other collection of data bytes; and each of the two collections of data bytes associated with the file has its own ***independent size***.
+
+Design the changes to the file system **on-disk data structure format** to support this file system extension. In your solution, you should try to fully support this new feature, but you should also try to do so **in a way that does *not* change the on-disk data structure format of a *directory entry* or an *inode* in the original classical Unix file system**. For example, in the classical Unix file system, a directory entry consists of a 16-bit inode number and a 14-character field for storing that filename; you may not modify this directory entry format in any way. Likewise, you may not modify the existing inode format in any way. Your solution must also be ***efficient in the space it uses on the disk***; for example, you may ***not*** simply reserve a second inode for every file, since many files will not use an "alternate" collection of data bytes associated with them (i.e., *some* files may also have an "alternate" collection of data bytes associated with them, in addition to the "main" collection of data bytes, but *many* files will use only the "main" collection of data bytes).
+
+In your answer, you do *not* need to show pseudo-code for the *execution* of this extension to the file system. Rather, you need only **clearly** describe how you make use of **the on-disk data structures** to **represent** both collections of data bytes associated with a file (the "main" and the "alternate" collection of data bytes) required by this extension. For example, be sure to clearly explain how you locate and how you store the new "alternate" collection of data bytes associated with any file that uses one.
+
+**Hint**: Although you may not change the format of the **on-disk *directory entry*** or ***inode*** data structures, you may use some for specialized purposes, consistent with their existing format. In this, though, you should still try to retain the spirit of the meaning of these existing data structure formats.
+
+---
+
+## Question 5: Cryptographic Message Protection
+
+*20 Points*
+
+Consider a system that allows a user process running on one computer to send a message to another user process running on some other computer, where these computers are connected by a computer network. Each user process is running on behalf of some real person who logged in to the computer on which that process is running and started the process in execution. **You may assume that the sending process knows the identity of the person executing the process to which the sender is sending a message.** The size of a message as sent by a process or as received by a process, or as the message exists in transit over the network, is not limited.
+
+The computer network connecting these computers is possibly susceptible to attack by malicious users. In particular, such a malicious user could modify any existing message in transit over the network, or could inject new messages with any content and destined to any user process on any computer connected to the network.
+
+For this question, you may assume that a sending process can send a message simply by asking the local kernel to send it to some specified destination process. You need not be concerned for this question with how the sending process specifies the intended destination process; you may assume something simple such as by specifying the identifier of the destination computer and the process identifier of the destination process on that computer. You may assume that, in normal circumstances, the message will be delivered to that destination process. But as noted above, malicious users may attempt to attack the network by modifying any message and/or by injecting additional messages. The **kernel** provides no support for **protecting** the message.
+
+When a process receives a message, the receiving process gets nothing other than the contents of the received message. Any information such as which user process or which person sent the message must be determined by the receiving process from the contents of just the message as received.
+
+Design a scheme by which some user process sending a message to another user process can cryptographically protect the message in such a way that the receiving process can verify the following **two properties** about the received message:
+
+- that the message was actually sent by the **sending person** that the message claims to have been sent by; and
+- that the **contents** of the message has not been modified since that sending process sent that message on behalf of that person.
+
+Your solution must achieve these properties by one or more **cryptographic operations** that you perform as part of sending the message and/or as part of receiving and verifying the received message. **In your solution, you may add any additional information to the message that you need to and/or may modify any part of the contents of the message as part of sending it and/or as part of receiving and checking it.** You may not assume any special support for achieving these properties other than the cryptographic operations you use in your solution and what you do with them in your solution.
+
+The computers and network of this system must support an arbitrary (potentially very large) set of different users (i.e., people), any of which can be running any number of user processes on any computer connected to this network. **A sending process might send only a single message to some particular destination process, but it might instead be common for some sending process over time to send many messages to the same destination.**
+
+Each user process may be **initialized** with only **a small *limited total* amount of state** such as **cryptographic keys** or other information needed to support its ability to send and receive messages in this way and to verify the above two properties for any message received. If any process in your solution requires additional cryptographic keys or other material, **you must describe specifically how that process obtains that information**.
+
+Show your solution using pseudocode similar to that used in the book or in class. In particular, you must show **both** how a user process sends a message **and** how a user process receives a message. As part of this, you must show explicitly how you check and verify the two properties above for any message received. **You must, in addition, strive to make your solution computationally efficient**.

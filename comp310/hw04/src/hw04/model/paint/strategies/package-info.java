@@ -1,0 +1,1 @@
+package hw04.model.paint.strategies;

@@ -1,0 +1,8 @@
+#!/usr/bin/env bun
+/**
+ * bscs-mcp — MCP server entry point for bscs-bench grading tools
+ *
+ * Usage:
+ *   bin/bscs-mcp --workspace <path-to-workspace>
+ */
+import "../agent/mcp-server.ts"

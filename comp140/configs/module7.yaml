@@ -1,0 +1,105 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 7
+assignment_name: "map_search"
+display_name: "Map Search"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: python
+runtime:
+  version: "3.11"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 45
+  total_points: 27
+  timeout_seconds: 15
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "solution.py"
+    functions:
+      - Queue.__init__
+      - Queue.__len__
+      - Queue.__str__
+      - Queue.push
+      - Queue.pop
+      - Queue.clear
+      - Stack.__init__
+      - Stack.__len__
+      - Stack.__str__
+      - Stack.push
+      - Stack.pop
+      - Stack.clear
+      - bfs_dfs
+      - dfs
+      - astar
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  discovery: "auto"
+  pattern: "test_module7.py"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # Queue tests (4 points)
+  queue_init_empty: 0.5
+  queue_len: 0.5
+  queue_push_pop_fifo: 1
+  queue_clear: 0.5
+  queue_str: 0.5
+  queue_multiple_ops: 1
+
+  # Stack tests (4 points)
+  stack_init_empty: 0.5
+  stack_len: 0.5
+  stack_push_pop_lifo: 1
+  stack_clear: 0.5
+  stack_str: 0.5
+  stack_multiple_ops: 1
+
+  # bfs_dfs tests (7 points)
+  bfs_dfs_line_bfs: 1
+  bfs_dfs_line_dfs: 1
+  bfs_dfs_grid_bfs: 1
+  bfs_dfs_grid_dfs: 1
+  bfs_dfs_returns_parent: 1
+  bfs_dfs_finds_end: 1
+  bfs_dfs_unreachable: 1
+
+  # dfs (recursive) tests (5 points)
+  dfs_line: 1
+  dfs_tree: 1
+  dfs_grid: 1
+  dfs_modifies_parent: 1
+  dfs_stops_at_end: 1
+
+  # astar tests (7 points)
+  astar_line: 1
+  astar_grid_optimal: 1
+  astar_tree: 1
+  astar_uses_heuristic: 1
+  astar_returns_parent: 1
+  astar_finds_shortest: 1
+  astar_asymmetric: 1
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+docs:
+  writeup_sections:
+    - "BFS/DFS recipes"
+    - "A* algorithm analysis"
+    - "Algorithm comparison discussion"

@@ -1,0 +1,19 @@
+/* DO NOT EDIT */
+/*
+Refs:
+https://docs.oracle.com/en/java/javase/19/security/permissions-jdk1.html
+To find additional information on allowed options for a permission, see the Javadocs for the specified class.
+*/
+
+grant {
+  permission java.util.PropertyPermission "user.dir", "read";
+  permission java.util.PropertyPermission "java.rmi.server.hostname", "read,write";
+  permission java.util.PropertyPermission "java.rmi.server.codebase", "read,write";
+  permission java.net.SocketPermission "*:*", "accept, listen, connect,resolve";
+  permission java.util.PropertyPermission "*", "read,write";
+  permission java.util.PropertyPermission "java.rmi.server.useCodebaseOnly", "read,write";
+  permission java.util.PropertyPermission "java.rmi.server.logCalls", "write";
+  permission java.net.NetPermission "getNetworkInformation";
+  permission java.lang.RuntimePermission "getClassLoader";
+};
+

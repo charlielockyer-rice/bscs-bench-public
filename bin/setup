@@ -1,0 +1,316 @@
+#!/usr/bin/env bash
+#
+# bin/setup — Interactive setup for BSCS Bench
+#
+# Installs dependencies, configures .env, creates workspaces,
+# and optionally pre-builds Docker images.
+#
+# Usage:
+#   bin/setup          # Interactive setup
+#   bin/setup --all    # Non-interactive: set up all courses
+#
+
+set -euo pipefail
+
+# Color support (matches bin/doctor)
+if [ -n "${NO_COLOR:-}" ] || [ "${TERM:-}" = "dumb" ]; then
+  GREEN="" RED="" YELLOW="" BOLD="" RESET=""
+else
+  GREEN="\033[32m" RED="\033[31m" YELLOW="\033[33m" BOLD="\033[1m" RESET="\033[0m"
+fi
+
+pass() { printf "${GREEN}  ✓${RESET} %s\n" "$1"; }
+fail() { printf "${RED}  ✗${RESET} %s\n" "$1"; }
+info() { printf "  %s\n" "$1"; }
+
+# Resolve project root
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$PROJECT_ROOT"
+
+# ─── Course registry (bash 3.2 compat — indexed arrays, no declare -A) ───
+
+COURSE_DIRS=(comp140 comp182 comp215 comp321 comp322 comp341 comp382 comp411 comp421)
+COURSE_LABELS=("COMP 140" "COMP 182" "COMP 215" "COMP 321" "COMP 322" "COMP 341" "COMP 382" "COMP 411" "COMP 421")
+COURSE_DESCS=("Python    7 modules" "Proof+Py  9 homeworks" "Java      6 homeworks" "C         6 projects" "Java      4 homeworks" "Python    7 homeworks" "Proof     7 homeworks" "Java      6 assignments" "C+Proof   3 labs+2 exams")
+COURSE_DOCKER=("comp140-runner" "comp182-runner" "comp215-runner" "comp321-runner" "comp322-runner" "comp341-runner" "" "comp411-runner" "")
+COURSE_SIZES=("~200MB" "~200MB" "~500MB" "~1.2GB" "~3GB" "~2.5GB" "" "~300MB" "")
+
+# Parse --all flag
+ALL_MODE=false
+if [ "${1:-}" = "--all" ]; then
+  ALL_MODE=true
+fi
+
+printf "\n${BOLD}BSCS Bench Setup${RESET}\n"
+printf "=================\n\n"
+
+# ─── Step 1: Dependencies ────────────────────────────────────────────────
+
+printf "${BOLD}[1/5] Installing dependencies...${RESET}\n"
+
+# bun install (root)
+if command -v bun &>/dev/null; then
+  if bun install --frozen-lockfile > /dev/null 2>&1 || bun install > /dev/null 2>&1; then
+    pass "bun install"
+  else
+    fail "bun install failed"
+  fi
+else
+  fail "bun not found (install: https://bun.sh)"
+fi
+
+# PyYAML
+if python3 -c "import yaml" &>/dev/null; then
+  pass "PyYAML"
+else
+  info "Installing PyYAML..."
+  if pip3 install pyyaml > /dev/null 2>&1; then
+    pass "PyYAML"
+  else
+    fail "PyYAML install failed (try: pip3 install pyyaml)"
+  fi
+fi
+
+# ─── Step 2: Environment ────────────────────────────────────────────────
+
+printf "\n${BOLD}[2/5] Configuring environment...${RESET}\n"
+
+if [ -f "$PROJECT_ROOT/.env" ]; then
+  info ".env already exists, keeping it."
+else
+  if [ -f "$PROJECT_ROOT/.env.example" ]; then
+    cp "$PROJECT_ROOT/.env.example" "$PROJECT_ROOT/.env"
+    pass "Created .env from .env.example"
+  else
+    fail ".env.example not found"
+  fi
+fi
+
+# Load .env (same pattern as bin/doctor)
+if [ -f "$PROJECT_ROOT/.env" ]; then
+  while IFS='=' read -r key value; do
+    key=$(echo "$key" | xargs)
+    value=$(echo "$value" | xargs)
+    if [ -n "$key" ] && [ -z "${!key:-}" ]; then
+      export "$key=$value"
+    fi
+  done < <(grep -v '^\s*#' "$PROJECT_ROOT/.env" | grep '=')
+fi
+
+# Prompt for API key if placeholder
+if [ -f "$PROJECT_ROOT/.env" ] && grep -q "^OPENROUTER_API_KEY=sk-or-v1-\.\.\." "$PROJECT_ROOT/.env"; then
+  if [ "$ALL_MODE" = false ]; then
+    printf "  Enter your OpenRouter API key (or press Enter to skip): "
+    read -r api_key
+    if [ -n "$api_key" ]; then
+      sed -i.bak "s|^OPENROUTER_API_KEY=.*|OPENROUTER_API_KEY=$api_key|" "$PROJECT_ROOT/.env"
+      rm -f "$PROJECT_ROOT/.env.bak"
+      pass "OPENROUTER_API_KEY configured"
+    else
+      info "Skipped — set OPENROUTER_API_KEY in .env later"
+    fi
+  else
+    info "OPENROUTER_API_KEY is placeholder — edit .env to set it"
+  fi
+elif [ -n "${OPENROUTER_API_KEY:-}" ]; then
+  pass "OPENROUTER_API_KEY is set"
+else
+  info "OPENROUTER_API_KEY not set (required for benchmarks)"
+fi
+
+# ─── Step 3: Course Selection ────────────────────────────────────────────
+
+printf "\n${BOLD}[3/5] Select courses to set up:${RESET}\n\n"
+
+SELECTED=()
+
+if [ "$ALL_MODE" = true ]; then
+  # --all: select everything
+  i=0
+  while [ $i -lt ${#COURSE_DIRS[@]} ]; do
+    SELECTED[$i]=$i
+    i=$((i + 1))
+  done
+  info "All courses selected (--all)"
+else
+  # Display numbered list
+  i=0
+  while [ $i -lt ${#COURSE_DIRS[@]} ]; do
+    num=$((i + 1))
+    docker_info=""
+    if [ -n "${COURSE_DOCKER[$i]}" ]; then
+      docker_info="${COURSE_SIZES[$i]} Docker"
+    elif [ "${COURSE_DIRS[$i]}" = "comp182" ] || [ "${COURSE_DIRS[$i]}" = "comp382" ]; then
+      docker_info="LLM-graded"
+    elif [ "${COURSE_DIRS[$i]}" = "comp421" ]; then
+      docker_info="SSH to CLEAR"
+    fi
+    printf "  %d) %-10s %-24s %s\n" "$num" "${COURSE_LABELS[$i]}" "${COURSE_DESCS[$i]}" "$docker_info"
+    i=$((i + 1))
+  done
+
+  printf "\n  Enter numbers (space-separated), or 'all' [default: all]: "
+  read -r selection
+
+  if [ -z "$selection" ] || [ "$selection" = "all" ]; then
+    i=0
+    while [ $i -lt ${#COURSE_DIRS[@]} ]; do
+      SELECTED[$i]=$i
+      i=$((i + 1))
+    done
+  else
+    for num in $selection; do
+      idx=$((num - 1))
+      if [ "$idx" -ge 0 ] && [ "$idx" -lt ${#COURSE_DIRS[@]} ]; then
+        SELECTED[${#SELECTED[@]}]=$idx
+      else
+        printf "${YELLOW}  ⚠${RESET} Ignoring invalid number: %s\n" "$num"
+      fi
+    done
+  fi
+fi
+
+if [ ${#SELECTED[@]} -eq 0 ]; then
+  printf "\n${RED}No courses selected. Exiting.${RESET}\n"
+  exit 1
+fi
+
+# ─── Step 4: Create Workspaces ───────────────────────────────────────────
+
+printf "\n${BOLD}[4/5] Creating workspaces...${RESET}\n"
+
+for idx in "${SELECTED[@]}"; do
+  course="${COURSE_DIRS[$idx]}"
+  if [ -d "$PROJECT_ROOT/$course/configs" ]; then
+    output=$("$SCRIPT_DIR/setup_course" "./$course" agent 2>&1) || true
+    # Extract counts from output
+    created=$(echo "$output" | grep -o 'Created: [0-9]*' | grep -o '[0-9]*' || echo "0")
+    skipped=$(echo "$output" | grep -o 'Skipped: [0-9]*' | grep -o '[0-9]*' || echo "0")
+    total=$(echo "$output" | grep -o 'Total: [0-9]*' | grep -o '[0-9]*' || echo "?")
+    if [ "$created" = "0" ] && [ "$skipped" != "0" ]; then
+      pass "$course ($total workspaces, all existed)"
+    else
+      pass "$course ($created created, $skipped skipped)"
+    fi
+  else
+    fail "$course — configs/ not found"
+  fi
+done
+
+# COMP 341 data download
+for idx in "${SELECTED[@]}"; do
+  if [ "${COURSE_DIRS[$idx]}" = "comp341" ]; then
+    if [ -d "$PROJECT_ROOT/comp341/data" ]; then
+      pass "comp341 data already exists"
+    else
+      info "Downloading COMP 341 datasets..."
+      if python3 "$SCRIPT_DIR/setup_comp341_data" > /dev/null 2>&1; then
+        pass "comp341 data downloaded"
+      else
+        info "Some COMP 341 data requires manual download — run bin/setup_comp341_data"
+      fi
+    fi
+    break
+  fi
+done
+
+# ─── Step 5: Docker Pre-build ───────────────────────────────────────────
+
+# Collect selected courses that have Docker images
+DOCKER_IMAGES=()
+DOCKER_COURSES=()
+
+for idx in "${SELECTED[@]}"; do
+  img="${COURSE_DOCKER[$idx]}"
+  if [ -n "$img" ]; then
+    DOCKER_IMAGES[${#DOCKER_IMAGES[@]}]="$img"
+    DOCKER_COURSES[${#DOCKER_COURSES[@]}]="${COURSE_DIRS[$idx]}"
+  fi
+done
+
+if [ ${#DOCKER_IMAGES[@]} -gt 0 ]; then
+  printf "\n${BOLD}[5/5] Pre-build Docker images?${RESET}\n"
+  info "Building images now avoids delays during benchmarks."
+  printf "\n"
+
+  # Check which need building
+  NEED_BUILD=()
+  NEED_BUILD_COURSES=()
+
+  DOCKER_AVAILABLE=false
+  if command -v docker &>/dev/null && docker info &>/dev/null; then
+    DOCKER_AVAILABLE=true
+  fi
+
+  if [ "$DOCKER_AVAILABLE" = true ]; then
+    i=0
+    while [ $i -lt ${#DOCKER_IMAGES[@]} ]; do
+      img="${DOCKER_IMAGES[$i]}"
+      course="${DOCKER_COURSES[$i]}"
+      size="${COURSE_SIZES[$idx]:-}"
+      if docker image inspect "$img" &>/dev/null; then
+        pass "$img already built"
+      else
+        NEED_BUILD[${#NEED_BUILD[@]}]="$img"
+        NEED_BUILD_COURSES[${#NEED_BUILD_COURSES[@]}]="$course"
+        info "$img needs building"
+      fi
+      i=$((i + 1))
+    done
+
+    if [ ${#NEED_BUILD[@]} -gt 0 ]; then
+      BUILD_NOW=false
+      if [ "$ALL_MODE" = true ]; then
+        BUILD_NOW=true
+      else
+        printf "\n  Build now? (y/N): "
+        read -r build_answer
+        if [ "$build_answer" = "y" ] || [ "$build_answer" = "Y" ]; then
+          BUILD_NOW=true
+        fi
+      fi
+
+      if [ "$BUILD_NOW" = true ]; then
+        i=0
+        while [ $i -lt ${#NEED_BUILD[@]} ]; do
+          img="${NEED_BUILD[$i]}"
+          course="${NEED_BUILD_COURSES[$i]}"
+          printf "  Building %s..." "$img"
+          if docker build -t "$img" -f "$course/Dockerfile" "$course/" > /dev/null 2>&1; then
+            printf " done\n"
+          else
+            printf " ${RED}failed${RESET}\n"
+          fi
+          i=$((i + 1))
+        done
+      else
+        info "Skipped — images will build on first grade run"
+      fi
+    fi
+  else
+    info "Docker not available — skipping image pre-build"
+  fi
+else
+  printf "\n${BOLD}[5/5] Docker images${RESET}\n"
+  info "No selected courses require Docker images"
+fi
+
+# ─── COMP 421 note ──────────────────────────────────────────────────────
+
+for idx in "${SELECTED[@]}"; do
+  if [ "${COURSE_DIRS[$idx]}" = "comp421" ]; then
+    if [ -z "${CLEAR_NETID:-}" ]; then
+      printf "\n${YELLOW}  ⚠${RESET} COMP 421 labs require SSH access to Rice CLEAR servers.\n"
+      info "Set CLEAR_NETID in .env — see docs/QUICKSTART.md for details."
+    fi
+    break
+  fi
+done
+
+# ─── Summary ─────────────────────────────────────────────────────────────
+
+printf "\n──────────────────────────\n"
+printf "${BOLD}Setup complete.${RESET} Run ${BOLD}bin/doctor${RESET} to verify, then:\n"
+printf "  bin/bench-cli comp140    # run a benchmark\n"
+printf "\n"

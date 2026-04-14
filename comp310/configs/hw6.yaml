@@ -1,0 +1,25 @@
+assignment_number: 6
+assignment_name: "hw06"
+display_name: "Extended Visitor Ballworld"
+language: java
+runtime:
+  version: "17"
+grading:
+  total_points: 100
+  timeout_seconds: 90
+  max_attempts: 10
+source_dir: "hw06"
+depends_on: "comp310_hw5"
+source_files:
+  - path: "src/hw06/model/BallHosts/DynamicBall.java"
+  - path: "src/hw06/model/BallVisitors/OneTypeBallAlgo.java"
+  - path: "src/hw06/model/BallVisitors/SameTypeBallAlgo.java"
+  - path: "src/visitorDemoExercises/listFWVisitorExercises/LargestFwdAlgo.java"
+  - path: "src/visitorDemoExercises/listFWVisitorExercises/LastFwdAlgo.java"
+  - path: "src/visitorDemoExercises/listFWVisitorExercises/ContainFwdAlgo.java"
+  - path: "src/visitorDemoExercises/listFWVisitorExercises/FromNthAlgo.java"
+  - path: "src/visitorDemoExercises/listFWVisitorExercises/RemoveSmallestRevAlgo.java"
+tests:
+  classes:
+    - "comp310.tests.hw06.ListVisitorTest"
+    - "comp310.tests.hw06.ExtVisitorTest"

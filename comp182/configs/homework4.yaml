@@ -1,0 +1,56 @@
+assignment_number: 4
+assignment_name: "homework4"
+display_name: "HW4: Graphs and Their Exploration"
+course: "comp182"
+language: "python"
+assignment_mode: "hybrid"
+
+source_files:
+  - path: "solution.py"
+    functions:
+      - compute_largest_cc_size
+
+tests:
+  discovery: "auto"
+  pattern: "test_module4.py"
+
+grading:
+  total_points: 15
+  timeout_seconds: 10
+
+test_points:
+  test_empty_graph: 1
+  test_single_node_no_edges: 1
+  test_single_edge: 1
+  test_complete_k4: 1
+  test_two_equal_components: 1
+  test_two_unequal_components: 1
+  test_three_components_different_sizes: 1
+  test_line_graph_5: 1
+  test_star_graph_6: 1
+  test_large_component_plus_isolated: 1
+  test_cycle_graph: 1
+  test_bridge_graph: 1
+  test_complete_bipartite_k3_3: 1
+  test_many_isolated_nodes: 1
+  test_one_big_several_small: 1
+
+llm_grading:
+  rubric: "solutions/homework4_rubric.md"
+
+problems:
+  - number: 1
+    name: "Growth of Functions, Algorithms, Summations"
+    points: 45
+  - number: 2
+    name: "BFS and Applications"
+    points: 30
+  - number: 3
+    name: "Network Resilience"
+    points: 25
+
+topics:
+  - "Graph Exploration"
+  - "BFS"
+  - "Connected Components"
+  - "Network Resilience"

@@ -1,0 +1,24 @@
+[
+  {
+    "login": "theinbetweens",
+    "id": 518131,
+    "node_id": "MDQ6VXNlcjUxODEzMQ==",
+    "avatar_url": "https://avatars.githubusercontent.com/u/518131?v=4",
+    "gravatar_id": "",
+    "url": "https://api.github.com/users/theinbetweens",
+    "html_url": "https://github.com/theinbetweens",
+    "followers_url": "https://api.github.com/users/theinbetweens/followers",
+    "following_url": "https://api.github.com/users/theinbetweens/following{/other_user}",
+    "gists_url": "https://api.github.com/users/theinbetweens/gists{/gist_id}",
+    "starred_url": "https://api.github.com/users/theinbetweens/starred{/owner}{/repo}",
+    "subscriptions_url": "https://api.github.com/users/theinbetweens/subscriptions",
+    "organizations_url": "https://api.github.com/users/theinbetweens/orgs",
+    "repos_url": "https://api.github.com/users/theinbetweens/repos",
+    "events_url": "https://api.github.com/users/theinbetweens/events{/privacy}",
+    "received_events_url": "https://api.github.com/users/theinbetweens/received_events",
+    "type": "User",
+    "user_view_type": "public",
+    "site_admin": false,
+    "contributions": 5
+  }
+]

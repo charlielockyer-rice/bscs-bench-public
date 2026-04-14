@@ -1,0 +1,79 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 1
+assignment_name: "circles"
+display_name: "Circles"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: python
+runtime:
+  version: "3.11"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 25
+  total_points: 20
+  timeout_seconds: 10
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "solution.py"
+    functions:
+      - distance
+      - midpoint
+      - slope
+      - perp
+      - intersect
+      - make_circle
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  discovery: "auto"
+  pattern: "test_module1.py"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  distance_basic: 1
+  distance_same_point: 1
+  distance_negative: 1
+  distance_float: 1
+  midpoint_basic: 1
+  midpoint_same_point: 1
+  midpoint_negative: 1
+  midpoint_float: 1
+  slope_basic: 1
+  slope_negative: 1
+  slope_steep: 1
+  slope_float: 1
+  perp_basic: 1
+  perp_negative: 1
+  perp_steep: 1
+  perp_float: 1
+  intersect_basic: 1
+  intersect_negative: 1
+  intersect_parallel_offset: 1
+  intersect_float: 1
+  make_circle_basic: 1
+  make_circle_right_triangle: 1
+  make_circle_unit_circle: 1
+  make_circle_large: 1
+
+# =============================================================================
+# DOCUMENTATION
+# =============================================================================
+docs:
+  writeup_sections:
+    - "Recipe for make_circle"
+    - "Discussion: Alternative approaches"

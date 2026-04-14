@@ -1,0 +1,48 @@
+
+[submodule "src/provided/utils"]
+	path = src/provided/utils
+	url = https://github.com/Rice-COMP-310/General-Utils.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/logger"]
+	path = src/provided/logger
+	url = https://github.com/Rice-COMP-310/Logger.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/remoteCompute"]
+	path = src/provided/remoteCompute
+	url = https://github.com/Rice-COMP-310/RemoteCompute
+	fetchRecurseSubmodules = true
+[submodule "src/provided/config"]
+	path = src/provided/config
+	url = https://github.com/Rice-COMP-310/AppConfig.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/rmiUtils"]
+	path = src/provided/rmiUtils
+	url = https://github.com/Rice-COMP-310/RMIUtils.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/discovery"]
+	path = src/provided/discovery
+	url = https://github.com/Rice-COMP-310/DiscoveryClient.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/listFW"]
+	path = src/provided/listFW
+	url = https://github.com/Rice-COMP-310/List_Visitor_Framework.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/pubsubsync"]
+	path = src/provided/pubsubsync
+	url = https://github.com/Rice-COMP-310/PubSubSyncClient.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/extvisitor"]
+	path = src/provided/extvisitor
+	url = https://github.com/Rice-COMP-310/ExtVisitor.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/datapacket"]
+	path = src/provided/datapacket
+	url = https://github.com/Rice-COMP-310/Datapacket.git
+	fetchRecurseSubmodules = true
+[submodule "src/provided/mixedData"]
+	path = src/provided/mixedData
+	url = https://github.com/Rice-COMP-310/MixedData.git
+	fetchRecurseSubmodules = true
+[submodule "src/common"]
+	path = src/common
+	url = https://github.com/Rice-COMP-310/comp310-s22-chatapp-design-comp310-s22-chatapp-design-b.git

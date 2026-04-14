@@ -1,0 +1,46 @@
+assignment_number: 4
+assignment_name: "house_prices_regression"
+display_name: "Houston Home Price Prediction"
+language: python
+description: "Predicting real estate prices using regression methods"
+
+source_files:
+  - path: "solution.py"
+    functions:
+      - load_housing_data
+      - check_missing_values
+      - baseline_heuristic
+      - train_linear_regression
+      - train_lasso_regression
+      - tune_lasso_alpha
+      - train_svr
+      - train_decision_tree_regressor
+      - cross_validate_model
+      - calculate_rmse
+      - calculate_rmsle
+      - prepare_kaggle_submission
+
+data_files:
+  - source: "data/hw4/houston_homes.csv"
+  - source: "data/hw4/houston_homes_test.csv"
+
+grading:
+  total_points: 100
+  total_tests: 13
+  timeout_seconds: 300
+  max_attempts: 10
+
+test_points:
+  test_load_data: 5
+  test_missing_values_check: 5
+  test_baseline_rmse: 10
+  test_linear_regression: 10
+  test_lasso_regression: 10
+  test_lasso_alpha_tuning: 10
+  test_svr_linear: 5
+  test_svr_rbf: 5
+  test_decision_tree_regressor: 10
+  test_cross_validation: 10
+  test_rmse_calculation: 5
+  test_rmsle_calculation: 5
+  test_submission_format: 10

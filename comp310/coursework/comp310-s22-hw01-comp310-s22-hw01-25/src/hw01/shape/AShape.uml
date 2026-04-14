@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="20131001" xmlns:xmi="http://www.omg.org/spec/XMI/20131001" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:UMLLabProfile="http:///schemas/UMLLabProfile/NS/0" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" xmlns:uml="http://www.eclipse.org/uml2/5.0.0/UML" xsi:schemaLocation="http:///schemas/UMLLabProfile/NS/0 pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile-Annotation_2-UMLLabProfile">
+  <uml:Model xmi:id="_rxgfsHyjEeyqPtdb1vr-DA" name="AShape">
+    <eAnnotations xmi:id="_tLNdkHyjEeyqPtdb1vr-DA" source="http://ns.yatta.de/umllab">
+      <contents xmi:type="ecore:EAnnotation" xmi:id="_tLP50HyjEeyqPtdb1vr-DA" source="codegen">
+        <details xmi:id="_tLQg4HyjEeyqPtdb1vr-DA" key="codegenDirectory" value="/comp310-s22-hw01-comp310-s22-hw01-25/src"/>
+        <details xmi:id="_tb494HyjEeyqPtdb1vr-DA" key="AssociatedSourceCode" value="/comp310-s22-hw01-comp310-s22-hw01-25/src/hw01/shape/AShape.java;416761190/1;/comp310-s22-hw01-comp310-s22-hw01-25/src/hw01/shape/ASimpleShape.java;4219496244/1;/comp310-s22-hw01-comp310-s22-hw01-25/src/hw01/shape/Circle.java;1050888860/1;/comp310-s22-hw01-comp310-s22-hw01-25/src/hw01/shape/CompositeShape.java;3080031280/1;/comp310-s22-hw01-comp310-s22-hw01-25/src/hw01/shape/Ellipse.java;2978466505/1;/comp310-s22-hw01-comp310-s22-hw01-25/src/hw01/shape/Rectangle.java;475615628/1;"/>
+      </contents>
+    </eAnnotations>
+    <elementImport xmi:id="_tWoqcHyjEeyqPtdb1vr-DA">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#boolean"/>
+    </elementImport>
+    <elementImport xmi:id="_tWoqcXyjEeyqPtdb1vr-DA">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#byte"/>
+    </elementImport>
+    <elementImport xmi:id="_tWoqcnyjEeyqPtdb1vr-DA">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#char"/>
+    </elementImport>
+    <elementImport xmi:id="_tWpRgHyjEeyqPtdb1vr-DA">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#double"/>
+    </elementImport>
+    <elementImport xmi:id="_tWpRgXyjEeyqPtdb1vr-DA">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#float"/>
+    </elementImport>
+    <elementImport xmi:id="_tWpRgnyjEeyqPtdb1vr-DA">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+    </elementImport>
+    <elementImport xmi:id="_tWpRg3yjEeyqPtdb1vr-DA">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#long"/>
+    </elementImport>
+    <elementImport xmi:id="_tWpRhHyjEeyqPtdb1vr-DA">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#short"/>
+    </elementImport>
+    <elementImport xmi:id="_tWs74HyjEeyqPtdb1vr-DA">
+      <importedElement xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/UMLPrimitiveTypes.library.uml#String"/>
+    </elementImport>
+    <packagedElement xmi:type="uml:Package" xmi:id="_tWAYUHyjEeyqPtdb1vr-DA" name="hw01">
+      <packagedElement xmi:type="uml:Package" xmi:id="_tWI7MHyjEeyqPtdb1vr-DA" name="shape">
+        <packagedElement xmi:type="uml:Class" xmi:id="_tWkZAHyjEeyqPtdb1vr-DA" name="AShape" isAbstract="true">
+          <ownedComment xmi:id="_tYOl4HyjEeyqPtdb1vr-DA">
+            <body>&#xD;
+@author charlielockyer&#xD;
+An abstract class describing an abstract shape on a 2D plane, like a screen</body>
+          </ownedComment>
+          <ownedAttribute xmi:id="_tX4AkHyjEeyqPtdb1vr-DA" name="xPos" visibility="private">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_tX5OsHyjEeyqPtdb1vr-DA" name="yPos">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+          </ownedAttribute>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYFb8HyjEeyqPtdb1vr-DA" name="setXPos" specification="_tWqfoHyjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYGDAHyjEeyqPtdb1vr-DA" name="xPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <language>java</language>
+            <body>this.xPos = xPos;&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYK7gHyjEeyqPtdb1vr-DA" name="getXPos" specification="_tWrtwHyjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYK7gXyjEeyqPtdb1vr-DA" direction="return">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <language>java</language>
+            <body>return xPos;&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedOperation xmi:id="_tWqfoHyjEeyqPtdb1vr-DA" name="setXPos" method="_tYFb8HyjEeyqPtdb1vr-DA">
+            <ownedComment xmi:id="_tYOl4XyjEeyqPtdb1vr-DA">
+              <body>Sets the x position to an input integer&#xD;
+	 * @param xPos the shape's x position</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tWrGsHyjEeyqPtdb1vr-DA" name="xPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+          </ownedOperation>
+          <ownedOperation xmi:id="_tWrtwHyjEeyqPtdb1vr-DA" name="getXPos" method="_tYK7gHyjEeyqPtdb1vr-DA">
+            <ownedComment xmi:id="_tYOl4nyjEeyqPtdb1vr-DA">
+              <body>&#xD;
+	 * @return the shape's x position</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tWsU0HyjEeyqPtdb1vr-DA" direction="return">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+          </ownedOperation>
+          <ownedOperation xmi:id="_tXu2oHyjEeyqPtdb1vr-DA" name="setColor" isAbstract="true">
+            <ownedComment xmi:id="_tYOl43yjEeyqPtdb1vr-DA">
+              <body>Sets the color of the shape to an input color defined by the Color class&#xD;
+	 * @param color the color of the shape</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tXvdsHyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+          </ownedOperation>
+          <ownedOperation xmi:id="_tXwEwHyjEeyqPtdb1vr-DA" name="paint" isAbstract="true">
+            <ownedComment xmi:id="_tYOl5HyjEeyqPtdb1vr-DA">
+              <body>Paints the shape on the screen, abstract because each different shape is painted differently&#xD;
+	 * @param g the graphics object on which the shape will be painted</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tXwEwXyjEeyqPtdb1vr-DA" name="g" type="_tXjQcHyjEeyqPtdb1vr-DA"/>
+          </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_tWvYIHyjEeyqPtdb1vr-DA" name="ASimpleShape" isAbstract="true">
+          <ownedComment xmi:id="_tYPM8HyjEeyqPtdb1vr-DA">
+            <body>&#xD;
+@author charlielockyer&#xD;
+An abstract class describing an abstract simple shape on a 2D plane, like a screen&#xD;
+A simple shape has its own custom painting instructions, and is not composed of other shapes&#xD;
+Simple shapes are the most basic shapes and inherently have a color</body>
+          </ownedComment>
+          <generalization xmi:id="_tXmTwHyjEeyqPtdb1vr-DA" general="_tWkZAHyjEeyqPtdb1vr-DA"/>
+          <ownedAttribute xmi:id="_tX51wHyjEeyqPtdb1vr-DA" name="color" visibility="protected" type="_tXhbQHyjEeyqPtdb1vr-DA" association="_tYRpMHyjEeyqPtdb1vr-DA"/>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYLikHyjEeyqPtdb1vr-DA" name="setColor" specification="_tXwr0HyjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYLikXyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+            <language>java</language>
+            <body>this.color = color;&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedOperation xmi:id="_tXwr0HyjEeyqPtdb1vr-DA" name="setColor" method="_tYLikHyjEeyqPtdb1vr-DA">
+            <ownedComment xmi:id="_tYPM8XyjEeyqPtdb1vr-DA">
+              <body>Sets the color of the shape as written in AShape</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tXwr0XyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+          </ownedOperation>
+          <ownedOperation xmi:id="_tXxS4HyjEeyqPtdb1vr-DA" name="paint" isAbstract="true">
+            <ownedComment xmi:id="_tYPM8nyjEeyqPtdb1vr-DA">
+              <body>Paints the shape on the screen, abstract because each different shape is painted differently</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tXxS4XyjEeyqPtdb1vr-DA" name="g" type="_tXjQcHyjEeyqPtdb1vr-DA"/>
+          </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_tWybcHyjEeyqPtdb1vr-DA" name="Circle">
+          <ownedComment xmi:id="_tYPM83yjEeyqPtdb1vr-DA">
+            <body>&#xD;
+A concrete class representing a circle that can be painted on a graphics object</body>
+          </ownedComment>
+          <generalization xmi:id="_tXnh4HyjEeyqPtdb1vr-DA" general="_tW5wMHyjEeyqPtdb1vr-DA"/>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYMJoHyjEeyqPtdb1vr-DA" name="Circle" specification="_tXx58HyjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYMJoXyjEeyqPtdb1vr-DA" name="xPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYMJonyjEeyqPtdb1vr-DA" name="yPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYMJo3yjEeyqPtdb1vr-DA" name="diameter">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYMJpHyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+            <ownedParameter xmi:id="_tYMJpXyjEeyqPtdb1vr-DA" type="_tWybcHyjEeyqPtdb1vr-DA" direction="return"/>
+            <language>java</language>
+            <body>super(xPos, yPos, diameter, diameter, color);&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedOperation xmi:id="_tXx58HyjEeyqPtdb1vr-DA" name="Circle" method="_tYMJoHyjEeyqPtdb1vr-DA">
+            <eAnnotations xmi:id="_tXyhAnyjEeyqPtdb1vr-DA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+              <details xmi:id="_tXyhA3yjEeyqPtdb1vr-DA" key="create"/>
+            </eAnnotations>
+            <ownedParameter xmi:id="_tXx58XyjEeyqPtdb1vr-DA" name="xPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tXx58nyjEeyqPtdb1vr-DA" name="yPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tXyhAHyjEeyqPtdb1vr-DA" name="diameter">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tXyhAXyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+            <ownedParameter xmi:id="_tXyhBHyjEeyqPtdb1vr-DA" type="_tWybcHyjEeyqPtdb1vr-DA" direction="return"/>
+          </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_tW0QoHyjEeyqPtdb1vr-DA" name="CompositeShape">
+          <ownedComment xmi:id="_i-agIHyoEeyqPtdb1vr-DA">
+            <body>&#xD;
+@author charlielockyer&#xD;
+An concrete class describing a composite shape on a 2D plane, like a screen&#xD;
+A composite shape is composed of two other shapes and delegates its painting instructions to&#xD;
+those shapes.&#xD;
+Composite shapes can be composed to an arbitrary degree and do not inherently have color</body>
+          </ownedComment>
+          <generalization xmi:id="_tXpXEHyjEeyqPtdb1vr-DA" general="_tWkZAHyjEeyqPtdb1vr-DA"/>
+          <ownedAttribute xmi:id="_tX6c0HyjEeyqPtdb1vr-DA" name="shape1" visibility="private" type="_tWkZAHyjEeyqPtdb1vr-DA" association="_tYS3UHyjEeyqPtdb1vr-DA"/>
+          <ownedAttribute xmi:id="_tX7D4XyjEeyqPtdb1vr-DA" name="shape2" visibility="private" type="_tWkZAHyjEeyqPtdb1vr-DA" association="_tYTeYXyjEeyqPtdb1vr-DA"/>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYMJpnyjEeyqPtdb1vr-DA" name="CompositeShape" specification="_tXowAHyjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYMJp3yjEeyqPtdb1vr-DA" name="shape1" type="_tWkZAHyjEeyqPtdb1vr-DA"/>
+            <ownedParameter xmi:id="_tYMJqHyjEeyqPtdb1vr-DA" name="shape2" type="_tWkZAHyjEeyqPtdb1vr-DA"/>
+            <ownedParameter xmi:id="_tYMJqXyjEeyqPtdb1vr-DA" type="_tW0QoHyjEeyqPtdb1vr-DA" direction="return">
+              <name xsi:nil="true"/>
+            </ownedParameter>
+            <language>java</language>
+            <body>this.shape1 = shape1;&#xD;
+		this.shape2 = shape2;&#xD;
+		this.setXPos(Math.min(shape1.getXPos(), shape2.getXPos()));&#xD;
+		this.setYPos(Math.min(shape1.getYPos(), shape2.getYPos()));&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYMwsHyjEeyqPtdb1vr-DA" name="setColor" specification="_tXzIEHyjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYMwsXyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+            <language>java</language>
+            <body>shape1.setColor(color);&#xD;
+		shape2.setColor(color);&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYMwsnyjEeyqPtdb1vr-DA" name="paint" specification="_tXzvIHyjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYMws3yjEeyqPtdb1vr-DA" name="g" type="_tXjQcHyjEeyqPtdb1vr-DA"/>
+            <language>java</language>
+            <body>shape1.paint(g);&#xD;
+		shape2.paint(g);&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedOperation xmi:id="_tXowAHyjEeyqPtdb1vr-DA" name="CompositeShape" method="_tYMJpnyjEeyqPtdb1vr-DA">
+            <eAnnotations xmi:id="_tXowA3yjEeyqPtdb1vr-DA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+              <details xmi:id="_tXowBHyjEeyqPtdb1vr-DA" key="create"/>
+            </eAnnotations>
+            <ownedComment xmi:id="_i-agIXyoEeyqPtdb1vr-DA">
+              <body>Constructs a CompositeShape object&#xD;
+	 * @param shape1 the first component shape of the CompositeShape&#xD;
+	 * @param shape2 the other component shape of the CompositeShape</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tXowAXyjEeyqPtdb1vr-DA" name="shape1" type="_tWkZAHyjEeyqPtdb1vr-DA"/>
+            <ownedParameter xmi:id="_tXowAnyjEeyqPtdb1vr-DA" name="shape2" type="_tWkZAHyjEeyqPtdb1vr-DA"/>
+            <ownedParameter xmi:id="_tXowBXyjEeyqPtdb1vr-DA" type="_tW0QoHyjEeyqPtdb1vr-DA" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:id="_tXzIEHyjEeyqPtdb1vr-DA" name="setColor" method="_tYMwsHyjEeyqPtdb1vr-DA">
+            <ownedComment xmi:id="_i-agInyoEeyqPtdb1vr-DA">
+              <body>Sets the color of the shape to an input color defined by the Color class by delegating&#xD;
+	 * to the component shapes&#xD;
+	 * @param color the color of the shape</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tXzIEXyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+          </ownedOperation>
+          <ownedOperation xmi:id="_tXzvIHyjEeyqPtdb1vr-DA" name="paint" method="_tYMwsnyjEeyqPtdb1vr-DA">
+            <ownedComment xmi:id="_i-agI3yoEeyqPtdb1vr-DA">
+              <body>Paints the shape on the screen, abstract because each different shape is painted differently&#xD;
+	 * @param g the graphics object on which the shape will be painted</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tXzvIXyjEeyqPtdb1vr-DA" name="g" type="_tXjQcHyjEeyqPtdb1vr-DA"/>
+          </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_tW5wMHyjEeyqPtdb1vr-DA" name="Ellipse">
+          <ownedComment xmi:id="_tYPM-HyjEeyqPtdb1vr-DA">
+            <body>&#xD;
+@author charlielockyer&#xD;
+A concrete class representing an ellipse that can be painted on a graphics object</body>
+          </ownedComment>
+          <generalization xmi:id="_tXqlMHyjEeyqPtdb1vr-DA" general="_tWvYIHyjEeyqPtdb1vr-DA"/>
+          <ownedAttribute xmi:id="_tX7q8XyjEeyqPtdb1vr-DA" name="width" visibility="private">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_tX8SAXyjEeyqPtdb1vr-DA" name="height" visibility="private">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+          </ownedAttribute>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYNXwHyjEeyqPtdb1vr-DA" name="Ellipse" specification="_tX0WMHyjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYNXwXyjEeyqPtdb1vr-DA" name="xPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYNXwnyjEeyqPtdb1vr-DA" name="yPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYNXw3yjEeyqPtdb1vr-DA" name="width">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYNXxHyjEeyqPtdb1vr-DA" name="height">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYNXxXyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+            <ownedParameter xmi:id="_tYNXxnyjEeyqPtdb1vr-DA" type="_tW5wMHyjEeyqPtdb1vr-DA" direction="return"/>
+            <language>java</language>
+            <body>this.setXPos(xPos);&#xD;
+		this.setYPos(yPos);&#xD;
+		this.width = width;&#xD;
+		this.height = height;&#xD;
+		this.setColor(color);&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYNXx3yjEeyqPtdb1vr-DA" name="paint" specification="_tX09RHyjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYNXyHyjEeyqPtdb1vr-DA" name="g" type="_tXjQcHyjEeyqPtdb1vr-DA"/>
+            <language>java</language>
+            <body>g.setColor(this.color); // Set the color to use when drawing&#xD;
+		g.fillOval(this.getXPos(), this.getYPos(), this.width, this.height);&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedOperation xmi:id="_tX0WMHyjEeyqPtdb1vr-DA" name="Ellipse" method="_tYNXwHyjEeyqPtdb1vr-DA">
+            <eAnnotations xmi:id="_tX09QXyjEeyqPtdb1vr-DA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+              <details xmi:id="_tX09QnyjEeyqPtdb1vr-DA" key="create"/>
+            </eAnnotations>
+            <ownedComment xmi:id="_tYPM-XyjEeyqPtdb1vr-DA">
+              <body>Constructs an ellipse object&#xD;
+	 * @param xPos the x position (top left corner of bounding rectangle)&#xD;
+	 * @param yPos the y position (top left corner of bounding rectangle)&#xD;
+	 * @param width the width of the ellipse (horizontal)&#xD;
+	 * @param height the height of the ellipse (vertical)&#xD;
+	 * @param color the color of the ellipse (Color class)</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tX0WMXyjEeyqPtdb1vr-DA" name="xPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tX0WMnyjEeyqPtdb1vr-DA" name="yPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tX0WM3yjEeyqPtdb1vr-DA" name="width">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tX0WNHyjEeyqPtdb1vr-DA" name="height">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tX09QHyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+            <ownedParameter xmi:id="_tX09Q3yjEeyqPtdb1vr-DA" type="_tW5wMHyjEeyqPtdb1vr-DA" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:id="_tX09RHyjEeyqPtdb1vr-DA" name="paint" method="_tYNXx3yjEeyqPtdb1vr-DA">
+            <ownedComment xmi:id="_tYPM-nyjEeyqPtdb1vr-DA">
+              <body>Paints the ellipse on the Graphics object g</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tX1kUHyjEeyqPtdb1vr-DA" name="g" type="_tXjQcHyjEeyqPtdb1vr-DA"/>
+          </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Class" xmi:id="_tW9akHyjEeyqPtdb1vr-DA" name="Rectangle">
+          <ownedComment xmi:id="_tYP0AHyjEeyqPtdb1vr-DA">
+            <body>&#xD;
+@author charlielockyer&#xD;
+A concrete class representing a rectangle that can be painted on a graphics object</body>
+          </ownedComment>
+          <generalization xmi:id="_tXrzUHyjEeyqPtdb1vr-DA" general="_tWvYIHyjEeyqPtdb1vr-DA"/>
+          <ownedAttribute xmi:id="_tX85EXyjEeyqPtdb1vr-DA" name="width" visibility="private">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+          </ownedAttribute>
+          <ownedAttribute xmi:id="_tX-HMHyjEeyqPtdb1vr-DA" name="height" visibility="private">
+            <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+          </ownedAttribute>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYN-0HyjEeyqPtdb1vr-DA" name="Rectangle" specification="_tX2LYHyjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYN-0XyjEeyqPtdb1vr-DA" name="xPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYN-0nyjEeyqPtdb1vr-DA" name="yPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYN-03yjEeyqPtdb1vr-DA" name="width">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYN-1HyjEeyqPtdb1vr-DA" name="height">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tYN-1XyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+            <ownedParameter xmi:id="_tYN-1nyjEeyqPtdb1vr-DA" type="_tW9akHyjEeyqPtdb1vr-DA" direction="return"/>
+            <language>java</language>
+            <body>this.setXPos(xPos);&#xD;
+		this.setYPos(yPos);&#xD;
+		this.width = width;&#xD;
+		this.height = height;&#xD;
+		this.setColor(color);&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedBehavior xmi:type="uml:OpaqueBehavior" xmi:id="_tYN-13yjEeyqPtdb1vr-DA" name="paint" specification="_tX2yc3yjEeyqPtdb1vr-DA">
+            <ownedParameter xmi:id="_tYN-2HyjEeyqPtdb1vr-DA" name="g" type="_tXjQcHyjEeyqPtdb1vr-DA"/>
+            <language>java</language>
+            <body>g.setColor(this.color); // Set the color to use when drawing&#xD;
+		g.fillRect(this.getXPos(), this.getYPos(), this.width, this.height);&#xD;
+	</body>
+          </ownedBehavior>
+          <ownedOperation xmi:id="_tX2LYHyjEeyqPtdb1vr-DA" name="Rectangle" method="_tYN-0HyjEeyqPtdb1vr-DA">
+            <eAnnotations xmi:id="_tX2ycHyjEeyqPtdb1vr-DA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+              <details xmi:id="_tX2ycXyjEeyqPtdb1vr-DA" key="create"/>
+            </eAnnotations>
+            <ownedComment xmi:id="_tYP0AXyjEeyqPtdb1vr-DA">
+              <body>Constructs a rectangle object&#xD;
+	 * @param xPos the x position (top left corner)&#xD;
+	 * @param yPos the y position (top left corner)&#xD;
+	 * @param width the width of the rectangle (horizontal)&#xD;
+	 * @param height the height of the rectangle (vertical)&#xD;
+	 * @param color the color of the rectangle (Color class)</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tX2LYXyjEeyqPtdb1vr-DA" name="xPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tX2LYnyjEeyqPtdb1vr-DA" name="yPos">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tX2LY3yjEeyqPtdb1vr-DA" name="width">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tX2LZHyjEeyqPtdb1vr-DA" name="height">
+              <type xmi:type="uml:PrimitiveType" href="pathmap://UML_LIBRARIES/JavaPrimitiveTypes.library.uml#int"/>
+            </ownedParameter>
+            <ownedParameter xmi:id="_tX2LZXyjEeyqPtdb1vr-DA" name="color" type="_tXhbQHyjEeyqPtdb1vr-DA"/>
+            <ownedParameter xmi:id="_tX2ycnyjEeyqPtdb1vr-DA" type="_tW9akHyjEeyqPtdb1vr-DA" direction="return"/>
+          </ownedOperation>
+          <ownedOperation xmi:id="_tX2yc3yjEeyqPtdb1vr-DA" name="paint" method="_tYN-13yjEeyqPtdb1vr-DA">
+            <ownedComment xmi:id="_tYP0AnyjEeyqPtdb1vr-DA">
+              <body>Paints the rectangle on the Graphics object g</body>
+            </ownedComment>
+            <ownedParameter xmi:id="_tX3ZgHyjEeyqPtdb1vr-DA" name="g" type="_tXjQcHyjEeyqPtdb1vr-DA"/>
+          </ownedOperation>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_tYRpMHyjEeyqPtdb1vr-DA" name="" memberEnd="_tYRpMXyjEeyqPtdb1vr-DA _tX51wHyjEeyqPtdb1vr-DA">
+          <ownedEnd xmi:id="_tYRpMXyjEeyqPtdb1vr-DA" name="" type="_tWvYIHyjEeyqPtdb1vr-DA" association="_tYRpMHyjEeyqPtdb1vr-DA"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_tYS3UHyjEeyqPtdb1vr-DA" name="" memberEnd="_tYS3UXyjEeyqPtdb1vr-DA _tX6c0HyjEeyqPtdb1vr-DA">
+          <ownedEnd xmi:id="_tYS3UXyjEeyqPtdb1vr-DA" name="" type="_tW0QoHyjEeyqPtdb1vr-DA" association="_tYS3UHyjEeyqPtdb1vr-DA"/>
+        </packagedElement>
+        <packagedElement xmi:type="uml:Association" xmi:id="_tYTeYXyjEeyqPtdb1vr-DA" name="" memberEnd="_tYTeYnyjEeyqPtdb1vr-DA _tX7D4XyjEeyqPtdb1vr-DA">
+          <ownedEnd xmi:id="_tYTeYnyjEeyqPtdb1vr-DA" name="" type="_tW0QoHyjEeyqPtdb1vr-DA" association="_tYTeYXyjEeyqPtdb1vr-DA"/>
+        </packagedElement>
+      </packagedElement>
+    </packagedElement>
+    <packagedElement xmi:type="uml:Package" xmi:id="_tWC0kHyjEeyqPtdb1vr-DA" name="java">
+      <packagedElement xmi:type="uml:Package" xmi:id="_tWDboHyjEeyqPtdb1vr-DA" name="awt">
+        <packagedElement xmi:type="uml:Class" xmi:id="_tXhbQHyjEeyqPtdb1vr-DA" name="Color"/>
+        <packagedElement xmi:type="uml:Class" xmi:id="_tXjQcHyjEeyqPtdb1vr-DA" name="Graphics"/>
+      </packagedElement>
+    </packagedElement>
+    <profileApplication xmi:id="_tLSWEHyjEeyqPtdb1vr-DA">
+      <eAnnotations xmi:id="_tLVZYHyjEeyqPtdb1vr-DA" source="http://www.eclipse.org/uml2/2.0.0/UML">
+        <references xmi:type="ecore:EPackage" href="pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile-Annotation_2-UMLLabProfile"/>
+      </eAnnotations>
+      <appliedProfile href="pathmap://UMLLAB_PROFILES/UMLLab.profile.uml#UMLLabProfile"/>
+    </profileApplication>
+  </uml:Model>
+  <UMLLabProfile:TargetLanguage xmi:id="_tLaR4HyjEeyqPtdb1vr-DA" base_Package="_rxgfsHyjEeyqPtdb1vr-DA">
+    <languageName>java</languageName>
+  </UMLLabProfile:TargetLanguage>
+  <UMLLabProfile:Reference xmi:id="_tXipYHyjEeyqPtdb1vr-DA" base_Element="_tXhbQHyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:Reference xmi:id="_tXkekHyjEeyqPtdb1vr-DA" base_Element="_tXjQcHyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:LegacyStyledElement xmi:id="_tX4noHyjEeyqPtdb1vr-DA" base_Element="_tX4AkHyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:LegacyStyledElement xmi:id="_tX51wXyjEeyqPtdb1vr-DA" base_Element="_tX51wHyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:LegacyStyledElement xmi:id="_tX7D4HyjEeyqPtdb1vr-DA" base_Element="_tX6c0HyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:LegacyStyledElement xmi:id="_tX7q8HyjEeyqPtdb1vr-DA" base_Element="_tX7D4XyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:LegacyStyledElement xmi:id="_tX8SAHyjEeyqPtdb1vr-DA" base_Element="_tX7q8XyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:LegacyStyledElement xmi:id="_tX85EHyjEeyqPtdb1vr-DA" base_Element="_tX8SAXyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:LegacyStyledElement xmi:id="_tX9gIHyjEeyqPtdb1vr-DA" base_Element="_tX85EXyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:LegacyStyledElement xmi:id="_tX-HMXyjEeyqPtdb1vr-DA" base_Element="_tX-HMHyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:Reference xmi:id="_tYSQQHyjEeyqPtdb1vr-DA" base_Element="_tYRpMHyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:Reference xmi:id="_tYTeYHyjEeyqPtdb1vr-DA" base_Element="_tYS3UHyjEeyqPtdb1vr-DA"/>
+  <UMLLabProfile:Reference xmi:id="_tYUsgHyjEeyqPtdb1vr-DA" base_Element="_tYTeYXyjEeyqPtdb1vr-DA"/>
+</xmi:XMI>

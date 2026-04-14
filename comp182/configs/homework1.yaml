@@ -1,0 +1,64 @@
+assignment_number: 1
+assignment_name: "Algorithmic Thinking and Logic"
+display_name: "HW1: Algorithmic Thinking and Logic"
+course: "comp182"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+llm_grading:
+  rubric: "solutions/homework1_rubric.md"
+
+problems:
+  - number: 1
+    name: "Algorithmic Thinking"
+    points: 20
+    description: "Analyze Zachary's paper using the 5-step Algorithmic Thinking process"
+
+  - number: 2
+    name: "Propositional Logic"
+    points: 30
+    parts:
+      - part: "2.1"
+        points: 15
+        description: "Write sentences using propositional logic"
+      - part: "2.2"
+        points: 9
+        description: "Determine satisfiability and tautology for XOR propositions"
+      - part: "2.3"
+        points: 6
+        description: "Determine logical equivalence of compound propositions"
+
+  - number: 3
+    name: "Predicate Logic"
+    points: 30
+    parts:
+      - part: "3.1"
+        points: 14
+        description: "Determine truth values over real numbers"
+      - part: "3.2"
+        points: 16
+        description: "Determine logical equivalence of quantified expressions"
+
+  - number: 4
+    name: "Proofs"
+    points: 20
+    parts:
+      - part: "a"
+        points: 5
+        description: "Prove uniqueness of floor(sqrt(n))"
+      - part: "b"
+        points: 5
+        description: "Prove sqrt(n) is integer or irrational"
+      - part: "c"
+        points: 5
+        description: "Prove quadratic with odd coefficients has no rational solution"
+      - part: "d"
+        points: 5
+        description: "Prove irrational between rational and irrational"
+
+topics:
+  - "Algorithmic Thinking"
+  - "Propositional Logic"
+  - "Predicate Logic"
+  - "Mathematical Proofs"

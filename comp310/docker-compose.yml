@@ -1,0 +1,20 @@
+# COMP 310 Docker Compose
+# Usage: WORKSPACE=./workspaces/comp310_hw01 docker compose run --rm comp310 /opt/comp310/build.sh hw01
+#
+# Note: Security constraints (mem_limit, cpus) match runner.py for consistency.
+# docker-compose is for interactive use; runner.py enforces these for automated tests.
+
+services:
+  comp310:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # Security constraints - must match runner.py
+    mem_limit: 4g
+    cpus: 2
+    # No network access needed for compilation and testing
+    network_mode: "none"
+    volumes:
+      # Mount workspace (WORKSPACE env var is required)
+      - ${WORKSPACE:?WORKSPACE environment variable must be set}:/workspace
+    working_dir: /workspace

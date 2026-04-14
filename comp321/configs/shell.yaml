@@ -1,0 +1,73 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 4
+assignment_name: "shell"
+display_name: "Unix Shell (tsh)"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: c
+runtime:
+  version: "gcc13"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 24
+  total_points: 70
+  timeout_seconds: 60
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  - path: "tsh.c"
+    functions:
+      - main
+      - initpath
+      - eval
+      - builtin_cmd
+      - do_bgfg
+      - waitfg
+      - sigchld_handler
+      - sigint_handler
+      - sigtstp_handler
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  executable: "tsh"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  test_trace01: 2
+  test_trace02: 2
+  test_trace03: 2
+  test_trace04: 2
+  test_trace05: 2
+  test_trace06: 3
+  test_trace07: 3
+  test_trace08: 3
+  test_trace09: 3
+  test_trace10: 3
+  test_trace11: 3
+  test_trace12: 3
+  test_trace13: 3
+  test_trace14: 3
+  test_trace15: 3
+  test_trace16: 3
+  test_trace17: 3
+  test_trace18: 3
+  test_trace19: 3
+  test_trace20: 3
+  test_trace21: 3
+  test_trace22: 3
+  test_trace23: 3
+  test_trace24: 3

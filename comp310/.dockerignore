@@ -1,0 +1,11 @@
+# COMP 310 Docker build context — allowlist approach
+# Only files explicitly included with ! are sent to Docker.
+
+# Exclude everything by default
+*
+
+# Include only what the Dockerfile needs
+!lib/
+!tests/
+!build.sh
+!Dockerfile

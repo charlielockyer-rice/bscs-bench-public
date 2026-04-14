@@ -1,0 +1,156 @@
+# =============================================================================
+# IDENTITY
+# =============================================================================
+assignment_number: 5
+assignment_name: "tester_framework"
+display_name: "Tester Framework"
+
+# =============================================================================
+# LANGUAGE & RUNTIME
+# =============================================================================
+language: java
+runtime:
+  version: "17"
+
+# =============================================================================
+# GRADING
+# =============================================================================
+grading:
+  total_tests: 80
+  total_points: 68
+  timeout_seconds: 30
+  max_attempts: 10
+
+# =============================================================================
+# SOURCE FILES
+# =============================================================================
+source_files:
+  # Test framework classes (focus of HW5)
+  - path: "skeleton_code/src/main/rice/test/TestCase.java"
+  - path: "skeleton_code/src/main/rice/test/TestResults.java"
+  - path: "skeleton_code/src/main/rice/test/Tester.java"
+  # PyObj classes (from HW2, included in skeleton)
+  - path: "skeleton_code/src/main/rice/obj/APyObj.java"
+  - path: "skeleton_code/src/main/rice/obj/AIterablePyObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyBoolObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyIntObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyFloatObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyCharObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyListObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PySetObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyTupleObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyDictObj.java"
+  - path: "skeleton_code/src/main/rice/obj/PyStringObj.java"
+  # Node classes (from HW3, included in skeleton)
+  - path: "skeleton_code/src/main/rice/node/APyNode.java"
+  - path: "skeleton_code/src/main/rice/node/AIterablePyNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyBoolNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyIntNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyFloatNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyListNode.java"
+  - path: "skeleton_code/src/main/rice/node/PySetNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyTupleNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyStringNode.java"
+  - path: "skeleton_code/src/main/rice/node/PyDictNode.java"
+  # Generator classes (from HW3-4, included in skeleton)
+  - path: "skeleton_code/src/main/rice/basegen/BaseSetGenerator.java"
+  - path: "skeleton_code/src/main/rice/concisegen/ConciseSetGenerator.java"
+
+# =============================================================================
+# TESTS
+# =============================================================================
+tests:
+  classes:
+    - "test.rice.test.TestCaseTest"
+    - "test.rice.test.TestResultsTest"
+    - "test.rice.test.TesterTest"
+
+# =============================================================================
+# POINT ALLOCATION
+# =============================================================================
+test_points:
+  # TestCaseTest (4.0 pts)
+  testGetArgsNoArgs: 0.1
+  testGetArgsOneArgSimple: 0.1
+  testGetArgsOneArgNested: 0.1
+  testGetArgsMultipleArgsSimple: 0.1
+  testGetArgsMultipleArgsNested: 0.1
+  testToStringNoArgs: 0.1
+  testToStringOneArgSimple: 0.1
+  testToStringOneArgNested: 0.1
+  testToStringMultipleArgsSimple: 0.1
+  testToStringMultipleArgsNested: 0.1
+  testEqualsNoArgs: 0.2
+  testEqualsOneArgSimple: 0.2
+  testEqualsOneArgNested: 0.2
+  testEqualsMultipleArgsSimple: 0.2
+  testEqualsMultipleArgsNested: 0.2
+  testNotEqual: 0.2
+  testNotEqualSubset1: 0.2
+  testNotEqualSubset2: 0.2
+  testHashCodeNoArgs: 0.2
+  testHashCodeOneArgSimple: 0.2
+  testHashCodeOneArgNested: 0.2
+  testHashCodeMultipleArgsSimple: 0.2
+  testHashCodeMultipleArgsNested: 0.2
+  testHashCodeNotEqual: 0.2
+  testHashCodeNotEqualSubset: 0.2
+
+  # TestResultsTest (2.0 pts)
+  testGetTestCaseValid: 0.2
+  testGetTestCaseZero: 0.5
+  testGetTestCaseOutOfBoundsNeg: 0.4
+  testGetTestCaseOutOfBoundsPos: 0.4
+  testGetWrongSetEmpty: 0.1
+  testGetWrongSetNonEmpty: 0.1
+  testGetCaseToFilesEmpty: 0.1
+  testGetCaseToFilesAllPass: 0.1
+  testGetCaseToFilesNonEmpty: 0.1
+
+  # TesterTest (62.0 pts)
+  testInvalidSolPath: 0.5
+  testInvalidImplDirPath: 0.5
+  testSolutionNotGrowing: 2.0
+  testDoesNotOverwriteSolution: 2.0
+  testExpectedNotGrowing: 0.5
+  testWrapperNotGrowing: 0.5
+  testGetExpectedResultsOneTest: 1.0
+  testGetExpectedResultsOneTestStr: 1.0
+  testGetExpectedResultsOneArgSimple: 1.0
+  testWritesExpectedPyFile: 2.0
+  testGetExpectedResultsOneArgNested: 1.5
+  testGetExpectedResultsMultipleArgsSimple: 3.0
+  testGetExpectedResultsMultipleArgsNested: 3.0
+  testRunTestsOneFileOneTestFails: 0.5
+  testRunTestsOneFileOneTestFails2: 0.5
+  testRunTestsReturnsTests: 2.0
+  testRunTestsOneFileOneTestPasses: 1.0
+  testRunTestsOneFileOneTestPasses2: 1.0
+  testRunTestsOneFileOneTestPrints: 1.0
+  testRunTestsOneFileOneTestPrints2: 1.0
+  testRunTestsSkipNonPy: 1.0
+  testRunTestsSkipNonPy2: 2.0
+  testRunTestsOneFileFailsAll: 0.5
+  testRunTestsOneFileFailsAll2: 0.5
+  testRunTestsOneFilePassesAll: 1.0
+  testRunTestsOneFilePassesAll2: 1.0
+  testRunTestsOneFileMixed: 0.5
+  testRunTestsOneFileMixed2: 1.0
+  testRunTestsMultipleFilesFailAll: 0.5
+  testRunTestsMultipleFilesFailAll2: 1.0
+  testRunTestsMultipleFilesPassAll: 1.5
+  testRunTestsMultipleFilesPassAll2: 1.5
+  testRunTestsMultipleFilesMixed: 0.5
+  testRunTestsMultipleFilesMixed2: 2.0
+  testRunTestsMultipleFilesMixedCorrectness: 3.0
+  testRunTestsMultipleFilesMixedCorrectness2: 3.0
+  testRunTestsMultipleFilesNotNumbered: 2.0
+  testRunTestsMultipleFilesNotNumbered2: 2.0
+  testRunTestsMultipleFilesFailAllComplex: 1.0
+  testRunTestsMultipleFilesFailAllComplex2: 1.0
+  testRunTestsMultipleFilesPassAllComplex: 2.0
+  testRunTestsMultipleFilesPassAllComplex2: 2.0
+  testRunTestsMultipleFilesMixedComplex: 1.0
+  testRunTestsMultipleFilesMixedComplex2: 3.0
+  testRunTestsMalformedFilesFailAll: 1.0
+  testRunTestsMalformedFilesFailAll2: 1.0

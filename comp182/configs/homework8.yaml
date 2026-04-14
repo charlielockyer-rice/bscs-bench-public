@@ -1,0 +1,33 @@
+assignment_number: 8
+assignment_name: "Greedy Algorithms"
+display_name: "HW8: Greedy Algorithms"
+course: "comp182"
+total_points: 100
+type: "theoretical"
+language: "proof"
+
+llm_grading:
+  rubric: "solutions/homework8_rubric.md"
+
+problems:
+  - number: 1
+    name: "Greedy Choice Property"
+    points: 35
+    description: "Prove greedy choice property"
+
+  - number: 2
+    name: "Exchange Arguments"
+    points: 35
+    description: "Use exchange arguments to prove correctness"
+
+  - number: 3
+    name: "Greedy Algorithm Design"
+    points: 30
+    description: "Design and analyze greedy algorithms"
+
+topics:
+  - "Greedy Algorithms"
+  - "Greedy Choice Property"
+  - "Exchange Arguments"
+  - "Interval Scheduling"
+  - "Huffman Coding"

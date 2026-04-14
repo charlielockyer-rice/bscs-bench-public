@@ -1,0 +1,6 @@
+#
+# trace20.txt - Tests whether the shell searches the current directory
+#     if the path is NULL.  Requires that the driver sets the path.
+#
+/bin/echo tsh> myspin 1
+myspin 1
